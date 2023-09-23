@@ -72,7 +72,7 @@ Reference       Class
 The following is a table of all research papers read.
 | Paper Title | Summary | 
 | -------- | -------- | 
-| *Ray Tracing on Prgrammable Graphics Hardware* | Row 1, Column 2 |
+| *Ray Tracing on Prgrammable Graphics Hardware* | ~ |
 
 
 
