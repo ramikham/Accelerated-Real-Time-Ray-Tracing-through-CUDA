@@ -34,3 +34,19 @@ Week 7
 
 Week 8 
   - Start on CUDA
+
+References Used in Code
+Reference       Class
+[1]            Sphere.cpp
+[2]            Primitives_Group.h
+
+
+## References
+
+The following is a list of references, citations, or links that I consulted to write my code or to help clarify any misunderstood concepts
+
+ [1] *An Introduction to Ray Tracing - Section 2.1: Intersection of the Sphere – Algebraic Solution.*
+ [2] *Fundamentals of Computer Graphics - section 4.4.4: Intersecting a Group of Objects.*
+
+
+
