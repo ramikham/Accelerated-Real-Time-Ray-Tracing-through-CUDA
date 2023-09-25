@@ -11,10 +11,10 @@ Ray tracing is the backbone of modern computer graphics and has become the most 
 **Q. What gaps/limitations/challenges are there**
 
 
-**Q. What method/tests/experiments will you do?**
+**Q. What method/tests/experiments will you do?**  
 I will start with rendering scenes using the ray tracer I wrote in scratch using C++. I will then incorporate OpenMP and render the sames scenes. Finally, I will incorporate CUDA and render the same scenes. This will allow me to compare the performance of three versions of my ray tracers. The aim is to show that CUDA significantly beats any of the other versions. 
 
-**Q. What data/tools/software/hardware will you need?**
+**Q. What data/tools/software/hardware will you need?**  
 The technology that will be used is: C++, OpenMP, and CUDA.
 The data that will be used are .obj files that will be rendered in the ray tracer: https://graphics.stanford.edu/data/3Dscanrep/ and https://people.sc.fsu.edu/~jburkardt/data/obj/obj.html
 The IDE that will be used is: CLion/Visual Studio
