@@ -5,24 +5,24 @@
 **Q. Why is this project important?**\
 Ray tracing is the backbone of modern computer graphics and has become the most widely used rendering technique in the CG industry. There are many applications for ray tracing, including computer animation, video games, and architectural rendering. However, ray tracing does come with a downside: it is an unbounded algorithm that scales with the complexity of the scene. Using CUDA for ray tracing can significantly enhance the algorithm's performance. While, in theory, ray tracing converges to a realistic image given unlimited time, the value of time as a resource is paramount. Therefore, we aim to leverage the evolution of GPUs to transform ray tracing into a real-time algorithm, thereby expanding its usability across many more industries.
 
-**Q. What has been done before?**\
+**Q. What has been done before?**
 
 
-**Q. What gaps/limitations/challenges are there**\
+**Q. What gaps/limitations/challenges are there**
 
 
-**Q. What method/tests/experiments will you do?**\
+**Q. What method/tests/experiments will you do?**
 I will start with rendering scenes using the ray tracer I wrote in scratch using C++. I will then incorporate OpenMP and render the sames scenes. Finally, I will incorporate CUDA and render the same scenes. This will allow me to compare the performance of three versions of my ray tracers. The aim is to show that CUDA significantly beats any of the other versions. 
 
-**Q. What data/tools/software/hardware will you need?**\
+**Q. What data/tools/software/hardware will you need?**
 The technology that will be used is: C++, OpenMP, and CUDA.
 The data that will be used are .obj files that will be rendered in the ray tracer: https://graphics.stanford.edu/data/3Dscanrep/ and https://people.sc.fsu.edu/~jburkardt/data/obj/obj.html
 The IDE that will be used is: CLion/Visual Studio
 
-**Q. What results/data will you get/generate?**\
+**Q. What results/data will you get/generate?**
 
 
-**Q. How will you analyze/present/evaluate your data/results?**\
+**Q. How will you analyze/present/evaluate your data/results?**
 
 I will **analyze** the results by comparing rendering times between three implementations:
   - sequential
