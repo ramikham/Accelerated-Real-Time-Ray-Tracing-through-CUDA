@@ -37,24 +37,24 @@ I will **analyze** the results by comparing rendering times between three implem
    - rendering of images and animation videos
     
 
-Project Timeline
-Week 3
+## Project Timeline
+Week 3 
   - Work on completing the Ray Tracer program by implementing the following features:
-    Camera
-    Anti-aliasing
-    Diffuse materials
-    Metallic materials
-    Dieelectric materials
+    * Camera
+    * Anti-aliasing (through multi-sampling)
+    * Diffuse materials
+    * Metallic materials
+    * Dieelectric materials
 
     - Read the following research papers:
-      Ray Tracing on Programmable Graphics Hardware
+      * Ray Tracing on Programmable Graphics Hardware
 
 Week 4
-  - Work on completing the Ray Tracer by implementing the following features
-    Defocus Blur
-    Motion Blur
-    BVHs and AABBs
-    Light
+  - Work on completing the Ray Tracer by implementing the following features:
+    * Defocus Blur
+    * Motion Blur
+    * BVHs and AABBs
+    * Light
 
 Week 5
  - Work on completing the Ray Tracer by implementing the following features
