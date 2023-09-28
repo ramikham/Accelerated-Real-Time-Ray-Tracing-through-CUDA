@@ -33,7 +33,7 @@ I will **analyze** the results by comparing rendering times between three implem
 
  I will **present** the results using the following:
    - using *tables* to compare running times of the three implementations
-   - using *graphs* to analyze the parallelism
+   - using *graphs* to analyze the parallelism (efficiency, speedup, runtime)
    - rendering of images and animation videos
     
 
