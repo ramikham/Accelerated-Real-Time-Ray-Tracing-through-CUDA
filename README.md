@@ -47,8 +47,9 @@ Week 3
     * Metallic materials
     * Dieelectric materials
 
-    - Read the following research papers:
-      * Ray Tracing on Programmable Graphics Hardware
+   - Read the following research papers:
+      * *Ray Tracing on Programmable Graphics Hardware*
+      * *Improving the Performance of a Ray Tracing Algorithm using a GPU*
 
 Week 4
   - Work on completing the Ray Tracer by implementing the following features:
@@ -59,19 +60,19 @@ Week 4
 
 Week 5
  - Work on completing the Ray Tracer by implementing the following features
-   Boxes
-   Planes
-   First scene of a Cornell Box
+   * Boxes
+   * Planes
+   * First scene of a Cornell Box
 
 Week 6
   - Work on completing the Ray Tracer by adding the following features
-    Triangles
-    Cylinders
+    * Triangles
+    * Cylinders
 
 Week 7 
   - Work on completing the Ray Tracer by adding the following features
-    Noise
-    Meshes
+    * Noise
+    * Meshes
 
 Week 8 
   - Start on CUDA
