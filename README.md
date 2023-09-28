@@ -53,6 +53,7 @@ Week 3
 
    - Define some research questions.
    - Write the first draft of the *Abstract* of the Research Report.
+   - Update the Appendix, including equations and approporiate explanations of their implementation in the code and possibly refrences. 
 
 Week 4
   - Work on completing the Ray Tracer by implementing the following features:
