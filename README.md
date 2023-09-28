@@ -42,6 +42,7 @@ Week 3
   - Work on completing the Ray Tracer program by implementing the following features:
     * Camera
     * Anti-aliasing (through multi-sampling)
+    * A shading model (Lambertian)
     * Diffuse materials
     * Metallic materials
     * Dieelectric materials
