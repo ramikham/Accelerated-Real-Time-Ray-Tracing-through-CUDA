@@ -96,7 +96,7 @@ The following is a table of all research papers read.
 The following is a list of references, citations, or links that I consulted to write my code or to help clarify any misunderstood concepts.
 
  [1] *An Introduction to Ray Tracing - Section 2.1: Intersection of the Sphere – Algebraic Solution.*<br>
- [2] *Fundamentals of Computer Graphics - section 4.4.4: Intersecting a Group of Objects.*<br>  
+ [2] *Fundamentals of Computer Graphics - section 4.4.4: Intersecting a Group of Objects.*<br>
  [3] Writing a PPM file: *https://www.rosettacode.org/wiki/Bitmap/Write_a_PPM_file#C++*<br>
 
 
