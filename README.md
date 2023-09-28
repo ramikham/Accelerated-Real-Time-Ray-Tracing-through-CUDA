@@ -47,9 +47,12 @@ Week 3
     * Metallic materials
     * Dieelectric materials
 
-   - Read the following research papers:
+   - Read the following research papers and summarize each in one paragraph:
       * *Ray Tracing on Programmable Graphics Hardware*
       * *Improving the Performance of a Ray Tracing Algorithm using a GPU*
+
+   - Define some research questions.
+   - Write the first draft of the *Abstract* of the Research Report.
 
 Week 4
   - Work on completing the Ray Tracer by implementing the following features:
