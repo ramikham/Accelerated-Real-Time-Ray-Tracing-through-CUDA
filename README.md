@@ -87,6 +87,17 @@ Reference       Class
 [2]            Primitives_Group.h
 [3]            main.cpp
 
+## Results
+In this section, I will include some of the rendered images.
+
+**Week 3**</br>
+Diffuse scene with 50 samples per pixel.</br>
+![Multisampling](Images/Test-Diffuse-50-Samples-per-Pixel.png?raw=true)</br></br>
+Diffuse scene with 500 samples per pixel.</br>
+![Multisampling](Images/Test-Diffuse-500-Samples-per-Pixel.png?raw=true)</br></br>
+Diffuse and specular materials
+![Diffuse and Specular](Images/Test-Specular-200-Samples-per-Pixel.png?raw=true)</br></br>
+
 ## Research Papers
 The following is a table of all research papers read.
 | Paper Title | Summary | 
