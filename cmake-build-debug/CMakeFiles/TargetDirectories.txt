@@ -1,0 +1,3 @@
+C:/Users/Rami/CLionProjects/CUDA_Ray_Tracer/cmake-build-debug/CMakeFiles/CUDA_Ray_Tracer.dir
+C:/Users/Rami/CLionProjects/CUDA_Ray_Tracer/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Rami/CLionProjects/CUDA_Ray_Tracer/cmake-build-debug/CMakeFiles/rebuild_cache.dir

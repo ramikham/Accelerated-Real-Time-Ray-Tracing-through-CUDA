@@ -1,0 +1,9 @@
+# ninja log v5
+2	267	7176813782101835	build.ninja	6b08690dbb17ab1a
+21	1571	7176279177487314	CMakeFiles/CUDA_Ray_Tracer.dir/Sphere.cpp.obj	9d18928b7be38fb
+4	1144	7176777705230753	CMakeFiles/CUDA_Ray_Tracer.dir/main.cpp.obj	37cbb7c97305c755
+17	489	7169385025784332	CMakeFiles/CUDA_Ray_Tracer.dir/Camera.cpp.obj	af12a001038fa81a
+29	1711	7176279178887294	CMakeFiles/CUDA_Ray_Tracer.dir/Primitives_Group.cpp.obj	b64ff455fa88f895
+10	881	7171830924645480	CMakeFiles/CUDA_Ray_Tracer.dir/Ray.cpp.obj	2c8f0a1e403194a7
+13	1537	7176279177117307	CMakeFiles/CUDA_Ray_Tracer.dir/Mathematics/Ray.cpp.obj	25deb96f5a5fac2a
+1145	1425	7176777707961586	CUDA_Ray_Tracer.exe	cb75e6e14be52984
