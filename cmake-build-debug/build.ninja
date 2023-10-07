@@ -49,29 +49,29 @@ cmake_ninja_workdir = C$:/Users/Rami/CLionProjects/CUDA_Ray_Tracer/cmake-build-d
 
 build cmake_object_order_depends_target_CUDA_Ray_Tracer: phony || CMakeFiles/CUDA_Ray_Tracer.dir
 
-build CMakeFiles/CUDA_Ray_Tracer.dir/main.cpp.obj: CXX_COMPILER__CUDA_Ray_Tracer_Debug C$:/Users/Rami/CLionProjects/CUDA_Ray_Tracer/main.cpp || cmake_object_order_depends_target_CUDA_Ray_Tracer
-  DEP_FILE = CMakeFiles\CUDA_Ray_Tracer.dir\main.cpp.obj.d
+build CMakeFiles/CUDA_Ray_Tracer.dir/src/main.cpp.obj: CXX_COMPILER__CUDA_Ray_Tracer_Debug C$:/Users/Rami/CLionProjects/CUDA_Ray_Tracer/src/main.cpp || cmake_object_order_depends_target_CUDA_Ray_Tracer
+  DEP_FILE = CMakeFiles\CUDA_Ray_Tracer.dir\src\main.cpp.obj.d
   FLAGS = -g -fdiagnostics-color=always -std=gnu++11
   OBJECT_DIR = CMakeFiles\CUDA_Ray_Tracer.dir
-  OBJECT_FILE_DIR = CMakeFiles\CUDA_Ray_Tracer.dir
+  OBJECT_FILE_DIR = CMakeFiles\CUDA_Ray_Tracer.dir\src
 
-build CMakeFiles/CUDA_Ray_Tracer.dir/Mathematics/Ray.cpp.obj: CXX_COMPILER__CUDA_Ray_Tracer_Debug C$:/Users/Rami/CLionProjects/CUDA_Ray_Tracer/Mathematics/Ray.cpp || cmake_object_order_depends_target_CUDA_Ray_Tracer
-  DEP_FILE = CMakeFiles\CUDA_Ray_Tracer.dir\Mathematics\Ray.cpp.obj.d
+build CMakeFiles/CUDA_Ray_Tracer.dir/src/Mathematics/Ray.cpp.obj: CXX_COMPILER__CUDA_Ray_Tracer_Debug C$:/Users/Rami/CLionProjects/CUDA_Ray_Tracer/src/Mathematics/Ray.cpp || cmake_object_order_depends_target_CUDA_Ray_Tracer
+  DEP_FILE = CMakeFiles\CUDA_Ray_Tracer.dir\src\Mathematics\Ray.cpp.obj.d
   FLAGS = -g -fdiagnostics-color=always -std=gnu++11
   OBJECT_DIR = CMakeFiles\CUDA_Ray_Tracer.dir
-  OBJECT_FILE_DIR = CMakeFiles\CUDA_Ray_Tracer.dir\Mathematics
+  OBJECT_FILE_DIR = CMakeFiles\CUDA_Ray_Tracer.dir\src\Mathematics
 
-build CMakeFiles/CUDA_Ray_Tracer.dir/Primitives/Sphere.cpp.obj: CXX_COMPILER__CUDA_Ray_Tracer_Debug C$:/Users/Rami/CLionProjects/CUDA_Ray_Tracer/Primitives/Sphere.cpp || cmake_object_order_depends_target_CUDA_Ray_Tracer
-  DEP_FILE = CMakeFiles\CUDA_Ray_Tracer.dir\Primitives\Sphere.cpp.obj.d
+build CMakeFiles/CUDA_Ray_Tracer.dir/src/Primitives/Sphere.cpp.obj: CXX_COMPILER__CUDA_Ray_Tracer_Debug C$:/Users/Rami/CLionProjects/CUDA_Ray_Tracer/src/Primitives/Sphere.cpp || cmake_object_order_depends_target_CUDA_Ray_Tracer
+  DEP_FILE = CMakeFiles\CUDA_Ray_Tracer.dir\src\Primitives\Sphere.cpp.obj.d
   FLAGS = -g -fdiagnostics-color=always -std=gnu++11
   OBJECT_DIR = CMakeFiles\CUDA_Ray_Tracer.dir
-  OBJECT_FILE_DIR = CMakeFiles\CUDA_Ray_Tracer.dir\Primitives
+  OBJECT_FILE_DIR = CMakeFiles\CUDA_Ray_Tracer.dir\src\Primitives
 
-build CMakeFiles/CUDA_Ray_Tracer.dir/Primitives/Primitives_Group.cpp.obj: CXX_COMPILER__CUDA_Ray_Tracer_Debug C$:/Users/Rami/CLionProjects/CUDA_Ray_Tracer/Primitives/Primitives_Group.cpp || cmake_object_order_depends_target_CUDA_Ray_Tracer
-  DEP_FILE = CMakeFiles\CUDA_Ray_Tracer.dir\Primitives\Primitives_Group.cpp.obj.d
+build CMakeFiles/CUDA_Ray_Tracer.dir/src/Primitives/Primitives_Group.cpp.obj: CXX_COMPILER__CUDA_Ray_Tracer_Debug C$:/Users/Rami/CLionProjects/CUDA_Ray_Tracer/src/Primitives/Primitives_Group.cpp || cmake_object_order_depends_target_CUDA_Ray_Tracer
+  DEP_FILE = CMakeFiles\CUDA_Ray_Tracer.dir\src\Primitives\Primitives_Group.cpp.obj.d
   FLAGS = -g -fdiagnostics-color=always -std=gnu++11
   OBJECT_DIR = CMakeFiles\CUDA_Ray_Tracer.dir
-  OBJECT_FILE_DIR = CMakeFiles\CUDA_Ray_Tracer.dir\Primitives
+  OBJECT_FILE_DIR = CMakeFiles\CUDA_Ray_Tracer.dir\src\Primitives
 
 
 # =============================================================================
@@ -81,7 +81,7 @@ build CMakeFiles/CUDA_Ray_Tracer.dir/Primitives/Primitives_Group.cpp.obj: CXX_CO
 #############################################
 # Link the executable CUDA_Ray_Tracer.exe
 
-build CUDA_Ray_Tracer.exe: CXX_EXECUTABLE_LINKER__CUDA_Ray_Tracer_Debug CMakeFiles/CUDA_Ray_Tracer.dir/main.cpp.obj CMakeFiles/CUDA_Ray_Tracer.dir/Mathematics/Ray.cpp.obj CMakeFiles/CUDA_Ray_Tracer.dir/Primitives/Sphere.cpp.obj CMakeFiles/CUDA_Ray_Tracer.dir/Primitives/Primitives_Group.cpp.obj
+build CUDA_Ray_Tracer.exe: CXX_EXECUTABLE_LINKER__CUDA_Ray_Tracer_Debug CMakeFiles/CUDA_Ray_Tracer.dir/src/main.cpp.obj CMakeFiles/CUDA_Ray_Tracer.dir/src/Mathematics/Ray.cpp.obj CMakeFiles/CUDA_Ray_Tracer.dir/src/Primitives/Sphere.cpp.obj CMakeFiles/CUDA_Ray_Tracer.dir/src/Primitives/Primitives_Group.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\CUDA_Ray_Tracer.dir
