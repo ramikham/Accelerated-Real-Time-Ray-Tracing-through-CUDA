@@ -3,4 +3,4 @@ project(CUDA_Ray_Tracer)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(CUDA_Ray_Tracer main.cpp Mathematics/Vec3D.h Utilities.h Mathematics/Ray.cpp Mathematics/Ray.h Primitives/Primitive.h Camera.h Primitives/Sphere.cpp Primitives/Sphere.h Primitives/Primitives_Group.cpp Primitives/Primitives_Group.h Mathematics/Randomized_Algorithms.h Scenes.h Scenes.h Shading.h)
+add_executable(CUDA_Ray_Tracer src/main.cpp "src/Mathematics/Vec3D.h" "src/Utilities.h" "src/Mathematics/Ray.cpp" "src/Mathematics/Ray.h" "src/Primitives/Primitive.h" "src/Camera.h" "src/Primitives/Sphere.cpp" "src/Primitives/Sphere.h" "src/Primitives/Primitives_Group.cpp" "src/Primitives/Primitives_Group.h" "src/Mathematics/Randomized_Algorithms.h" "src/Scenes.h" "src/Scenes.h" "src/Shading.h" src/Materials/Material.h src/Materials/Diffuse.h)

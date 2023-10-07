@@ -51,4 +51,14 @@ inline Vec3D random_unit_vector() {
             return unit_vector(random_vector);
     }
 }
+
+inline Vec3D random_on_hemisphere(const Vec3D& normal) {
+    Vec3D on_unit_sphere = random_unit_vector();
+
+    // In the same hemisphere as the normal?
+    if (dot_product(on_unit_sphere, normal) > 0.0)
+        return on_unit_sphere;
+    else
+        return -on_unit_sphere;
+}
 #endif //CUDA_RAY_TRACER_RANDOMIZED_ALGORITHMS_H

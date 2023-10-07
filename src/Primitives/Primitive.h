@@ -8,6 +8,7 @@
 #include "../Utilities.h"
 
 class Material;         // predef
+
 /// The ray/primitive intersection routine needs to return intersection
 /// information at the point of intersection. We use a structure for that,
 /// and we pass it around via the intersection() function.
@@ -18,8 +19,6 @@ struct Intersection_Information {
     double t;               // intersection t
     bool front_face;        // did the ray intersect the front face of the primitive?
     std::shared_ptr<Material> mat_ptr;      // pointer to the material of the primitive
-    Material_Type material_type;
-    Color surface_color;
 
     /// Function to make the normal always point out against the ray.
     inline void set_face_normal(const Ray& r, const Vec3D& outward_normal) {

@@ -5,6 +5,7 @@
 #include "Shading.h"
 #include "Scenes.h"
 
+
 void rendering_loop(Camera cam, const std::string& output_image_name) {
     // Output File
     // -------------------------------------------------------------------------------
@@ -55,6 +56,7 @@ void rendering_loop_with_supersampling(int samples_per_pixel, Camera cam, const 
         for (int i = 0; i < cam.image_width; ++i) {
             Color pixel_color(0.0, 0.0, 0.0);   // Initialize pixel color
             // Multisampling loop
+
             for (int s = 0; s < samples_per_pixel; ++s) {
                 // Calculate random offsets within the pixel
                 double u_offset = (i+random_double()) / (cam.image_width - 1);
@@ -67,7 +69,7 @@ void rendering_loop_with_supersampling(int samples_per_pixel, Camera cam, const 
                 Ray r(cam.camera_origin, ray_direction);
 
                 // Accumulate color for each sample
-                pixel_color += cast_ray(r, first_scene(), 50);
+                pixel_color += cast_ray(r, diffuse_ambient_scene(), 50);
             }
 
             // Average the colors from all samples
@@ -111,6 +113,14 @@ int main() {
 
     Camera cam(camera_origin, aspect_ratio, focal_length, image_width, viewport_height);
     //rendering_loop(cam, "No Multisampling");
-    rendering_loop_with_supersampling(200, cam, "Test Specular - New Scene");
+
+    // 59932433
+
+    auto start = std::chrono::high_resolution_clock::now();
+    rendering_loop_with_supersampling(200, cam, "Blinn Lambertian Model - Low Ambient Reflection");
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start);
+
+    std::cout << duration.count() << std::endl;
     return 0;
 }

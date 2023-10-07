@@ -42,8 +42,7 @@ bool Sphere::intersection(const Ray &r, double t_0, double t_1, Intersection_Inf
     intersection_info.p = r.at(intersection_t);
     Vec3D outward_normal = (intersection_info.p - center) / radius;
     intersection_info.set_face_normal(r, outward_normal);
-    intersection_info.material_type = mat_type;
-    intersection_info.surface_color = surface_color;
+    intersection_info.mat_ptr = sphere_material;
 
     return true;
 }
