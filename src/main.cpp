@@ -30,7 +30,7 @@ void rendering_loop(Camera cam, const std::string& output_image_name) {
             Ray r(cam.camera_origin, ray_direction);
 
             // Shoot a ray through the pixel center and color it
-            Color pixel_color = cast_ray(r, first_scene());
+            Color pixel_color = shade(r, specular_scene());
 
             // Output the color the PPM file
             ofs << static_cast<int>(255.9 * pixel_color.x()) << ' '
@@ -69,7 +69,7 @@ void rendering_loop_with_supersampling(int samples_per_pixel, Camera cam, const 
                 Ray r(cam.camera_origin, ray_direction);
 
                 // Accumulate color for each sample
-                pixel_color += cast_ray(r, diffuse_ambient_scene(), 50);
+                pixel_color += shade(r, specular_scene(), 1);
             }
 
             // Average the colors from all samples
@@ -117,7 +117,7 @@ int main() {
     // 59932433
 
     auto start = std::chrono::high_resolution_clock::now();
-    rendering_loop_with_supersampling(200, cam, "Blinn Lambertian Model - Low Ambient Reflection");
+    rendering_loop_with_supersampling(200, cam, "Specular Reflection - No Recursion");
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start);
 

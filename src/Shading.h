@@ -9,7 +9,7 @@
 #include "Primitives/Primitives_Group.h"
 #include "Materials/Diffuse.h"
 
-Color cast_ray(const Ray& r, const Primitive& world, int depth=10){Intersection_Information rec;
+Color shade(const Ray& r, const Primitive& world, int depth= 10){Intersection_Information rec;
     if (depth <= 0)
         return Color(0,0,0);
 
@@ -28,7 +28,7 @@ Color cast_ray(const Ray& r, const Primitive& world, int depth=10){Intersection_
     // Background color when there is no intersection
     Vec3D unit_direction = unit_vector(r.get_ray_direction());
     auto a = 0.5 * (unit_direction.y() + 1.0);
-    return (1.0 - a) * Color(1.0, 1.0, 1.0) + a * Color(0.2, 0.3, 0.5);
+    return (1.0 - a) * Color(1.0, 1.0, 1.0) + a * Color(0.5, 0.7, 1.0);     // for a darker ambient color, use Color(0.2, 0.3, 0.5);
 }
 
 #endif //CUDA_RAY_TRACER_SHADING_H
