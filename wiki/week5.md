@@ -1,0 +1,13 @@
+# Week 4 Tasks
+
+**9 October - 15 October**
+- #### Meet supervisor
+- #### LaTeX Document
+- [ ] First draft of *Literature Review - Introduction*
+- [x] Included XX research papers in the LaTeX document
+
+| Research Paper                                                                                              | Section in LaTeX Document | Purpose                                   | Citation (Harvard)                                                                                                                                                                                                                                                                                            |
+|-------------------------------------------------------------------------------------------------------------|---------------------------|-------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Real-time Rendering with Compressed Animated Light Field**                                                | **2.7.1 Virtual Reality** | Current state-of-the-art in VR technology | Koniaris, B., Kosek, M., Sinclair, D. and Mitchell, K., 2017, January. Real-time Rendering with Compressed Animated Light Fields. In Graphics Interface (Vol. 2).                                                                                                                                             |
+| **CUDA Website**                                                                                            | **2.5 CUDA and the GPU**  | What is CUDA?                             | NVIDIA Developer. (2019). CUDA Zone. [online] Available at: https://developer.nvidia.com/cuda-zone.                                                                                                                                                                                                           |
+| **Spatiotemporal variance-guided filtering: real-time reconstruction for path-traced global illumination.** | **2.2.6 Path Tracing**    | Current path tracing research             | Schied, C., Kaplanyan, A., Wyman, C., Patney, A., Chaitanya, C.R.A., Burgess, J., Liu, S., Dachsbacher, C., Lefohn, A. and Salvi, M., 2017. Spatiotemporal variance-guided filtering: real-time reconstruction for path-traced global illumination. In *Proceedings of High Performance Graphics* (pp. 1-12). |
