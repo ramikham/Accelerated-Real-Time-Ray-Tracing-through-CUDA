@@ -12,5 +12,8 @@ Diffuse scene with 500 samples per pixel.</br>
 Diffuse and metallic materials
 ![Diffuse and Metal](Images/Test-Specular-200-Samples-per-Pixel.png?raw=true)</br></br>
 
+Perfect-mirror floor and a metallic Sphere
+![Specular Reflection](Images/Specular-Reflection-Recursion-Depth-_-50.png)
+
 
 
