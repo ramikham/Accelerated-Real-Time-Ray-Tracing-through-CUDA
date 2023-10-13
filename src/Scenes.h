@@ -42,5 +42,21 @@ Primitives_Group diffuse_ambient_scene(){
     return scene;
 }
 
+Primitives_Group diffuse_ambient_scene_2(){
+    Primitives_Group scene;
+
+    // The ground material
+    std::shared_ptr<Diffuse> diffuse_material_ground = std::make_shared<Diffuse>(Color(0.8, 0.8, 0.0));
+
+    // The upper sphere material
+    std::shared_ptr<Diffuse> diffuse_material_upper = std::make_shared<Diffuse>(Color(0.9, 0.3, 0.3));
+
+
+    scene.add_primitive_to_list(std::make_shared<Sphere>(point3D( 0.0, -100.5, -1.0), 100.0, diffuse_material_ground));
+    scene.add_primitive_to_list(std::make_shared<Sphere>(point3D( 0.0,    0.0, -1.0),   0.5, diffuse_material_upper));
+
+    return scene;
+}
+
 
 #endif //CUDA_RAY_TRACER_SCENES_H

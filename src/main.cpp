@@ -69,7 +69,7 @@ void rendering_loop_with_supersampling(int samples_per_pixel, Camera cam, const 
                 Ray r(cam.camera_origin, ray_direction);
 
                 // Accumulate color for each sample
-                pixel_color += shade(r, specular_scene(), 1);
+                pixel_color += shade(r, diffuse_ambient_scene_2(), 50);
             }
 
             // Average the colors from all samples
@@ -117,7 +117,7 @@ int main() {
     // 59932433
 
     auto start = std::chrono::high_resolution_clock::now();
-    rendering_loop_with_supersampling(200, cam, "Specular Reflection - No Recursion");
+    rendering_loop_with_supersampling(1, cam, "Diffuse Scene - 1 sample-per-pixel");
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start);
 
