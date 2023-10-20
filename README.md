@@ -1,6 +1,10 @@
-# Accelerated-Real-Time-Ray-Tracing-through-CUDA
+# Title: Accelerated-Real-Time-Ray-Tracing-through-CUDA
+**Abstract**
+....
 
-# Background
+
+# Overview
+## Background
 Weekly progress can be found in the [Wiki](wiki).<br>
 Rendered images can be found [here](Images).<br>
 
