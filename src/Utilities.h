@@ -11,7 +11,10 @@
 #include <cmath>
 #include <vector>
 #include <memory>
+#include <algorithm>
 #include <chrono>
+#include <cassert>
+#include <omp.h>
 
 // Include Headers
 // -----------------------------------------------------------------------
@@ -48,5 +51,5 @@ inline Vec3D specular_reflection_direction(const Vec3D& I, const Vec3D& N) {
 inline Vec3D diffuse_reflection_direction(const Vec3D& N) {
     return N + random_unit_vector();
 }
-enum Material_Type {DIFFUSE, SPECULAR};
+
 #endif //CUDA_RAY_TRACER_UTILITIES_H

@@ -2,6 +2,8 @@
 
 **9 October - 15 October**
 - #### Meet supervisor
+- [x] Friday October, 13
+
 - #### LaTeX Document
 - [x] Included 6 research papers in the LaTeX document
 

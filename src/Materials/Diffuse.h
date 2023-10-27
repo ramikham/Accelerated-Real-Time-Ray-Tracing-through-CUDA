@@ -17,8 +17,8 @@ public:
 
         scattered_ray = Ray(intersection_info.p, reflection_direction);
 
-        shading_color = surface_color * std::fmax(0, dot_product(intersection_info.normal, reflection_direction)) / M_PI;
-
+       // shading_color = surface_color * std::fmax(0, dot_product(intersection_info.normal, reflection_direction)) / M_PI;
+        shading_color = surface_color;
         return true;
     }
 

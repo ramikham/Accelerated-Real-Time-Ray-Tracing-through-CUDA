@@ -6,8 +6,9 @@
 #define CUDA_RAY_TRACER_PRIMITIVE_H
 
 #include "../Utilities.h"
+#include "../Accelerators/Axis_Aligned_Bounding_Box.h"
 
-class Material;         // predef
+class Material;         // pre-definition of class "Material"
 
 /// The ray/primitive intersection routine needs to return intersection
 /// information at the point of intersection. We use a structure for that,
@@ -38,6 +39,8 @@ class Primitive {
 public:
     virtual bool intersection(const Ray& r, double t_0, double t_1, Intersection_Information& intersection_info) const = 0;
     virtual ~Primitive()=default;
+
+    virtual bool has_bounding_box(double time_0, double time_1, Axis_Aligned_Bounding_Box& surrounding_AABB) const = 0;
 };
 
 #endif //CUDA_RAY_TRACER_PRIMITIVE_H

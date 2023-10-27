@@ -1,10 +1,9 @@
 #include "Utilities.h"
 #include "Camera.h"
-#include "Primitives/Sphere.h"
-#include "Primitives/Primitives_Group.h"
 #include "Shading.h"
 #include "Scenes.h"
 
+/*
 
 void rendering_loop(Camera cam, const std::string& output_image_name) {
     // Output File
@@ -40,6 +39,7 @@ void rendering_loop(Camera cam, const std::string& output_image_name) {
     }
 }
 
+/*
 void rendering_loop_with_supersampling(int samples_per_pixel, Camera cam, const std::string& output_image_name) {
     // Output File
     // -------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ void rendering_loop_with_supersampling(int samples_per_pixel, Camera cam, const 
         for (int i = 0; i < cam.image_width; ++i) {
             Color pixel_color(0.0, 0.0, 0.0);   // Initialize pixel color
             // Multisampling loop
-
+#pragma omp parallel for schedule(dynamic) default(none) shared(samples_per_pixel, i, j, cam, pixel_color) num_threads(16)
             for (int s = 0; s < samples_per_pixel; ++s) {
                 // Calculate random offsets within the pixel
                 double u_offset = (i+random_double()) / (cam.image_width - 1);
@@ -69,7 +69,7 @@ void rendering_loop_with_supersampling(int samples_per_pixel, Camera cam, const 
                 Ray r(cam.camera_origin, ray_direction);
 
                 // Accumulate color for each sample
-                pixel_color += shade(r, diffuse_ambient_scene_2(), 50);
+                pixel_color += shade(r, many_objects_scene(), 10);
             }
 
             // Average the colors from all samples
@@ -82,45 +82,153 @@ void rendering_loop_with_supersampling(int samples_per_pixel, Camera cam, const 
         }
     }
 }
+*/
+void rendering_loop(int samples_per_pixel, const std::string& output_image_name) {
+    // Image
+    // -------------------------------------------------------------------------------
+    const auto aspect_ratio = 16.0 / 9.0;
+    const int image_width = 1200;
+    const int image_height = static_cast<int>(image_width / aspect_ratio);
+    const int max_depth = 5;
 
+    // World
+    // -------------------------------------------------------------------------------
+    Primitives_Group world = many_objects_scene();
+
+
+    // Camera
+    // -------------------------------------------------------------------------------
+    point3D lookfrom(13,2,3);       //point3D lookfrom(-2, 2, 1);
+    point3D lookat(0, 0, 0);        //point3D lookat(0,0,-1);
+    Vec3D vup(0,1,0);
+    auto vfov = 20.0;
+
+    Camera cam(lookfrom, lookat, vup, vfov, aspect_ratio);
+
+    // Output File
+    // -------------------------------------------------------------------------------
+    const std::string& file_name = output_image_name + ".ppm";
+    std::ofstream ofs(file_name, std::ios_base::out | std::ios_base::binary);
+
+    std::cout << "Image height = " << image_height << std::endl;
+    std::cout << "Image Width = " << image_width << std::endl;
+    std::cout << "Depth = " << max_depth << std::endl;
+    std::cout << "Samples-per-pixel = " << samples_per_pixel << std::endl;
+    // Render Loop
+    // -----------------------------------------------------------------------
+    // Reference: [3] How to write to a PPM file? https://www.rosettacode.org/wiki/Bitmap/Write_a_PPM_file#C++
+    ofs << "P3\n" << image_width << " " << image_height << "\n255\n";
+
+    for (int j = image_height - 1; j >=0; --j) {
+        for (int i = 0; i < image_width; ++i) {
+            Color pixel_color(0.0, 0.0, 0.0);   // Initialize pixel color
+           //
+           // #pragma omp parallel for schedule(dynamic) default(none) shared(std::cout, samples_per_pixel, i, j, cam, pixel_color, world, image_width, image_height) num_threads(16)
+            for (int s = 0; s < samples_per_pixel; ++s) {
+                //std::cout << "Number of active threads = " << omp_get_thread_num() << std::endl;
+                auto u = (i + random_double()) / (image_width - 1);
+                auto v = (j + random_double()) / (image_height - 1);
+
+                // Construct a ray from the camera origin in the direction of the sample point
+                Ray r = cam.get_ray(u, v);
+
+                // Accumulate color for each sample
+                pixel_color += shade(r, world, max_depth);
+            }
+
+            // Average the colors from all samples
+            pixel_color /= samples_per_pixel;
+
+            // Output the averaged color to the PPM file
+           ofs << static_cast<int>(255 * clamp(pixel_color.x(), 0.0, 0.999)) << ' '
+                << static_cast<int>(255 * clamp(pixel_color.y(), 0.0, 0.999)) << ' '
+                << static_cast<int>(255 * clamp(pixel_color.z(), 0.0, 0.999)) << '\n';
+        }
+    }
+}
+
+void parallel_rendering_loop(int samples_per_pixel, const std::string& output_image_name) {
+    // Image
+    // -------------------------------------------------------------------------------
+    const auto aspect_ratio = 16.0 / 9.0;
+    const int image_width = 1200;
+    const int image_height = static_cast<int>(image_width / aspect_ratio);
+    const int max_depth = 5;
+
+    // World
+    // -------------------------------------------------------------------------------
+    Primitives_Group world = many_objects_scene();
+
+
+    // Camera
+    // -------------------------------------------------------------------------------
+    point3D lookfrom(13,2,3);       //point3D lookfrom(-2, 2, 1);
+    point3D lookat(0, 0, 0);        //point3D lookat(0,0,-1);
+    Vec3D vup(0,1,0);
+    auto vfov = 20.0;
+
+    Camera cam(lookfrom, lookat, vup, vfov, aspect_ratio);
+
+    // Output File
+    // -------------------------------------------------------------------------------
+    const std::string& file_name = output_image_name + ".ppm";
+    std::ofstream ofs(file_name, std::ios_base::out | std::ios_base::binary);
+
+    std::cout << "Image height = " << image_height << std::endl;
+    std::cout << "Image Width = " << image_width << std::endl;
+    std::cout << "Depth = " << max_depth << std::endl;
+    std::cout << "Samples-per-pixel = " << samples_per_pixel << std::endl;
+    // Render Loop
+    // -----------------------------------------------------------------------
+    // Reference: [3] How to write to a PPM file? https://www.rosettacode.org/wiki/Bitmap/Write_a_PPM_file#C++
+    ofs << "P3\n" << image_width << " " << image_height << "\n255\n";
+    std::vector<std::vector<Color>> pixel_colors(image_height, std::vector<Color>(image_width, Color(0, 0, 0)));
+
+    for (int j = image_height - 1; j >=0; --j) {
+        #pragma omp parallel for default(none) shared(samples_per_pixel, image_height, image_width, j, cam, world, pixel_colors) num_threads(16)
+        for (int i = 0; i < image_width; ++i) {
+            Color pixel_color(0.0, 0.0, 0.0);   // Initialize pixel color
+            // #pragma omp parallel for schedule(dynamic) default(none) shared(std::cout, samples_per_pixel, i, j, cam, pixel_color, world, image_width, image_height) num_threads(16)
+            for (int s = 0; s < samples_per_pixel; ++s) {
+                //std::cout << "Number of active threads = " << omp_get_thread_num() << std::endl;
+                auto u = (i + random_double()) / (image_width - 1);
+                auto v = (j + random_double()) / (image_height - 1);
+
+                // Construct a ray from the camera origin in the direction of the sample point
+                Ray r = cam.get_ray(u, v);
+
+                // Accumulate color for each sample
+                pixel_color += shade(r, world, max_depth);
+            }
+
+            pixel_colors[j][i] = pixel_color;
+        }
+    }
+
+    // Average the colors from all samples to compute the final pixel color
+    for (int j = image_height - 1; j >= 0; --j) {
+        for (int i = 0; i < image_width; ++i) {
+            Color pixel_color = pixel_colors[j][i];
+            // Average the colors from all samples
+            pixel_color /= samples_per_pixel;
+            // Output the averaged color to the PPM file
+            ofs << static_cast<int>(255 * clamp(pixel_color.x(), 0.0, 0.999)) << ' '
+                << static_cast<int>(255 * clamp(pixel_color.y(), 0.0, 0.999)) << ' '
+                << static_cast<int>(255 * clamp(pixel_color.z(), 0.0, 0.999)) << '\n';
+        }
+    }
+}
 int main() {
     /* Reference:   The math for the image and camera details was inspired from:
      * https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-generating-camera-rays/generating-camera-rays.html
      */
 
-    // Image Details
-    // -----------------------------------------------------------------------
-    double aspect_ratio = 16.0 / 9.0;
-    int image_width = 800;
-    int image_height = static_cast<int>(image_width/aspect_ratio);
-    image_height = (image_height < 1) ? 1 : image_height;
+    auto start = omp_get_wtime();
+    //rendering_loop(50, "Testing Many Objects");
+    parallel_rendering_loop(50, "Testing Parallelism");
+    auto stop = omp_get_wtime();
+    auto duration = stop - start;
 
-    // Camera Details
-    // -----------------------------------------------------------------------
-    point3D camera_origin = point3D(0,0,0);
-    double focal_length = 1.0;
-    double viewport_height = 2.0;
-    double viewport_width = viewport_height * (static_cast<double>(image_width) / image_height);
-
-    Vec3D viewport_u = Vec3D(viewport_width, 0, 0);
-    Vec3D viewport_v = Vec3D(0, -viewport_height, 0);
-
-    Vec3D pixel_delta_u = viewport_u / image_width;
-    Vec3D pixel_delta_v = viewport_v / image_height;
-
-    Vec3D viewport_upper_left_corner = camera_origin - Vec3D(0, 0, focal_length) - viewport_u/2 - viewport_v/2;
-    Vec3D first_pixel_center_location = viewport_upper_left_corner + 0.5 * (pixel_delta_u + pixel_delta_v);
-
-    Camera cam(camera_origin, aspect_ratio, focal_length, image_width, viewport_height);
-    //rendering_loop(cam, "No Multisampling");
-
-    // 59932433
-
-    auto start = std::chrono::high_resolution_clock::now();
-    rendering_loop_with_supersampling(1, cam, "Diffuse Scene - 1 sample-per-pixel");
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start);
-
-    std::cout << duration.count() << std::endl;
+    std::cout << duration << std::endl;
     return 0;
 }
