@@ -32,6 +32,12 @@ static Vec3D random_vector_in_range(double lower_bound, double upper_bound) {
             };
 }
 
+inline int random_int_in_range(double min, double max) {
+    /// Returns a random int in [min, max]
+
+    return static_cast<int>(random_double(min, max+1));
+}
+
 /// A function that returns a random vector with each if its components in the range: [lower_bound,upper_bound).
 static Vec3D random_vector_in_range() {
     return {
@@ -44,12 +50,11 @@ static Vec3D random_vector_in_range() {
 /// A function that returns a random vector on the unit sphere.
 /// Reference: [4]
 inline Vec3D random_unit_vector() {
-    bool done = false;
-    while (!done) {
-        auto random_vector = random_vector_in_range(-1,1);
+    do {
+        auto random_vector = random_vector_in_range(-1, 1);
         if (random_vector.length_squared() < 1)
             return unit_vector(random_vector);
-    }
+    } while (true);
 }
 
 inline Vec3D random_on_hemisphere(const Vec3D& normal) {

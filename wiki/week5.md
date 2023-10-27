@@ -1,7 +1,9 @@
-# Week 4 Tasks
+# Week 5 Tasks
 
 **9 October - 15 October**
 - #### Meet supervisor
+- [x] Friday October, 13
+
 - #### LaTeX Document
 - [x] Included 6 research papers in the LaTeX document
 

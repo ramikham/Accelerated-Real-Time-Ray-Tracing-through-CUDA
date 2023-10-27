@@ -9,7 +9,8 @@
 #include "Primitives/Primitives_Group.h"
 #include "Materials/Diffuse.h"
 
-Color shade(const Ray& r, const Primitive& world, int depth= 10){Intersection_Information rec;
+Color shade(const Ray& r, const Primitive& world, int depth= 10){
+    Intersection_Information rec;
     if (depth <= 0)
         return Color(0,0,0);
 
@@ -19,7 +20,7 @@ Color shade(const Ray& r, const Primitive& world, int depth= 10){Intersection_In
 
         if (rec.mat_ptr->illumination(r, rec, visible_color, scattered_ray)) {
           // std::cout << visible_color;
-           return visible_color;
+           return visible_color * shade(scattered_ray, world, depth-1) ;
         }
 
         return Color(0,0,0);
