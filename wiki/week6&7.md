@@ -2,7 +2,7 @@
 
 **16 October - 30 October**
 - #### Meet supervisor
-- [ ] 27 October
+- [x] 27 October
 
 - #### LaTeX Document
 - [x] Included 6 research papers in the *Literature Review* chapter

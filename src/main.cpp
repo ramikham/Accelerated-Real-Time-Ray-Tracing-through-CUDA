@@ -165,7 +165,7 @@ void parallel_rendering_loop(int samples_per_pixel, const std::string& output_im
     point3D lookfrom(13,2,3);       //point3D lookfrom(-2, 2, 1);
     point3D lookat(0, 0, 0);        //point3D lookat(0,0,-1);
     Vec3D vup(0,1,0);
-    auto vfov = 20.0;
+    auto vfov = 30.0;
 
     Camera cam(lookfrom, lookat, vup, vfov, aspect_ratio);
 
@@ -225,7 +225,7 @@ int main() {
 
     auto start = omp_get_wtime();
     //rendering_loop(50, "Testing Many Objects");
-    parallel_rendering_loop(50, "Testing Parallelism");
+    parallel_rendering_loop(5, "Testing");
     auto stop = omp_get_wtime();
     auto duration = stop - start;
 
