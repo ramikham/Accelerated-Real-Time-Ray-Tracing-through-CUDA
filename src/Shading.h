@@ -29,7 +29,10 @@ Color shade(const Ray& r, const Primitive& world, int depth= 10){
     // Background color when there is no intersection
     Vec3D unit_direction = unit_vector(r.get_ray_direction());
     auto a = 0.5 * (unit_direction.y() + 1.0);
-    return (1.0 - a) * Color(1.0, 1.0, 1.0) + a * Color(0.5, 0.7, 1.0);     // for a darker ambient color, use Color(0.2, 0.3, 0.5);
+
+    // for a darker ambient color, use Color(0.2, 0.3, 0.5); for brighter use Color(0.5, 0.7, 1.0)
+    return (1.0 - a) * Color(0.0, 0.0, 0.0) + a * Color(0.1, 0.15, 0.2); // Represents the darkness of outer space
+
 }
 
 #endif //CUDA_RAY_TRACER_SHADING_H

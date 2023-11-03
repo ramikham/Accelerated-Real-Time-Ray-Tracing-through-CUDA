@@ -63,20 +63,38 @@ Primitives_Group diffuse_ambient_scene_2(){
 
 Primitives_Group many_objects_scene() {
     Primitives_Group world;
-
-    for (int a = -11; a < 11; a++) {
-        for (int b = -11; b < 11; b++) {
+    std::shared_ptr<Material> ground_material = std::make_shared<Diffuse>(Color(0.6, 0.6, 0.6));
+    world.add_primitive_to_list(std::make_shared<Sphere>(point3D(0,-1000,0), 1000, ground_material));
+    for (int a = -2; a < 2; a++) {
+        for (int b = -2; b < 2; b++) {
             point3D center(a + 0.9*random_double(), 1, b + 0.9*random_double());
 
             if ((center - point3D(4, 0.2, 0)).length() > 0.9) {
                 std::shared_ptr<Material> sphere_material;
 
                     // diffuse
-                    sphere_material = std::make_shared<Diffuse>(Color(0.4, 0.2, 0.1));
-                    world.add_primitive_to_list(std::make_shared<Sphere>(center, 0.2, sphere_material));
+                    Color rand_c = random_vector_in_range();
+                    sphere_material = std::make_shared<Diffuse>(Color(rand_c));
+                    if (a % 2 == 0)
+                        world.add_primitive_to_list(std::make_shared<Sphere>(center, 0.1, sphere_material));
+                    else if (a % 3 == 0)
+                        world.add_primitive_to_list(std::make_shared<Sphere>(center, 0.1, std::make_shared<Diffuse>(Color(1.0, 1.0, 1.0))));
+                    else if (a % 5 == 0)
+                        world.add_primitive_to_list(std::make_shared<Sphere>(center, 0.1, sphere_material));
+                    else
+                        world.add_primitive_to_list(std::make_shared<Sphere>(center, 0.1, std::make_shared<Diffuse>(Color(1.0, 1.0, 1.0))));
             }
         }
     }
+
+   // Color big_sphere_color(0.8, 0.8, 0.8); // You can set the color you prefer
+    //point3D big_sphere_center(0, 2.5, 0); // Adjust the center as needed
+    //double big_sphere_radius = 2.0; // Adjust the radius as needed
+    //std::shared_ptr<Material> sphere_material = std::make_shared<Diffuse>(Color(big_sphere_color));
+
+   // std::shared_ptr<Specular> specular_material = std::make_shared<Specular>(Color(1.0, 1.0, 1.0), 0.0, 1.0);
+
+    //world.add_primitive_to_list(std::make_shared<Sphere>(big_sphere_center, big_sphere_radius, specular_material));
 
     world = Primitives_Group(std::make_shared<Bounding_Volume_Hierarchy>(world));
     return world;
@@ -100,4 +118,6 @@ Primitives_Group testing_scene() {
 
     return world;
 }
+
+
 #endif //CUDA_RAY_TRACER_SCENES_H
