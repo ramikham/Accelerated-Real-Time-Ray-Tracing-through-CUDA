@@ -3,6 +3,7 @@
 **30 October - 5 November**
 - #### Meet supervisor
 - [ ] 3 November
+  - - Advisor was not in the office.
 
 - #### LaTeX Document
 - [x] Included more research papers in the *Literature Review* chapter.
