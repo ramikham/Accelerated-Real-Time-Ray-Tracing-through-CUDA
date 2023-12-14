@@ -1,9 +1,5 @@
-# Title: Accelerated-Real-Time-Ray-Tracing-through-CUDA
-Here we combine GPU programming through CUDA, alongside other accelerating schemes, to determine whether an offline rendering engine can be made to run in real-time.
-We delve into the theoretical foundations of real-time rendering, discuss the computational demands 
-dictated by realizing photo-realistic rendering in real-time, propose acceleration techniques by utilizing the parallelism 
-of CUDA to harness the power of the graphics processing unit (GPU), discuss the limitations that have restricted the usage of real-time rendering in highly 
-demanding computing applications like video games, and, finally, explore the future possibilities in accelerating rendering.
+# Title: Approaches to Accelerating Rendering Speeds
+Computational demands of rendering can be significant, especially for complex scenes with high-resolution geometric data and intricate lighting. This necessitates the development of efficient techniques to accelerate rendering speeds. In what follows, we will explore the theoretical foundations of rendering and various acceleration techniques. We will cover topics including rendering algorithms, shading calculations, acceleration data structure, the impact of parallelism on rendering times, and the integration of deep learning. We will implement a rendering engine and investigate methods to improve its performance.
 
 ## Background
 Weekly progress can be found in the [Wiki](wiki).<br>
