@@ -27,7 +27,7 @@ public:
     ~Specular() override = default;
 
     bool illumination(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
-                      Ray &scattered_ray) const override {
+                      Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf) const override {
         if (reflection) {
             // Calculate the direction of the reflected vector
             Vec3D R = specular_reflection_direction(unit_vector(incident_ray.get_ray_direction()),
@@ -43,7 +43,7 @@ public:
             shading_color = surface_color;
 
             // Reflection inside the object surface do not illuminate the scene
-            bool illumination = dot_product(scattered_ray.get_ray_direction(), intersection_info.normal) > 0 ? true : false;
+            bool illumination = dot_product(scattered_ray.get_ray_direction(), intersection_info.normal) > 0;
             return illumination;
         }
 

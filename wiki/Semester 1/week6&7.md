@@ -20,7 +20,7 @@
 
 - [x] Finished the *Introduction* chapter (Chapter 1)
 - [x] Finished the *Abstract*
-- [x] Implemented a BVH class: Bounding_Volume_Hierarchy.h 
+- [x] Implemented a BVH class: BVH.h 
 - [x] Implemented an acceleration structure: Axis_Aligned_Bounding_Boxes.h
 - [x] Implemented a camera class: Camera.h
 

@@ -7,7 +7,8 @@
 
 #include "../Utilities.h"
 
-/// A class to represent a ray. A ray is given is a function R(t) = origin + t * direction
+// A class to represent a ray. A ray is given is a function R(t) = origin + t * direction.
+// Reference: xxx
 class Ray {
 public:
     // Constructors
@@ -18,15 +19,31 @@ public:
 
     // Getters
     // -----------------------------------------------------------------------
-    point3D get_ray_origin() const;
-    Vec3D get_ray_direction() const;
-    double get_time() const;
-    point3D at(double t) const;
+    point3D get_ray_origin() const {
+        // Returns the origin point of the ray
+
+        return ray_origin;
+    };
+    Vec3D get_ray_direction() const {
+        // Returns the direction vector of the ray
+
+        return ray_direction;
+    };
+    double get_time() const {
+        // Returns the time of the ray
+
+        return time;
+    };
+    point3D at(double t) const {
+        // Solves the ray's equation at time = t
+
+        return ray_origin + t * ray_direction;
+    };
 
 private:
-    point3D ray_origin;
-    point3D ray_direction;
-    double time;
+    point3D ray_origin;             // the ray's origin
+    Vec3D ray_direction;            // the ray's direction
+    double time;                    // the ray's time
 };
 
 

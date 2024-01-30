@@ -55,12 +55,6 @@ build CMakeFiles/CUDA_Ray_Tracer.dir/src/main.cpp.obj: CXX_COMPILER__CUDA_Ray_Tr
   OBJECT_DIR = CMakeFiles\CUDA_Ray_Tracer.dir
   OBJECT_FILE_DIR = CMakeFiles\CUDA_Ray_Tracer.dir\src
 
-build CMakeFiles/CUDA_Ray_Tracer.dir/src/Mathematics/Ray.cpp.obj: CXX_COMPILER__CUDA_Ray_Tracer_Debug C$:/Users/Rami/CLionProjects/CUDA_Ray_Tracer/src/Mathematics/Ray.cpp || cmake_object_order_depends_target_CUDA_Ray_Tracer
-  DEP_FILE = CMakeFiles\CUDA_Ray_Tracer.dir\src\Mathematics\Ray.cpp.obj.d
-  FLAGS = -fopenmp -g -fdiagnostics-color=always -std=gnu++11
-  OBJECT_DIR = CMakeFiles\CUDA_Ray_Tracer.dir
-  OBJECT_FILE_DIR = CMakeFiles\CUDA_Ray_Tracer.dir\src\Mathematics
-
 
 # =============================================================================
 # Link build statements for EXECUTABLE target CUDA_Ray_Tracer
@@ -69,7 +63,7 @@ build CMakeFiles/CUDA_Ray_Tracer.dir/src/Mathematics/Ray.cpp.obj: CXX_COMPILER__
 #############################################
 # Link the executable CUDA_Ray_Tracer.exe
 
-build CUDA_Ray_Tracer.exe: CXX_EXECUTABLE_LINKER__CUDA_Ray_Tracer_Debug CMakeFiles/CUDA_Ray_Tracer.dir/src/main.cpp.obj CMakeFiles/CUDA_Ray_Tracer.dir/src/Mathematics/Ray.cpp.obj
+build CUDA_Ray_Tracer.exe: CXX_EXECUTABLE_LINKER__CUDA_Ray_Tracer_Debug CMakeFiles/CUDA_Ray_Tracer.dir/src/main.cpp.obj
   FLAGS = -fopenmp -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\CUDA_Ray_Tracer.dir

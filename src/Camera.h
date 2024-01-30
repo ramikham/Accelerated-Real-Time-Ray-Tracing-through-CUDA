@@ -11,46 +11,8 @@ class Camera {
 public:
     // Constructors
     // -----------------------------------------------------------------------
-    /// Default Constructor
-    /*
-    Camera() {
-        double aspect_ratio = 16.0 / 9.0;
-        double viewport_height = 2.0;
-        double viewport_width = aspect_ratio * viewport_height;
-        focal_length = 1.0;
+    Camera() {}
 
-        camera_origin = point3D(0,0,0);
-        viewport_width_vector = Vec3D(viewport_width, 0.0, 0.0);
-        viewport_height_vector = Vec3D(0.0, viewport_height, 0.0);
-        lower_left_corner = camera_origin -
-                viewport_width_vector/2 -
-                viewport_height_vector/2 -
-                Vec3D(0, 0, focal_length);
-    }
-
-    /// Second Constructor: Enables a positionable camera by means of a pinhole camera model.
-    /// Allows for adjustable vertical FoV.
-    Camera (
-            double v_fov,
-            double aspect_ratio
-            ) {
-        double theta = degrees_to_radians(v_fov);
-        double h = tan(theta / 2);
-        double viewport_height = 2.0 * h;
-        double viewport_width = aspect_ratio * viewport_height;
-
-        focal_length = 1.0;
-
-        camera_origin = point3D(0,0,0);
-        viewport_width_vector = Vec3D(viewport_width, 0.0, 0.0);
-        viewport_height_vector = Vec3D(0.0, viewport_height, 0.0);
-        lower_left_corner = camera_origin -
-                            viewport_width_vector/2 -
-                            viewport_height_vector/2 -
-                            Vec3D(0, 0, focal_length);
-    }
-*/
-    // Third constructor: allows for camera orientation
     Camera(
             point3D lookfrom,           // the position where we place the camera (the camera's origin - now settable by the user)
             point3D lookat,             // the point we look at
@@ -78,11 +40,8 @@ public:
 
         viewport_width_vector = 2 * half_viewport_width * camera_right;
         viewport_height_vector = 2 * half_viewport_height * camera_up;
-
     }
 
-
-    // Use this when using the first and second constructors
     Ray get_ray(double u, double v) const{
         /// Input: (u,v) is a point (i.e., pixel) in the image plane that the camera is capturing.
         /// u and v ∈ [0,1].
@@ -96,7 +55,7 @@ public:
 public:
     // Data Members
     // -----------------------------------------------------------------------
-    point3D camera_origin;
+    point3D camera_origin;                          // location of the camera in space
     Vec3D viewport_width_vector;                    // (horizontal) a vector representing the width of the viewport in the camera's coordinate system.
                                                     // Points from the camera's origin to the right side of the viewport.
 

@@ -52,6 +52,7 @@ public:
     // -----------------------------------------------------------------------
     double V[3];
 };
+
 // Design Choice: make a point a vector (aliases)
 // ------------------------------------------------------------------------
 using point3D = Vec3D;
@@ -71,7 +72,7 @@ inline Vec3D cross_product(const Vec3D& u, const Vec3D& v) {
     );
 }
 
-// Other vector functions
+// Other vector operations
 // ------------------------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& out, const Vec3D& v) {
     return std::cout << v[0] << " " << v[1] << " " << v[2] << std::endl;

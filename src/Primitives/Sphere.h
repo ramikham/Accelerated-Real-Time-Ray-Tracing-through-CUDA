@@ -11,7 +11,7 @@ public:
     // Constructor
     // -----------------------------------------------------------------------
     Sphere(point3D center, double radius, std::shared_ptr<Material> material) :
-    center(center), radius(radius), sphere_material(material) {}
+            center(center), radius(radius), sphere_material(material) {}
 
     bool intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const override;
     bool has_bounding_box(double time_0, double time_1, Axis_Aligned_Bounding_Box &surrounding_AABB) const override;
@@ -22,7 +22,10 @@ public:
     std::shared_ptr<Material> sphere_material;          // material of the sphere
 };
 
+/// Reference: xxx
 bool Sphere::intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const {
+    // Tests if the ray r intersects the sphere between the interval [t_0,t_1]
+
     // Get the A, B, C of the quadratic equation
     Vec3D OC = r.get_ray_origin() - center;
     auto A = r.get_ray_direction().length_squared();
@@ -63,10 +66,10 @@ bool Sphere::intersection(const Ray &r, double t_0, double t_1, Intersection_Inf
     return true;
 }
 
+/// Reference: xxx
 bool Sphere::has_bounding_box(double time_0, double time_1, Axis_Aligned_Bounding_Box &surrounding_AABB) const {
     // Construct the sphere's AABB
-    //return false;
-    //  std::cout << "constructed";
+
     surrounding_AABB = Axis_Aligned_Bounding_Box(
             center - Vec3D(radius, radius, radius),
             center + Vec3D(radius, radius, radius)
