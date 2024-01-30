@@ -21,8 +21,9 @@ public:
 
     // Functions
     // -----------------------------------------------------------------------
+    /// Reference: xxx
     bool intersection(const Ray& r, double t_min, double t_max) const {
-        /// Does ray r intersect the AABB within the interval [t_min,t_max]?
+        /// Checks if ray r intersect the AABB within the interval [t_min,t_max]
 
         // First, check the intersection along the x-axis
         auto inv_dir = Vec3D(1.0 / r.get_ray_direction().x(), 1.0 / r.get_ray_direction().y(), 1.0 / r.get_ray_direction().z());
@@ -50,15 +51,49 @@ public:
             return false;
 
         return true;
+
+        /* /// Reference: Ray Tracing: The Next Week
+        for (int a = 0; a < 3; a++) {
+            auto invD = 1.0f / r.get_ray_direction()[a];
+            auto t0 = (get_min()[a] - r.get_ray_origin()[a]) * invD;
+            auto t1 = (get_max()[a] - r.get_ray_origin()[a]) * invD;
+            if (invD < 0.0f)
+                std::swap(t0, t1);
+            t_min = t0 > t_min ? t0 : t_min;
+            t_max = t1 < t_max ? t1 : t_max;
+            if (t_max <= t_min)
+                return false;
         }
+        return true;*/
+    }
+
+    Axis_Aligned_Bounding_Box pad() {
+        // Return an AABB that has no side narrower than some delta, padding if necessary.
+        double delta = 0.0001;
+
+        point3D new_min(fmax(minimum.x() - delta / 2, minimum.x()),
+                        fmax(minimum.y() - delta / 2, minimum.y()),
+                        fmax(minimum.z() - delta / 2, minimum.z()));
+
+        point3D new_max(fmin(maximum.x() + delta / 2, maximum.x()),
+                        fmin(maximum.y() + delta / 2, maximum.y()),
+                        fmin(maximum.z() + delta / 2, maximum.z()));
+
+        return {new_min, new_max};
+    }
 private:
     // Data Members
     // -----------------------------------------------------------------------
-    point3D minimum;
-    point3D maximum;
+    point3D minimum;            // point at the minimum extent (corner) of the box
+    point3D maximum;            // point at the maximum extent (corner) of the box
 };
 
+// Supporting Functions
+// -----------------------------------------------------------------------
+/// Reference: xxx
 Axis_Aligned_Bounding_Box construct_surrounding_box(Axis_Aligned_Bounding_Box box_0, Axis_Aligned_Bounding_Box box_1) {
+    // Constructs a box surrounding two other boxes: box_0 and box_1
+
     point3D minimum(fmin(box_0.get_min().x(), box_1.get_min().x()),
                     fmin(box_0.get_min().y(), box_1.get_min().y()),
                     fmin(box_0.get_min().z(), box_1.get_min().z()));
