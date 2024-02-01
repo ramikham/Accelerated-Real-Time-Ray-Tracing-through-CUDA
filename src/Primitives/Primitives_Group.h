@@ -55,6 +55,22 @@ public:
         return true;
     }
 
+    double PDF_value(const point3D &o, const Vec3D &v) const override {
+        double weight = 1.0/primitives_list.size();
+        double sum = 0.0;
+       // std::cout << "v = " << v << std::endl;
+        for (const auto& primitive : primitives_list)
+            sum += weight * primitive->PDF_value(o, v);
+     //   std::cout << "why do i get NaN sums?" << std::endl;
+
+        return sum;
+    }
+
+    Vec3D random(const Vec3D &o) const override {
+        auto int_size = static_cast<int>(primitives_list.size());
+        return primitives_list[random_int_in_range(0, int_size-1)]->random(o);
+    }
+
     // Helper Functions
     // -------------------------------------------------------------------
     void add_primitive_to_list(std::shared_ptr<Primitive> o) { primitives_list.push_back(o); }

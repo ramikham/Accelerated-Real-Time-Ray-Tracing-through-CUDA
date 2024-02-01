@@ -12,7 +12,7 @@ public:
     Diffuse_Light(Color light_color) : light_color(light_color) {}
 
     bool illumination(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
-                      Ray &scattered_ray, MATERIAL_TYPE &type, double &pdf) const override {
+                      Ray &scattered_ray, MATERIAL_TYPE &type, double &pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
         return false;
     }
 
