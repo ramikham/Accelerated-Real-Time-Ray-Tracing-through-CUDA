@@ -5,7 +5,7 @@
 #ifndef CUDA_RAY_TRACER_TRANSLATE_H
 #define CUDA_RAY_TRACER_TRANSLATE_H
 
-#include "Primitive.h"
+#include "../../Primitives/Primitive.h"
 
 class Translate : public Primitive {
 public:
@@ -23,12 +23,12 @@ public:
         return true;
     }
 
-    bool has_bounding_box(double time_0, double time_1, Axis_Aligned_Bounding_Box &surrounding_AABB) const override {
+    bool has_bounding_box(double time_0, double time_1, AABB &surrounding_AABB) const override {
         // TODO: IMPLEMENT THIS AND CHECK THAT THE CLASS IS CORRECT
         if (!primitive_ptr->has_bounding_box(time_0, time_1, surrounding_AABB))
             return false;
 
-        surrounding_AABB = Axis_Aligned_Bounding_Box(
+        surrounding_AABB = AABB(
                 surrounding_AABB.get_min() + displacement,
                 surrounding_AABB.get_max() + displacement
                 );

@@ -7,6 +7,7 @@
 
 #include "Primitive.h"
 
+/// Reference: Ray Tracing: The Next Week
 class XZ_Rectangle : public Primitive {
 public:
     XZ_Rectangle(const point3D &minPoint, const point3D &maxPoint, const std::shared_ptr<Material> &matPtr)
@@ -38,9 +39,9 @@ public:
         return true;
     }
 
-    bool has_bounding_box(double time_0, double time_1, Axis_Aligned_Bounding_Box &surrounding_AABB) const override {
-        surrounding_AABB = Axis_Aligned_Bounding_Box(point3D(min_point.x(), y_comp - 0.0001, min_point.z()),
-                                                     point3D(max_point.x(), y_comp + 0.0001, max_point.z()));
+    bool has_bounding_box(double time_0, double time_1, AABB &surrounding_AABB) const override {
+        surrounding_AABB = AABB(point3D(min_point.x(), y_comp - 0.0001, min_point.z()),
+                                point3D(max_point.x(), y_comp + 0.0001, max_point.z()));
         return true;
     }
 

@@ -29,8 +29,8 @@ inline bool compare_AABBs(const std::shared_ptr<Primitive> a, const std::shared_
 
     assert(axis >= 0 && axis <= 2);
 
-    Axis_Aligned_Bounding_Box box_a;            // AABB of object a
-    Axis_Aligned_Bounding_Box box_b;            // AABB of object b
+    AABB box_a;            // AABB of object a
+    AABB box_b;            // AABB of object b
 
     if (!a->has_bounding_box(0,0,box_a) || !b->has_bounding_box(0,0,box_b))
         std::cerr << "NO BOUNDING BOX IN BVH_NODE CONSTRUCTOR.\n";
@@ -38,9 +38,11 @@ inline bool compare_AABBs(const std::shared_ptr<Primitive> a, const std::shared_
     // Compare based on the splitting strategy
     if (split_strategy == MIN_COORDINATE_SORT)
         return box_a.get_min().V[axis] < box_b.get_min().V[axis];
-    else if (split_strategy == MAX_COORDINATE_SORT)
+    else if (split_strategy == MAX_COORDINATE_SORT) {
         // TODO: to be implemented
-        ;
+        std::cout << "ds" << std::endl;
+    }
+
     else if (split_strategy == CENTROID_SORT)
         // TODO: to be implemented
         ;
@@ -73,12 +75,14 @@ bool box_z_compare(const std::shared_ptr<Primitive> a, const std::shared_ptr<Pri
     return compare_AABBs(a, b, 2, split_strategy);
 }
 
-/// Reference: Fundamentals of Computer Graphics - Section 12.3.2
+/// Reference: Fundamentals of Computer Graphics - Section 12.3.2: Hierarchical Bounding Boxes
 class BVH : public Primitive {
 public:
     // Constructors
     // -----------------------------------------------------------------------
     BVH();
+
+    /// Reference: Fundamentals of Computer Graphics - Section 12.3.2: Hierarchical Bounding Boxes
     BVH(const Primitives_Group &list, SPLIT_STRATEGY split_strategy) :
             BVH(list.primitives_list, 0, list.primitives_list.size(), 0.0, 0.0, split_strategy) {}
 
@@ -126,7 +130,7 @@ public:
             right = std::make_shared<BVH>(objects, mid, end, time0, time1, split_strategy);
         }
 
-        Axis_Aligned_Bounding_Box box_left, box_right;
+        AABB box_left, box_right;
 
         if (  !left->has_bounding_box(time0, time1, box_left)
               || !right->has_bounding_box(time0, time1, box_right)
@@ -138,7 +142,7 @@ public:
 
     // Overloaded Functions
     // -----------------------------------------------------------------------
-    /// Reference: xxx
+    /// Reference: Fundamentals of Computer Graphics - Section 12.3.2: Hierarchical Bounding Boxes
     bool intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const override {
         // Test whether the box of the BVH node is intersected by the ray r
 
@@ -165,7 +169,7 @@ public:
         } else
             return false;
     };
-    bool has_bounding_box(double time_0, double time_1, Axis_Aligned_Bounding_Box &surrounding_AABB) const override {
+    bool has_bounding_box(double time_0, double time_1, AABB &surrounding_AABB) const override {
         surrounding_AABB = BBOX;
         return true;
     };
@@ -183,7 +187,7 @@ public:
     // -----------------------------------------------------------------------
     std::shared_ptr<Primitive> left;        // left-child node
     std::shared_ptr<Primitive> right;       // right-child node
-    Axis_Aligned_Bounding_Box BBOX;         // bounding box
+    AABB BBOX;         // bounding box
     SPLIT_STRATEGY split_strategy;          // split strategy
 };
 #endif //CUDA_RAY_TRACER_BVH_H

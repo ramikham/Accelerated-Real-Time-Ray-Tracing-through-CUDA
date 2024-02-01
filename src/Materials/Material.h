@@ -17,6 +17,8 @@ enum MATERIAL_TYPE {
     UNIFORM_HEMPISPHERICAL_DIFFUSE
 };
 
+/// References:     - Fundamentals of Computer Graphics - Section 4.5.1: Light Sources
+///                 - Fundamentals of Computer Graphics - Section 4.5.2: Shading in Software
 class Material {
 public:
     virtual ~Material()=default;

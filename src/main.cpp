@@ -322,8 +322,9 @@ void render(Scene_Information& scene_info) {
                  Ray r = cam.get_ray(u, v);
 
                  // Accumulate color for each sample
-               //  pixel_color +=  radiance_sample_light_directly(r, world, max_depth);
-                 pixel_color += radiance_sample_light_directly(r, world, max_depth);
+                 pixel_color +=  radiance_background(r, world, max_depth);
+             //  pixel_color += radiance_mixture(r, world, lights, max_depth);
+              //   pixel_color += radiance_mixture(r, world,lights, max_depth);
              }
 
              pixel_colors[j][i] = pixel_color;
@@ -411,7 +412,7 @@ int main() {
 
     // working:
  //   Scene_Information scene_info = scene_Test();
-    Scene_Information scene_info = Cornell_Box_scene();
+    Scene_Information scene_info = many_balls_scene();
      render(scene_info);      //parallel
     //serial_render(scene_info);
     auto stop = omp_get_wtime();

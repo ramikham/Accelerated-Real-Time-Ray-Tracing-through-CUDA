@@ -73,7 +73,7 @@ Color radiance(const Ray& r, const Primitive& world, int depth= 10){
 // Color(0.70, 0.80, 1.00) is sky blue
 // (0,0,0) is dark
 // (0.04, 0.04, 0.08) sky dark
-Color radiance_background(const Ray& r, const Primitive& world, int depth= 10, Color background=Color(0,0,0)){
+Color radiance_background(const Ray& r, const Primitive& world, int depth= 10, Color background=Color(0.70, 0.80, 1.00)){
     Intersection_Information rec;
     if (depth <= 0)
         return Color(0,0,0);

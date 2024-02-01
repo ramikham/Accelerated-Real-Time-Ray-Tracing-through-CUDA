@@ -14,7 +14,7 @@ public:
             center(center), radius(radius), sphere_material(material) {}
 
     bool intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const override;
-    bool has_bounding_box(double time_0, double time_1, Axis_Aligned_Bounding_Box &surrounding_AABB) const override;
+    bool has_bounding_box(double time_0, double time_1, AABB &surrounding_AABB) const override;
 
     double PDF_value(const point3D &o, const Vec3D &v) const override {
         Intersection_Information intersection_information;
@@ -52,7 +52,7 @@ public:
     std::shared_ptr<Material> sphere_material;          // material of the sphere
 };
 
-/// Reference: xxx
+/// Reference: An Introduction to Ray Tracing - Section 2.1: Intersection of the Sphere
 bool Sphere::intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const {
     // Tests if the ray r intersects the sphere between the interval [t_0,t_1]
 
@@ -97,10 +97,10 @@ bool Sphere::intersection(const Ray &r, double t_0, double t_1, Intersection_Inf
 }
 
 /// Reference: xxx
-bool Sphere::has_bounding_box(double time_0, double time_1, Axis_Aligned_Bounding_Box &surrounding_AABB) const {
+bool Sphere::has_bounding_box(double time_0, double time_1, AABB &surrounding_AABB) const {
     // Construct the sphere's AABB
 
-    surrounding_AABB = Axis_Aligned_Bounding_Box(
+    surrounding_AABB = AABB(
             center - Vec3D(radius, radius, radius),
             center + Vec3D(radius, radius, radius)
     );
