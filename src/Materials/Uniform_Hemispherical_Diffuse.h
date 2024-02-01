@@ -12,7 +12,7 @@ public:
     Uniform_Hemispherical_Diffuse(const Color& surface_color) : surface_color(surface_color) {}
 
     bool illumination(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
-                      Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf) const override {
+                      Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
         material_type = UNIFORM_HEMPISPHERICAL_DIFFUSE;
         Vec3D reflection_direction = random_on_hemisphere(intersection_info.normal);
         scattered_ray = Ray(intersection_info.p, reflection_direction);

@@ -19,7 +19,7 @@ public:
     // Overridden Functions
     // -------------------------------------------------------------------------------
     bool illumination(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
-                      Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf) const override {
+                      Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
         // Diffuse reflection
         Vec3D reflection_direction = diffuse_reflection_direction(intersection_info.normal);
         scattered_ray = Ray(intersection_info.p, reflection_direction);

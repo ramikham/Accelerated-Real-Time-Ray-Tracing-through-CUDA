@@ -8,6 +8,9 @@
 #include "Utilities.h"
 #include "Primitives/Primitives_Group.h"
 #include "Materials/Diffuse.h"
+#include "Mathematics/Probability/PDF.h"
+#include "Mathematics/Probability/Primitive_PDF.h"
+#include "Mathematics/Probability/Mixture_PDF.h"
 
 /// Reference: xxx
 /*
@@ -55,10 +58,11 @@ Color radiance(const Ray& r, const Primitive& world, int depth= 10){
     Ray scattered_ray;
     Color surface_color;
     MATERIAL_TYPE material_type;
+    std::shared_ptr<PDF> surface_pdf_ptr;
     double pdf;
 
     // std::cout << "Normal from shade(): " << rec.normal << std::endl;
-    if (!rec.mat_ptr->illumination(r, rec, surface_color, scattered_ray, material_type, pdf))
+    if (!rec.mat_ptr->illumination(r, rec, surface_color, scattered_ray, material_type, pdf, surface_pdf_ptr))
         return Color(1.0,1.0,1.0);
 
     return rec.mat_ptr->BRDF(r, rec, scattered_ray, surface_color) *
@@ -68,6 +72,7 @@ Color radiance(const Ray& r, const Primitive& world, int depth= 10){
 
 // Color(0.70, 0.80, 1.00) is sky blue
 // (0,0,0) is dark
+// (0.04, 0.04, 0.08) sky dark
 Color radiance_background(const Ray& r, const Primitive& world, int depth= 10, Color background=Color(0,0,0)){
     Intersection_Information rec;
     if (depth <= 0)
@@ -80,13 +85,15 @@ Color radiance_background(const Ray& r, const Primitive& world, int depth= 10, C
     Ray scattered_ray;
     Color surface_color;
     MATERIAL_TYPE material_type;
+    std::shared_ptr<PDF> surface_pdf_ptr;
     double pdf;
 
     Color color_from_emission = rec.mat_ptr->emitted(rec.p, rec);
 
-    if (!rec.mat_ptr->illumination(r, rec, surface_color, scattered_ray, material_type, pdf))
+    if (!rec.mat_ptr->illumination(r, rec, surface_color, scattered_ray, material_type, pdf, surface_pdf_ptr))
         return color_from_emission;
 
+  //  std::cout << "Color from scatter = " << rec.mat_ptr->BRDF(r, rec, scattered_ray, surface_color) << std::endl;
     return color_from_emission + rec.mat_ptr->BRDF(r, rec, scattered_ray, surface_color) *
                                  radiance_background(scattered_ray, world, depth-1, background) / pdf;
 }
@@ -103,12 +110,13 @@ Color radiance_sample_light_directly(const Ray& r, const Primitive& world, int d
     Ray scattered_ray;
     Color surface_color;
     MATERIAL_TYPE material_type;
+    std::shared_ptr<PDF> surface_pdf_ptr;
     double pdf;
 
     // SAMPLE LIGHT DIRECTLY
     Color color_from_emission = rec.mat_ptr->emitted(rec.p, rec);
 
-    if (!rec.mat_ptr->illumination(r, rec, surface_color, scattered_ray, material_type, pdf))
+    if (!rec.mat_ptr->illumination(r, rec, surface_color, scattered_ray, material_type, pdf, surface_pdf_ptr))
         return color_from_emission;
 
     point3D on_light = point3D(random_double(213, 343), 554, random_double(227, 332));
@@ -129,6 +137,37 @@ Color radiance_sample_light_directly(const Ray& r, const Primitive& world, int d
 
     return color_from_emission + rec.mat_ptr->BRDF(r, rec, scattered_ray, surface_color) *
                                  radiance_sample_light_directly(scattered_ray, world, depth-1, background) / pdf;
+}
+
+Color radiance_mixture(const Ray& r, const Primitive& world, const Primitive& lights, int depth= 10, Color background=Color(0,0,0)){
+    Intersection_Information rec;
+    if (depth <= 0)
+        return Color(0,0,0);
+
+    if (!world.intersection(r, 0.001, infinity, rec))
+        // Background color when there is no intersection
+        return background;
+
+    Ray scattered_ray;
+    Color surface_color;
+    MATERIAL_TYPE material_type;
+    std::shared_ptr<PDF> surface_pdf_ptr;
+    double pdf;
+
+    Color color_from_emission = rec.mat_ptr->emitted(rec.p, rec);
+
+    if (!rec.mat_ptr->illumination(r, rec, surface_color, scattered_ray, material_type, pdf, surface_pdf_ptr))
+        return color_from_emission;
+
+    auto light_ptr = std::make_shared<Primitive_PDF>(lights, rec.p);
+    Mixture_PDF mixture_pdf(light_ptr, surface_pdf_ptr);
+
+  // std::cout << mixture_pdf.generate_a_random_direction_based_on_PDF() << std::endl;
+    scattered_ray = Ray(rec.p, mixture_pdf.generate_a_random_direction_based_on_PDF(), r.get_time());
+    double new_pdf = mixture_pdf.PDF_value(scattered_ray.get_ray_direction());
+
+    return color_from_emission + rec.mat_ptr->BRDF(r, rec, scattered_ray, surface_color) *
+                                 radiance_mixture(scattered_ray, world, lights, depth-1, background) / new_pdf;
 }
 
 /*

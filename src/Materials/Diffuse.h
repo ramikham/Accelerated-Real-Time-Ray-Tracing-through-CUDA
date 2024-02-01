@@ -7,13 +7,14 @@
 
 #include "Material.h"
 #include "../onb.h"
+#include "../Mathematics/Probability/Cosine_Weighted_PDF.h"
 
 class Diffuse : public Material {
 public:
     Diffuse(const Color& surface_color) : surface_color(surface_color) {}
 
     bool illumination(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
-                      Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf) const override {
+                      Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
         /*
         onb uvw;
         uvw.build_from_w(intersection_info.normal);
@@ -45,24 +46,25 @@ public:
         */
         /* ONB */
 
-        /*
-        std::vector<Vec3D> uvw;
-        uvw = build_ONB(intersection_info.normal);
-        Vec3D scatter_direction = global_to_ONB_local(uvw, cosine_weighted_direction());
+
+       // std::vector<Vec3D> uvw;
+       // uvw = build_ONB(intersection_info.normal);
+        surface_pdf_ptr = std::make_shared<Cosine_Weighted_PDF>(intersection_info.normal);
+        Vec3D scatter_direction = surface_pdf_ptr->generate_a_random_direction_based_on_PDF();
         scattered_ray = Ray(intersection_info.p, unit_vector(scatter_direction), incident_ray.get_time());
-        pdf = dot_product(uvw[2], scattered_ray.get_ray_direction()) / M_PI;
+        pdf = surface_pdf_ptr->PDF_value(scattered_ray.get_ray_direction());
         shading_color = surface_color;
-        return true;*/
+        return true;
 
         /* REGULAR - OLD working */
 
-
+        /*
         material_type = DIFFUSE;
         Vec3D reflection_direction = diffuse_reflection_direction(intersection_info.normal);
         scattered_ray = Ray(intersection_info.p, reflection_direction);
         shading_color = surface_color;
         pdf = this->pdf(incident_ray, intersection_info, scattered_ray);
-        return true;
+        return true;*/
     }
 
     /// Reference: xxx

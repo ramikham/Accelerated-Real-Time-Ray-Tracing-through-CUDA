@@ -16,7 +16,37 @@ public:
     bool intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const override;
     bool has_bounding_box(double time_0, double time_1, Axis_Aligned_Bounding_Box &surrounding_AABB) const override;
 
+    double PDF_value(const point3D &o, const Vec3D &v) const override {
+        Intersection_Information intersection_information;
+
+        if (!this->intersection(Ray(o,v), 0.001, infinity, intersection_information))
+            return 0;
+
+        double cos_theta_max = sqrt(1 - (radius * radius)/(center - o).length_squared());
+        auto solid_angle = 2*pi*(1-cos_theta_max);
+        return 1 / solid_angle;
+    }
+
+    Vec3D random(const Vec3D &o) const override {
+        Vec3D direction = center - o;
+        auto distance_squared = direction.length_squared();
+        onb uvw;
+        uvw.build_from_w(direction);
+        return uvw.local(importance_sampling_sphere(radius, distance_squared));
+    }
 public:
+    static Vec3D importance_sampling_sphere(double radius, double distance_squared) {
+        double r1 = random_double();
+        double r2 = random_double();
+        double z = 1 + r2*(sqrt(1-radius*radius/distance_squared) - 1);
+
+        double phi = 2*pi*r1;
+        double x = cos(phi)*sqrt(1-z*z);
+        double y = sin(phi)*sqrt(1-z*z);
+
+        return Vec3D(x, y, z);
+    }
+
     point3D center;                                     // center of the sphere
     double radius;                                      // radius of the sphere
     std::shared_ptr<Material> sphere_material;          // material of the sphere
