@@ -20,6 +20,9 @@
 #include "Mathematics/Transformations/Rotate_Z.h"
 #include "Mathematics/Transformations/Rotate_X.h"
 #include "Primitives/Translate.h"
+#include "Primitives/XY_Rectangle.h"
+#include "Primitives/YZ_Rectangle.h"
+#include "Primitives/XZ_Rectangle.h"
 
 /*
 Primitives_Group specular_scene(){
@@ -470,7 +473,6 @@ inline std::shared_ptr<Primitives_Group> Box(const point3D& a, const point3D& b,
     return sides;
 }
 
-
 /// Reference: https://www.graphics.cornell.edu/online/box/data.html
 Scene_Information Cornell_Box_scene() {
     Scene_Information scene_info;
@@ -502,7 +504,7 @@ Scene_Information Cornell_Box_scene() {
     std::shared_ptr<Diffuse> white = std::make_shared<Diffuse>(Color(0.73, 0.73, 0.73));
     std::shared_ptr<Diffuse> green = std::make_shared<Diffuse>(Color(0.12, 0.45, 0.15));
 
-    std::shared_ptr<Diffuse_Light> light = std::make_shared<Diffuse_Light>(Color(20,20,20));
+    std::shared_ptr<Diffuse_Light> light = std::make_shared<Diffuse_Light>(Color(4,4,4));
 
     // Primitives
     // -------------------------------------------------------------------------------
@@ -526,11 +528,148 @@ Scene_Information Cornell_Box_scene() {
     box2 = std::make_shared<Translate>(box2, Vec3D(130,0,65));
     scene_info.world.add_primitive_to_list(box2);
 
+  //  scene_info.world = Primitives_Group(std::make_shared<BVH>(scene_info.world, MIN_COORDINATE_SORT));
+
     // Lights
     // -------------------------------------------------------------------------------
     auto m = std::shared_ptr<Material>();
     scene_info.lights.add_primitive_to_list(std::make_shared<Quad>(point3D(343, 554, 332), Vec3D(-130,0,0), Vec3D(0,0,-105), m));
 
+    return scene_info;
+}
+
+/// Reference: https://www.graphics.cornell.edu/online/box/data.html
+Scene_Information my_Cornell_Box_scene() {
+    Scene_Information scene_info;
+
+    // Image settings
+    // -------------------------------------------------------------------------------
+    scene_info.aspect_ratio = 1.0;
+    scene_info.image_width = 800;
+    scene_info.image_height = static_cast<int>(scene_info.image_width / scene_info.aspect_ratio);
+
+    // Rendering settings
+    // -------------------------------------------------------------------------------
+    scene_info.max_depth = 10;
+    scene_info.samples_per_pixel = 10;
+
+    // Camera settings
+    // -------------------------------------------------------------------------------
+    scene_info.lookfrom = Vec3D(278, 278, -800);
+    scene_info.lookat = Vec3D(278, 278, 0);
+    scene_info.vup = Vec3D(0, 1, 0);
+    scene_info.vfov = 40;
+    scene_info.output_image_name = "Cornell Box - Mixture PDF";
+
+    scene_info.camera = Camera(scene_info.lookfrom, scene_info.lookat, scene_info.vup, scene_info.vfov, scene_info.aspect_ratio);
+
+    // Materials
+    // -------------------------------------------------------------------------------
+    std::shared_ptr<Diffuse> red = std::make_shared<Diffuse>(Color(0.65, 0.05, 0.05));
+    std::shared_ptr<Diffuse> white = std::make_shared<Diffuse>(Color(0.73, 0.73, 0.73));
+    std::shared_ptr<Diffuse> green = std::make_shared<Diffuse>(Color(0.12, 0.45, 0.15));
+
+    std::shared_ptr<Diffuse_Light> light = std::make_shared<Diffuse_Light>(Color(4,4,4));
+
+
+    std::shared_ptr<Diffuse_Light> sphere_light = std::make_shared<Diffuse_Light>(Color(0.2,0,0));
+    // Primitives
+    // -------------------------------------------------------------------------------
+    // z's must be equal
+ //   scene_info.world.add_primitive_to_list(std::make_shared<Quad>(point3D(343, 554, 332), Vec3D(-130,0,0), Vec3D(0,0,-105), light));
+
+    scene_info.world.add_primitive_to_list(std::make_shared<YZ_Rectangle>(point3D(555, 0, 0), point3D(555, 555, 555), green));
+    scene_info.world.add_primitive_to_list(std::make_shared<YZ_Rectangle>(point3D(0,0,0), point3D(0, 555, 555), red));
+    scene_info.world.add_primitive_to_list(std::make_shared<XY_Rectangle>(point3D(0, 0, 555), point3D(555, 555, 555), white));
+    scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(213, 554, 227), point3D(343,554,332), light));
+    scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(0, 0, 0), point3D(555,0,555), white));
+    scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(0, 555, 0), point3D(555,555,555), white));
+    scene_info.world.add_primitive_to_list(std::make_shared<Sphere>(point3D(190,90,190), 90, sphere_light));
+
+
+
+ //   scene_info.world.add_primitive_to_list(std::make_shared<Quad>(point3D(343, 554, 332), Vec3D(-130,0,0), Vec3D(0,0,-105), light));
+
+    std::shared_ptr<Primitive> box1 = Box(point3D(0,0,0), point3D(165,330,165), white);
+    std::shared_ptr<Primitive> box2 = Box(point3D(0,0,0), point3D(165,165,165), white);
+
+    // Translation/Rotation
+    // -------------------------------------------------------------------------------
+    box1 = std::make_shared<Rotate_Y>(box1, 15);
+    box1 = std::make_shared<Translate>(box1, Vec3D(265,0,295));
+    scene_info.world.add_primitive_to_list(box1);
+
+    box2 = std::make_shared<Rotate_Y>(box2, -18);
+    box2 = std::make_shared<Translate>(box2, Vec3D(130,0,65));
+  //  scene_info.world.add_primitive_to_list(box2);
+
+  //  scene_info.world = Primitives_Group(std::make_shared<BVH>(scene_info.world, MIN_COORDINATE_SORT));
+
+    // Lights
+    // -------------------------------------------------------------------------------
+    auto m = std::shared_ptr<Material>();
+    //scene_info.lights.add_primitive_to_list(std::make_shared<Quad>(point3D(343, 554, 332), Vec3D(-130,0,0), Vec3D(0,0,-105), m));
+    scene_info.lights.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(213, 554, 227), point3D(343,554,332), m));
+    scene_info.lights.add_primitive_to_list(std::make_shared<Sphere>(point3D(190,90,190), 90, m));
+
+    return scene_info;
+}
+
+Scene_Information many_balls_scene() {
+    Scene_Information scene_info;
+
+    // Image settings
+    // -------------------------------------------------------------------------------
+    scene_info.aspect_ratio = 16.0 / 9.0;
+    scene_info.image_width = 1200;
+    scene_info.image_height = static_cast<int>(scene_info.image_width / scene_info.aspect_ratio);
+
+    // Rendering settings
+    // -------------------------------------------------------------------------------
+    scene_info.max_depth = 10;
+    scene_info.samples_per_pixel = 10;
+
+    // Camera settings
+    // -------------------------------------------------------------------------------
+    scene_info.lookfrom = Vec3D(13, 2, 3);
+    scene_info.lookat = Vec3D(0, 0, 0);
+    scene_info.vup = Vec3D(0, 1, 0);
+    scene_info.vfov = 20;
+    scene_info.output_image_name = "Many Balls";
+
+    scene_info.camera = Camera(scene_info.lookfrom, scene_info.lookat, scene_info.vup, scene_info.vfov, scene_info.aspect_ratio);
+
+    // Materials
+    // -------------------------------------------------------------------------------
+    // The ground material
+    std::shared_ptr<Diffuse> diffuse_material_ground = std::make_shared<Diffuse>(Color(0.8, 0.8, 0.0));
+
+    // The upper sphere material
+    std::shared_ptr<Diffuse> diffuse_material_upper = std::make_shared<Diffuse>(Color(0.9, 0.3, 0.3));
+
+    // Primitives
+    // -------------------------------------------------------------------------------
+    std::shared_ptr<Diffuse_Light> light = std::make_shared<Diffuse_Light>(Color(20,20,20));
+    scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(-10, 80, -10), point3D(0, 80, 0), light));
+    scene_info.world.add_primitive_to_list(std::make_shared<Sphere>(point3D( 0.0, -100.5, -1.0), 100.0, diffuse_material_ground));
+    scene_info.world.add_primitive_to_list(std::make_shared<Sphere>(point3D( 0.0,    0.0, -1.0),   0.5, diffuse_material_upper));
+    for (int a = -11; a < 11; a++) {
+        for (int b = -11; b < 11; b++) {
+            point3D center(a + 0.9*random_double(), 0.2, b + 0.9*random_double());
+            if ((center - point3D(4, 0.2, 0)).length() > 0.9) {
+                scene_info.world.add_primitive_to_list(
+                        std::make_shared<Sphere>(center, 0.2, diffuse_material_upper));
+            }
+        }
+    }
+
+   // scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(-10, 80, -10), point3D(0, 80, 0), light));
+
+
+    // radiance_background: scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(213, 554, 227), point3D(343,554,332), light));
+    auto m = std::shared_ptr<Material>();
+    scene_info.lights.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(-10, 80, -10), point3D(0, 80, 0), m));
+    scene_info.world = Primitives_Group(std::make_shared<BVH>(scene_info.world, MIN_COORDINATE_SORT));
     return scene_info;
 }
 
