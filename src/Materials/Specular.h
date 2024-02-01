@@ -26,8 +26,12 @@ public:
 
     ~Specular() override = default;
 
+    /// References:             - Fundamentals of Computer Graphics: Section 4.5.4: Mirror Reflection
+    ///                         - Fundamentals of Computer Graphics: Section 14.2: Smooth Metals
+    ///                         - Fundamentals of Computer Graphics: Section 14.3.1: Reflectivity of a Dielectric
+    ///                         - Fundamentals of Computer Graphics: Section 14.3.2: Refraction
     bool illumination(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
-                      Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf) const override {
+                      Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
         if (reflection) {
             // Calculate the direction of the reflected vector
             Vec3D R = specular_reflection_direction(unit_vector(incident_ray.get_ray_direction()),

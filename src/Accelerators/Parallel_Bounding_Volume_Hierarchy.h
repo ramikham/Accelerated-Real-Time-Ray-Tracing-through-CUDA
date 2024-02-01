@@ -24,14 +24,14 @@ public:
     // Overloaded Functions
     // -----------------------------------------------------------------------
     bool intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const override;
-    bool has_bounding_box(double time_0, double time_1, Axis_Aligned_Bounding_Box &surrounding_AABB) const override;
+    bool has_bounding_box(double time_0, double time_1, AABB &surrounding_AABB) const override;
 
 public:
     // Constructors
     // -----------------------------------------------------------------------
     std::shared_ptr<Primitive> left;        // left-child node
     std::shared_ptr<Primitive> right;       // right-child node
-    Axis_Aligned_Bounding_Box BBOX;         // bounding box
+    AABB BBOX;         // bounding box
 };
 
 /// This is a straightforward of the pseudocode of Section 12.3.2
@@ -63,7 +63,7 @@ bool Parallel_Bounding_Volume_Hierarchy::intersection(const Ray &r, double t_0, 
 }
 
 bool Parallel_Bounding_Volume_Hierarchy::has_bounding_box(double time_0, double time_1,
-                                                 Axis_Aligned_Bounding_Box &surrounding_AABB) const {
+                                                 AABB &surrounding_AABB) const {
     surrounding_AABB = BBOX;
     return true;
 }
@@ -132,7 +132,7 @@ Parallel_Bounding_Volume_Hierarchy::Parallel_Bounding_Volume_Hierarchy(const std
         }
     }
 
-    Axis_Aligned_Bounding_Box box_left, box_right;
+    AABB box_left, box_right;
 
     if (  !left->has_bounding_box(time0, time1, box_left)
           || !right->has_bounding_box(time0, time1, box_right)

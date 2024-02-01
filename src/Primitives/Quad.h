@@ -21,7 +21,7 @@ public:
 
         area = n.length();
 
-        bbox = Axis_Aligned_Bounding_Box(Q, Q+u+v).pad();
+        bbox = AABB(Q, Q + u + v).AABB();
     }
 
     bool intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const override {
@@ -55,7 +55,7 @@ public:
         return true;
     }
 
-    bool has_bounding_box(double time_0, double time_1, Axis_Aligned_Bounding_Box &surrounding_AABB) const override {
+    bool has_bounding_box(double time_0, double time_1, AABB &surrounding_AABB) const override {
         surrounding_AABB = bbox;
 
         return true;
@@ -89,7 +89,7 @@ private:
     Vec3D u;
     Vec3D v;
     std::shared_ptr<Material> mat_ptr;
-    Axis_Aligned_Bounding_Box bbox;
+    AABB bbox;
     Vec3D normal;
     double D;
     Vec3D w;

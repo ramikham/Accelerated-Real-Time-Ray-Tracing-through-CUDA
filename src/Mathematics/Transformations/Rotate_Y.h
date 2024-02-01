@@ -39,7 +39,7 @@ public:
             }
         }
 
-        bbox = Axis_Aligned_Bounding_Box(min, max);
+        bbox = AABB(min, max);
     }
 
     bool intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const override {
@@ -81,7 +81,7 @@ public:
         return true;
     }
 
-    bool has_bounding_box(double time_0, double time_1, Axis_Aligned_Bounding_Box &surrounding_AABB) const override {
+    bool has_bounding_box(double time_0, double time_1, AABB &surrounding_AABB) const override {
         surrounding_AABB = bbox;
         return true;
     }
@@ -91,7 +91,7 @@ private:
     double sin_theta;
     double cos_theta;
     bool has_bbox;
-    Axis_Aligned_Bounding_Box bbox;
+    AABB bbox;
 };
 
 #endif //CUDA_RAY_TRACER_ROTATE_Y_H

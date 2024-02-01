@@ -13,13 +13,13 @@
 #include "Materials/Specular.h"
 #include "Accelerators/BVH.h"
 #include "Accelerators/Parallel_Bounding_Volume_Hierarchy.h"
-#include "Primitives/Translate.h"
+#include "Mathematics/Transformations/Translate.h"
 #include "Materials/Phong.h"
 #include "Materials/Diffuse_Light.h"
 #include "Mathematics/Transformations/Rotate_Y.h"
 #include "Mathematics/Transformations/Rotate_Z.h"
 #include "Mathematics/Transformations/Rotate_X.h"
-#include "Primitives/Translate.h"
+#include "Mathematics/Transformations/Translate.h"
 #include "Primitives/XY_Rectangle.h"
 #include "Primitives/YZ_Rectangle.h"
 #include "Primitives/XZ_Rectangle.h"
@@ -653,8 +653,8 @@ Scene_Information many_balls_scene() {
     scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(-10, 80, -10), point3D(0, 80, 0), light));
     scene_info.world.add_primitive_to_list(std::make_shared<Sphere>(point3D( 0.0, -100.5, -1.0), 100.0, diffuse_material_ground));
     scene_info.world.add_primitive_to_list(std::make_shared<Sphere>(point3D( 0.0,    0.0, -1.0),   0.5, diffuse_material_upper));
-    for (int a = -11; a < 11; a++) {
-        for (int b = -11; b < 11; b++) {
+    for (int a = -61; a < 61; a++) {
+        for (int b = -61; b < 61; b++) {
             point3D center(a + 0.9*random_double(), 0.2, b + 0.9*random_double());
             if ((center - point3D(4, 0.2, 0)).length() > 0.9) {
                 scene_info.world.add_primitive_to_list(
@@ -669,7 +669,11 @@ Scene_Information many_balls_scene() {
     // radiance_background: scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(213, 554, 227), point3D(343,554,332), light));
     auto m = std::shared_ptr<Material>();
     scene_info.lights.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(-10, 80, -10), point3D(0, 80, 0), m));
+    std::cout << scene_info.world.primitives_list.size() << " were created" << std::endl;
+    double start = omp_get_wtime();
     scene_info.world = Primitives_Group(std::make_shared<BVH>(scene_info.world, MIN_COORDINATE_SORT));
+    double end = omp_get_wtime();
+    std::cout << "BUILDING BVH TOOK " << end - start << std::endl;
     return scene_info;
 }
 

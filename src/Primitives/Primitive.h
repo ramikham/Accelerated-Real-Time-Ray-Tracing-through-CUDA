@@ -6,14 +6,15 @@
 #define CUDA_RAY_TRACER_PRIMITIVE_H
 
 #include "../Utilities.h"
-#include "../Accelerators/Axis_Aligned_Bounding_Box.h"
+#include "../Accelerators/AABB.h"
 
 class Material;         // pre-definition of class "Material"
 
 // The ray/primitive intersection routine needs to return intersection
 // information at the point of intersection. We use a structure for that,
 // and we pass it around via the intersection() function.
-/// ----------------------------------------------------------------------
+/// Reference: Fundamentals of Computer Graphics: Section 4.4.3 - Ray Intersection in Software
+// ----------------------------------------------------------------------
 struct Intersection_Information {
     point3D p;                              // intersection point
     Vec3D normal;                           // surface normal at intersection
@@ -39,7 +40,7 @@ class Primitive {
 public:
     virtual ~Primitive()=default;
     virtual bool intersection(const Ray& r, double t_0, double t_1, Intersection_Information& intersection_info) const = 0;
-    virtual bool has_bounding_box(double time_0, double time_1, Axis_Aligned_Bounding_Box& surrounding_AABB) const = 0;
+    virtual bool has_bounding_box(double time_0, double time_1, AABB& surrounding_AABB) const = 0;
     virtual double PDF_value(const point3D& o, const Vec3D& v) const { return 0.0; }
     virtual Vec3D random(const Vec3D& o) const { Vec3D(1,0,0); }
 };

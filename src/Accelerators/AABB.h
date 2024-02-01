@@ -2,17 +2,17 @@
 // Created by Rami on 10/17/2023.
 //
 
-#ifndef CUDA_RAY_TRACER_AXIS_ALIGNED_BOUNDING_BOX_H
-#define CUDA_RAY_TRACER_AXIS_ALIGNED_BOUNDING_BOX_H
+#ifndef CUDA_RAY_TRACER_AABB_H
+#define CUDA_RAY_TRACER_AABB_H
 
 #include "../Utilities.h"
 
-class Axis_Aligned_Bounding_Box {
+class AABB {
 public:
     // Constructors
     // -----------------------------------------------------------------------
-    Axis_Aligned_Bounding_Box() {}
-    Axis_Aligned_Bounding_Box(const point3D& MIN, const point3D& MAX) : minimum(MIN), maximum(MAX) {}
+    AABB() {}
+    AABB(const point3D& MIN, const point3D& MAX) : minimum(MIN), maximum(MAX) {}
 
     // Getters
     // -----------------------------------------------------------------------
@@ -21,7 +21,7 @@ public:
 
     // Functions
     // -----------------------------------------------------------------------
-    /// Reference: xxx
+    /// Reference: Fundamentals of Computer Graphics - Section 12.3.1: Bounding Boxes
     bool intersection(const Ray& r, double t_min, double t_max) const {
         /// Checks if ray r intersect the AABB within the interval [t_min,t_max]
 
@@ -67,20 +67,25 @@ public:
         return true;*/
     }
 
-    Axis_Aligned_Bounding_Box pad() {
+    AABB pad() {
         // Return an AABB that has no side narrower than some delta, padding if necessary.
         double delta = 0.0001;
 
-        point3D new_min(fmax(minimum.x() - delta / 2, minimum.x()),
-                        fmax(minimum.y() - delta / 2, minimum.y()),
-                        fmax(minimum.z() - delta / 2, minimum.z()));
+        point3D new_min(
+                (maximum.x() - minimum.x() >= delta) ? minimum.x() : (minimum.x() - delta / 2),
+                (maximum.y() - minimum.y() >= delta) ? minimum.y() : (minimum.y() - delta / 2),
+                (maximum.z() - minimum.z() >= delta) ? minimum.z() : (minimum.z() - delta / 2)
+        );
 
-        point3D new_max(fmin(maximum.x() + delta / 2, maximum.x()),
-                        fmin(maximum.y() + delta / 2, maximum.y()),
-                        fmin(maximum.z() + delta / 2, maximum.z()));
+        point3D new_max(
+                (maximum.x() - minimum.x() >= delta) ? maximum.x() : (maximum.x() + delta / 2),
+                (maximum.y() - minimum.y() >= delta) ? maximum.y() : (maximum.y() + delta / 2),
+                (maximum.z() - minimum.z() >= delta) ? maximum.z() : (maximum.z() + delta / 2)
+        );
 
-        return {new_min, new_max};
+        return AABB(new_min, new_max);
     }
+
 private:
     // Data Members
     // -----------------------------------------------------------------------
@@ -90,8 +95,8 @@ private:
 
 // Supporting Functions
 // -----------------------------------------------------------------------
-/// Reference: xxx
-Axis_Aligned_Bounding_Box construct_surrounding_box(Axis_Aligned_Bounding_Box box_0, Axis_Aligned_Bounding_Box box_1) {
+/// Reference: Reference: Fundamentals of Computer Graphics - Section 12.3.1: Bounding Boxes
+AABB construct_surrounding_box(AABB box_0, AABB box_1) {
     // Constructs a box surrounding two other boxes: box_0 and box_1
 
     point3D minimum(fmin(box_0.get_min().x(), box_1.get_min().x()),
@@ -104,4 +109,4 @@ Axis_Aligned_Bounding_Box construct_surrounding_box(Axis_Aligned_Bounding_Box bo
 
     return {minimum, maximum};
 }
-#endif //CUDA_RAY_TRACER_AXIS_ALIGNED_BOUNDING_BOX_H
+#endif //CUDA_RAY_TRACER_AABB_H

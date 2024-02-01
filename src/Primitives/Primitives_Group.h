@@ -18,7 +18,7 @@ public:
 
     // Overloaded Function
     // -------------------------------------------------------------------
-    /// Reference: xxx
+    /// Reference: Fundamentals of Computer Graphics: Section 4.4.4: Intersecting a Group of Objects
     bool intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const override {
         Intersection_Information current_info;
         bool intersection_flag = false;
@@ -35,11 +35,11 @@ public:
         return intersection_flag;
     };
 
-    bool has_bounding_box(double time_0, double time_1, Axis_Aligned_Bounding_Box &surrounding_AABB) const override {
+    bool has_bounding_box(double time_0, double time_1, AABB &surrounding_AABB) const override {
         if (primitives_list.empty())
             return false;
 
-        Axis_Aligned_Bounding_Box temp_box;
+        AABB temp_box;
         bool first_box = true;
 
         for (const auto& obj : primitives_list){

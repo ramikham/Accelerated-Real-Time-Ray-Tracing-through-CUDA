@@ -8,7 +8,6 @@
 #include "../Utilities.h"
 
 // A class to represent a ray. A ray is given is a function R(t) = origin + t * direction.
-// Reference: xxx
 class Ray {
 public:
     // Constructors

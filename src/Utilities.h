@@ -65,6 +65,8 @@ double uniform_pdf(){
 }
 
 // ONB Construction Functions
+/// References:          - Fundamentals of Computer Graphics - Section 2.4.5: Orthonormal Bases and Coordinate Frames
+///                      - Fundamentals of Computer Graphics - Section 2.4.6: Constructing a Basis from a Single Vector
 // -----------------------------------------------------------------------
 inline Vec3D global_to_ONB_local(Vec3D ONB_axes[3], double a, double b, double c){
     return a*ONB_axes[0] + b*ONB_axes[1] + c*ONB_axes[2];

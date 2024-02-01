@@ -7,7 +7,7 @@
 
 #include "Primitive.h"
 
-/// Reference: https://imgeself.github.io/posts/2019-07-20-raytracer-6-rectangles-cornell/
+/// Reference: Ray Tracing: The Next Week
 class XY_Rectangle : public Primitive {
 public:
     XY_Rectangle(const point3D &minPoint, const point3D &maxPoint, const std::shared_ptr<Material> &matPtr) : min_point(
@@ -42,9 +42,9 @@ public:
         return true;
     }
 
-    bool has_bounding_box(double time_0, double time_1, Axis_Aligned_Bounding_Box &surrounding_AABB) const override {
-        surrounding_AABB = Axis_Aligned_Bounding_Box(point3D(min_point.x(), min_point.y(), min_point.z() - 0.0001),
-                                                     point3D(max_point.x(), max_point.y(), max_point.z() + 0.0001));
+    bool has_bounding_box(double time_0, double time_1, AABB &surrounding_AABB) const override {
+        surrounding_AABB = AABB(point3D(min_point.x(), min_point.y(), min_point.z() - 0.0001),
+                                point3D(max_point.x(), max_point.y(), max_point.z() + 0.0001));
         return true;
     }
 
