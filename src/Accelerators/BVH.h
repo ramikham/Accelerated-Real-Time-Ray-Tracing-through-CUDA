@@ -39,13 +39,16 @@ inline bool compare_AABBs(const std::shared_ptr<Primitive> a, const std::shared_
     if (split_strategy == MIN_COORDINATE_SORT)
         return box_a.get_min().V[axis] < box_b.get_min().V[axis];
     else if (split_strategy == MAX_COORDINATE_SORT) {
-        // TODO: to be implemented
-        std::cout << "ds" << std::endl;
+        return box_a.get_max().V[axis] < box_b.get_max().V[axis];
     }
 
-    else if (split_strategy == CENTROID_SORT)
-        // TODO: to be implemented
-        ;
+    else if (split_strategy == CENTROID_SORT) {
+        // Calculate centroids
+        point3D centroid_a = 0.5 * (box_a.get_min() + box_a.get_max());
+        point3D centroid_b = 0.5 * (box_b.get_min() + box_b.get_max());
+        return centroid_a.V[axis] < centroid_b.V[axis];
+    }
+
     else if (split_strategy == MIDPOINT_PARTITION)
         // TODO: to be implemented
         ;
@@ -86,7 +89,7 @@ public:
     BVH(const Primitives_Group &list, SPLIT_STRATEGY split_strategy) :
             BVH(list.primitives_list, 0, list.primitives_list.size(), 0.0, 0.0, split_strategy) {}
 
-    /// Reference: xxx
+    /// Reference: Fundamentals of Computer Graphics - Section 12.3.2: Hierarchical Bounding Boxes
     BVH(const std::vector<std::shared_ptr<Primitive>> &src_objects,
         size_t start, size_t end, double time0, double time1, SPLIT_STRATEGY split_strategy) {
         // Builds a tree for a BVH.
@@ -174,14 +177,6 @@ public:
         return true;
     };
 
-    // Supporting Functions
-    // -----------------------------------------------------------------------
-    void min_coord_sort_BVH();                      // TODO: TO BE IMPLEMENTED
-    void max_coord_sort_BVH();                      // TODO: TO BE IMPLEMENTED
-    void centroid_sort_BVH();                       // TODO: TO BE IMPLEMENTED
-    void midpoint_partition_BVH();                  // TODO: TO BE IMPLEMENTED
-    void min_volume_sum_heuristic_BVH();            // TODO: TO BE IMPLEMENTED
-    void surface_area_heuristic_BVH();              // TODO: TO BE IMPLEMENTED
 public:
     // Data Members
     // -----------------------------------------------------------------------
