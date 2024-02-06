@@ -22,6 +22,9 @@ public:
     ///                     - Fundamentals of Computer Graphics - Section 5.2.3: Calculating Shading
     bool illumination(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
                       Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
+        surface_pdf_ptr = nullptr;              // no BRDF
+        material_type = PHONG;
+
         // Diffuse reflection
         Vec3D reflection_direction = diffuse_reflection_direction(intersection_info.normal);
         scattered_ray = Ray(intersection_info.p, reflection_direction);
@@ -37,6 +40,18 @@ public:
 
         return true;
     }
+
+    double pdf(const Ray &incident_ray, const Intersection_Information &intersection_info,
+               const Ray &scattered_ray) const override {
+        // TODO: Implement
+    }
+
+    Vec3D
+    BRDF(const Ray &incident_ray, const Intersection_Information &intersection_information, const Ray &scattered_ray,
+         Color &attenuated_color) const override {
+        // TODO: Implement
+    }
+
 private:
     // Data Members
     // -------------------------------------------------------------------------------
