@@ -62,6 +62,12 @@ public:
         return random_point - o;
     }
 
+    // Getters
+    // -------------------------------------------------------------------------------
+    double get_area() const {
+        return area;
+    }
+
 private:
     point3D min_point;
     point3D max_point;

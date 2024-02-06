@@ -8,6 +8,12 @@
 #include "../../Utilities.h"
 #include <random>
 
+// Constants
+// -----------------------------------------------------------------------
+const double TWO_PI = 2 * M_PI;
+
+// Randomized Algorithms
+// -----------------------------------------------------------------------
 inline double random_double() {
     // Returns a random double between [0.0,1.0).
 
@@ -19,7 +25,6 @@ inline double random_double(double lower_bound, double upper_bound) {
 
     return lower_bound + (upper_bound-lower_bound)*random_double();
 }
-
 
 static Vec3D random_vector_in_range(double lower_bound, double upper_bound) {
     // Returns a random vector with each of its components in the range: [lower_bound,upper_bound).
@@ -70,6 +75,7 @@ inline Vec3D random_on_hemisphere(const Vec3D& normal) {
         return -on_unit_sphere;
 }
 
+// Peter Shirley's method to generate cosine-weighted directions
 inline Vec3D random_cosine_direction() {
     auto r1 = random_double();
     auto r2 = random_double();
@@ -82,8 +88,7 @@ inline Vec3D random_cosine_direction() {
     return Vec3D(x, y, z);
 }
 
-const double TWO_PI = 2 * M_PI;
-
+// My method
 inline Vec3D cosine_weighted_direction() {
     double a = random_double();
     double b = random_double();

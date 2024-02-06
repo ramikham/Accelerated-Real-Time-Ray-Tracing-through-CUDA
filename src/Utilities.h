@@ -15,6 +15,7 @@
 #include <chrono>
 #include <cassert>
 #include <omp.h>
+#include <sstream>
 
 // Include Headers
 // -----------------------------------------------------------------------
@@ -25,13 +26,12 @@
 // Include Constants
 // -----------------------------------------------------------------------
 const double infinity = std::numeric_limits<double>::infinity();
-const double pi = 3.1415926535897932385;
-const double EPSILON = 1e-8;
+const double epsilon = std::numeric_limits<double>::epsilon();
 
 // Support Functions
 // -----------------------------------------------------------------------
 inline double degrees_to_radians(double degrees) {
-    return degrees * pi / 180.0;
+    return degrees * M_PI / 180.0;
 }
 
 inline double clamp(double x, double min, double max) {
@@ -40,6 +40,10 @@ inline double clamp(double x, double min, double max) {
     if (x > max)
         return max;
     return x;
+}
+
+double uniform_pdf(){
+    return 1/(2*M_PI);
 }
 
 // Gamma Correction
@@ -60,11 +64,7 @@ inline Vec3D diffuse_reflection_direction(const Vec3D& N) {
     return N + random_unit_vector();
 }
 
-double uniform_pdf(){
-    return 1/(2*M_PI);
-}
-
-// ONB Construction Functions
+// Orthonormal basis Construction Functions
 /// References:          - Fundamentals of Computer Graphics - Section 2.4.5: Orthonormal Bases and Coordinate Frames
 ///                      - Fundamentals of Computer Graphics - Section 2.4.6: Constructing a Basis from a Single Vector
 // -----------------------------------------------------------------------
@@ -86,4 +86,8 @@ std::vector<Vec3D> build_ONB(const Vec3D& w){
     return ONB;
 }
 
+// Angle between
+inline double angle_between(const Vec3D &u, const Vec3D &v) {
+    return acos(dot_product(u, v)/(u.length() * v.length()));
+}
 #endif //CUDA_RAY_TRACER_UTILITIES_H

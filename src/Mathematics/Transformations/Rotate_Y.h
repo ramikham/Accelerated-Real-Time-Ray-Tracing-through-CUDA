@@ -51,9 +51,6 @@ public:
         origin[0] = cos_theta * r.get_ray_origin()[0] - sin_theta * r.get_ray_origin()[2];
         origin[2] = sin_theta * r.get_ray_origin()[0] + cos_theta * r.get_ray_origin()[2];
 
-
-      // WHY IS primitive_ptr NUL
-
         direction[0] = cos_theta * r.get_ray_direction()[0] - sin_theta * r.get_ray_direction()[2];
         direction[2] = sin_theta * r.get_ray_direction()[0] + cos_theta * r.get_ray_direction()[2];
 

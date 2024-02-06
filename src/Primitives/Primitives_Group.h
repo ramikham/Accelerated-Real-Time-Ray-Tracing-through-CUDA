@@ -7,8 +7,6 @@
 
 #include "Primitive.h"
 
-/// Reference: [2]
-// ----------------------------------------------------------------------
 class Primitives_Group : public Primitive {
 public:
     // Constructor
@@ -58,10 +56,10 @@ public:
     double PDF_value(const point3D &o, const Vec3D &v) const override {
         double weight = 1.0/primitives_list.size();
         double sum = 0.0;
-       // std::cout << "v = " << v << std::endl;
+        // std::cout << "v = " << v << std::endl;
         for (const auto& primitive : primitives_list)
             sum += weight * primitive->PDF_value(o, v);
-     //   std::cout << "why do i get NaN sums?" << std::endl;
+        //   std::cout << "why do i get NaN sums?" << std::endl;
 
         return sum;
     }
@@ -76,6 +74,8 @@ public:
     void add_primitive_to_list(std::shared_ptr<Primitive> o) { primitives_list.push_back(o); }
     void empty_primitives_list() { primitives_list.clear(); }
 public:
+    // Data Members
+    // -----------------------------------------------------------------------
     std::vector<std::shared_ptr<Primitive>> primitives_list;        // primitives group container
 };
 

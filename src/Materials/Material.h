@@ -13,8 +13,8 @@
 struct Intersection_Information;
 
 enum MATERIAL_TYPE {
-    DIFFUSE,
-    UNIFORM_HEMPISPHERICAL_DIFFUSE
+    SPECULAR = 111,
+    PHONG = 42
 };
 
 /// References:     - Fundamentals of Computer Graphics - Section 4.5.1: Light Sources

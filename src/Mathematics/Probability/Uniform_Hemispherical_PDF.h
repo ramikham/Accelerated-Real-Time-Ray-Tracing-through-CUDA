@@ -29,10 +29,10 @@ private:
         auto r1 = random_double();
         auto r2 = random_double();
 
-        auto phi = 2 * pi * r1;            // Azimuthal angle (around the z-axis)
-        auto theta = acos(1-r2);             // Polar angle (measured from the z-axis)
+        auto phi = 2 * pi * r1;
+        auto theta = acos(1-r2);
 
-        // Convert spherical coordinates to Cartesian coordinates for the hemisphere
+        // Convert spherical coordinates to Cartesian coordinates
         auto x = sin(theta) * cos(phi);
         auto y = sin(theta) * sin(phi);
         auto z = cos(theta);

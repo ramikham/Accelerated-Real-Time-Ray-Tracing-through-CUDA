@@ -23,24 +23,24 @@ public:
             return 0;
 
         double cos_theta_max = sqrt(1 - (radius * radius)/(center - o).length_squared());
-        auto solid_angle = 2*pi*(1-cos_theta_max);
+        auto solid_angle = 2*M_PI*(1-cos_theta_max);
         return 1 / solid_angle;
     }
 
     Vec3D random(const Vec3D &o) const override {
         Vec3D direction = center - o;
         auto distance_squared = direction.length_squared();
-        onb uvw;
-        uvw.build_from_w(direction);
-        return uvw.local(importance_sampling_sphere(radius, distance_squared));
+        std::vector<Vec3D> uvw = build_ONB(direction);
+        return global_to_ONB_local(uvw, importance_sampling_sphere(radius, distance_squared));
     }
+
 public:
     static Vec3D importance_sampling_sphere(double radius, double distance_squared) {
         double r1 = random_double();
         double r2 = random_double();
         double z = 1 + r2*(sqrt(1-radius*radius/distance_squared) - 1);
 
-        double phi = 2*pi*r1;
+        double phi = 2*M_PI*r1;
         double x = cos(phi)*sqrt(1-z*z);
         double y = sin(phi)*sqrt(1-z*z);
 
