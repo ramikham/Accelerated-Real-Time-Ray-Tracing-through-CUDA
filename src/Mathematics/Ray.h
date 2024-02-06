@@ -40,6 +40,8 @@ public:
     };
 
 private:
+    // Data Members
+    // -----------------------------------------------------------------------
     point3D ray_origin;             // the ray's origin
     Vec3D ray_direction;            // the ray's direction
     double time;                    // the ray's time

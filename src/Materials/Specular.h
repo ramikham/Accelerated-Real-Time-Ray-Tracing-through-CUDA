@@ -6,6 +6,7 @@
 #define CUDA_RAY_TRACER_SPECULAR_H
 
 #include "Material.h"
+#include "../Mathematics/Probability/Uniform_Hemispherical_PDF.h"
 
 class Specular : public Material {
 public:
@@ -33,11 +34,14 @@ public:
     bool illumination(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
                       Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
         if (reflection) {
+            surface_pdf_ptr = nullptr;
+            material_type = SPECULAR;
+
             // Calculate the direction of the reflected vector
             Vec3D R = specular_reflection_direction(unit_vector(incident_ray.get_ray_direction()),
                                                     intersection_info.normal);
 
-            // Enable glossy reflection (mirror: flossy_reflection_fraction = 0)
+            // Enable glossy reflection (mirror: glossy_reflection_fraction = 0)
             R += glossy_reflection_fraction * random_unit_vector();
 
             // Initialize the reflect ray

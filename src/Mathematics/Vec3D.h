@@ -104,12 +104,4 @@ inline Vec3D operator/(Vec3D v, double t) {
 
 inline Vec3D unit_vector(Vec3D v) { return v / v.length(); }
 
-inline Vec3D min(const point3D& a, const point3D& b) {
-    return Vec3D(std::min(a.x(), b.x()), std::min(a.y(), b.y()), std::min(a.z(), b.z()));
-}
-
-inline Vec3D max(const point3D& a, const point3D& b) {
-    return Vec3D(std::max(a.x(), b.x()), std::max(a.y(), b.y()), std::max(a.z(), b.z()));
-}
-
 #endif //CUDA_RAY_TRACER_VEC3D_H

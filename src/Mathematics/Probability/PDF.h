@@ -12,7 +12,6 @@
 // a particular value.
 
 /// Reference: Ray Tracing: The Rest of Your Life
-
 class PDF {
 public:
     virtual ~PDF() {}

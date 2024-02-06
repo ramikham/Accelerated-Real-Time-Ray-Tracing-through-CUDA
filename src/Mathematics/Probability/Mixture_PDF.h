@@ -15,14 +15,15 @@ public:
     }
 
     double PDF_value(const Vec3D &direction) const override {
-      //  std::cout << "Light PDF: " <<p[0]->PDF_value(direction) << ", Surface PDF: " << p[1]->PDF_value(direction) << std::endl;
-      //td::cout << direction << std::endl;
-   //     if (std::isnan(direction.x())) {
+        /* DEBUGGING
+          std::cout << "Light PDF: " <<p[0]->PDF_value(direction) << ", Surface PDF: " << p[1]->PDF_value(direction) << std::endl;
+          std::cout << direction << std::endl;
+          if (std::isnan(direction.x())) {
             // Handle the case where pdf0 or pdf1 is NaN
-//            std::cerr << "PDF_value: NaN detected in pdf0 or pdf1." << std::endl;
-        //    return 0.0; // Or handle it according to your requirements
-    //    }
-
+            std::cerr << "PDF_value: NaN detected in pdf0 or pdf1." << std::endl;
+            return 0.0; // Or handle it according to your requirements
+          }
+    */
         return 0.5 * p[0]->PDF_value(direction) + 0.5*p[1]->PDF_value(direction);
     }
 
@@ -31,10 +32,11 @@ public:
         //    if (std::isnan(p[0]->generate_a_random_direction_based_on_PDF().x())) {
        //         std::cout << p[0]->generate_a_random_direction_based_on_PDF();
         //    }
+    //    std::cout << p[0]->generate_a_random_direction_based_on_PDF() << std::endl;
             return p[0]->generate_a_random_direction_based_on_PDF();
         }
         else {
-          //  std::cout << p[1]->generate_a_random_direction_based_on_PDF();
+           // std::cout << p[1]->generate_a_random_direction_based_on_PDF();
             return p[1]->generate_a_random_direction_based_on_PDF();
         }
     }

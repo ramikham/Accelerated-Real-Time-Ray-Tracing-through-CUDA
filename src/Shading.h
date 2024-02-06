@@ -11,36 +11,9 @@
 #include "Mathematics/Probability/PDF.h"
 #include "Mathematics/Probability/Primitive_PDF.h"
 #include "Mathematics/Probability/Mixture_PDF.h"
+#include "Materials/Diffuse_Light.h"
 
-/// Reference: xxx
-/*
-Color shade(const Ray& r, const Primitive& world, int depth= 10){
-    Intersection_Information rec;
-    if (depth <= 0)
-        return Color(0,0,0);
-
-    if (world.intersection(r,0.001, infinity, rec)) {
-        Ray scattered_ray;
-        Color visible_color;
-        MATERIAL_TYPE material_type;
-
-        if (rec.mat_ptr->illumination(r, rec, visible_color, scattered_ray, material_type)) {
-          // std::cout << visible_color;
-           return visible_color * shade(scattered_ray, world, depth-1);
-        }
-
-        return Color(0,0,0);
-    }
-
-    // Background color when there is no intersection
-    Vec3D unit_direction = unit_vector(r.get_ray_direction());
-    auto a = 0.5 * (unit_direction.y() + 1.0);
-
-    // for a darker ambient color, use Color(0.2, 0.3, 0.5); for brighter use Color(0.5, 0.7, 1.0)
-    //return (1.0 - a) * Color(0.0, 0.0, 0.0) + a * Color(0.1, 0.15, 0.2); // dark space
-    return (1.0-a)* Color(1.0, 1.0, 1.0) + a*Color(0.5, 0.7, 1.0);
-}*/
-
+/// Reference: Fundamentals of Computer Graphics - Section 4.5.2: Shading in Software
 Color radiance(const Ray& r, const Primitive& world, int depth= 10){
     Intersection_Information rec;
     if (depth <= 0)
@@ -69,11 +42,12 @@ Color radiance(const Ray& r, const Primitive& world, int depth= 10){
            radiance(scattered_ray, world, depth-1) / pdf;
 }
 
-
+// radiance() function with background color enabled. Set to (0.0,0.0,0.0) to get a dark background,
+// and experiment with rendering lights.
 // Color(0.70, 0.80, 1.00) is sky blue
 // (0,0,0) is dark
 // (0.04, 0.04, 0.08) sky dark
-Color radiance_background(const Ray& r, const Primitive& world, int depth= 10, Color background=Color(0.70, 0.80, 1.00)){
+Color radiance_background(const Ray& r, const Primitive& world, int depth= 10, Color background=Color(0,0,0)){
     Intersection_Information rec;
     if (depth <= 0)
         return Color(0,0,0);
@@ -93,11 +67,15 @@ Color radiance_background(const Ray& r, const Primitive& world, int depth= 10, C
     if (!rec.mat_ptr->illumination(r, rec, surface_color, scattered_ray, material_type, pdf, surface_pdf_ptr))
         return color_from_emission;
 
-  //  std::cout << "Color from scatter = " << rec.mat_ptr->BRDF(r, rec, scattered_ray, surface_color) << std::endl;
+    if (surface_pdf_ptr == nullptr && (material_type == SPECULAR || material_type == PHONG))
+        return surface_color * radiance_background(scattered_ray, world, depth-1, background);
+
+    //  std::cout << "Color from scatter = " << rec.mat_ptr->BRDF(r, rec, scattered_ray, surface_color) << std::endl;
     return color_from_emission + rec.mat_ptr->BRDF(r, rec, scattered_ray, surface_color) *
                                  radiance_background(scattered_ray, world, depth-1, background) / pdf;
 }
 
+/// Reference: Fundamentals of Computer Graphics: Section 14.10 - Monte Carlo Ray Tracing
 Color radiance_sample_light_directly(const Ray& r, const Primitive& world, int depth= 10, Color background=Color(0,0,0)){
     Intersection_Information rec;
     if (depth <= 0)
@@ -139,6 +117,56 @@ Color radiance_sample_light_directly(const Ray& r, const Primitive& world, int d
                                  radiance_sample_light_directly(scattered_ray, world, depth-1, background) / pdf;
 }
 
+Color radiance_sample_light_directly_2(const Ray& r, const Primitive& world, const std::vector<Diffuse_Light>& lights, int depth= 10, Color background=Color(0,0,0)){
+    Intersection_Information rec;
+    if (depth <= 0)
+        return Color(0,0,0);
+
+    if (!world.intersection(r, 0.001, infinity, rec))
+        // Background color when there is no intersection
+        return background;
+
+    Ray scattered_ray;
+    Color surface_color;
+    MATERIAL_TYPE material_type;
+    std::shared_ptr<PDF> surface_pdf_ptr;
+    double pdf;
+
+    // SAMPLE LIGHT DIRECTLY
+    Color color_from_emission = rec.mat_ptr->emitted(rec.p, rec);
+
+    if (!rec.mat_ptr->illumination(r, rec, surface_color, scattered_ray, material_type, pdf, surface_pdf_ptr))
+        return color_from_emission;
+
+    Color total_radiance = color_from_emission;
+
+    for (const Diffuse_Light& light : lights) {
+        point3D on_light = light.sample_position_XZ_Rectangle();
+        Vec3D to_light = on_light - rec.p;
+        double distance_squared = to_light.length_squared();
+        to_light = unit_vector(to_light);
+
+        if (dot_product(to_light, rec.normal) < 0)
+            continue;
+
+        double light_area = light.get_area();
+        auto light_cosine = fabs(to_light.y());
+        if (light_cosine < 0.000001)
+            continue;
+
+        pdf = distance_squared / (light_cosine * light_area);
+        scattered_ray = Ray(rec.p, to_light, r.get_time());
+
+        total_radiance += rec.mat_ptr->BRDF(r, rec, scattered_ray, surface_color) *
+                          radiance_sample_light_directly_2(scattered_ray, world, lights, depth - 1, background) / pdf;
+    }
+    return total_radiance;
+}
+
+/// Reference: Fundamentals of Computer Graphics: Section 14.10 - Monte Carlo Ray Tracing
+// A radiance() function with importance sampling of light and primitives enabled. Try rendering with light and observe
+// how less noisy this function is compared to radiance_background() when the same number of samples-per-pixel is used.
+// Color(0.70, 0.80, 1.00)
 Color radiance_mixture(const Ray& r, const Primitive& world, const Primitive& lights, int depth= 10, Color background=Color(0,0,0)){
     Intersection_Information rec;
     if (depth <= 0)
@@ -159,58 +187,16 @@ Color radiance_mixture(const Ray& r, const Primitive& world, const Primitive& li
     if (!rec.mat_ptr->illumination(r, rec, surface_color, scattered_ray, material_type, pdf, surface_pdf_ptr))
         return color_from_emission;
 
+    if (surface_pdf_ptr == nullptr && (material_type == SPECULAR || material_type == PHONG))
+        return surface_color * radiance_mixture(scattered_ray, world, lights, depth-1, background);
+
     auto light_ptr = std::make_shared<Primitive_PDF>(lights, rec.p);
     Mixture_PDF mixture_pdf(light_ptr, surface_pdf_ptr);
 
-  // std::cout << mixture_pdf.generate_a_random_direction_based_on_PDF() << std::endl;
     scattered_ray = Ray(rec.p, mixture_pdf.generate_a_random_direction_based_on_PDF(), r.get_time());
     double new_pdf = mixture_pdf.PDF_value(scattered_ray.get_ray_direction());
 
     return color_from_emission + rec.mat_ptr->BRDF(r, rec, scattered_ray, surface_color) *
                                  radiance_mixture(scattered_ray, world, lights, depth-1, background) / new_pdf;
 }
-
-/*
-Color ray_color(const Ray& r, const Primitive& world, int depth= 10) {
-    Intersection_Information rec;
-
-    // If we've exceeded the ray bounce limit, no more light is gathered.
-    if (depth <= 0)
-        return Color(0,0,0);
-
-    // If the ray hits nothing, return the background color.
-    if (!world.intersection(r, 0.001, infinity, rec)) {
-        // Background color when there is no intersection
-        Vec3D unit_direction = unit_vector(r.get_ray_direction());
-        auto a = 0.5 * (unit_direction.y() + 1.0);
-
-        // for a darker ambient color, use Color(0.2, 0.3, 0.5); for brighter use Color(0.5, 0.7, 1.0)
-        //return (1.0 - a) * Color(0.0, 0.0, 0.0) + a * Color(0.1, 0.15, 0.2); // dark space
-        return (1.0-a)* Color(1.0, 1.0, 1.0) + a*Color(0.5, 0.7, 1.0);
-    }
-
-
-    Ray scattered;
-    Color attenuation;
-//    Color color_from_emission = rec.mat->emitted(rec.u, rec.v, rec.p);
-    MATERIAL_TYPE material_type;
-
-    if (!rec.mat_ptr->illumination(r, rec, attenuation, scattered, material_type)) {
-        // Background color when there is no intersection
-        Vec3D unit_direction = unit_vector(r.get_ray_direction());
-        auto a = 0.5 * (unit_direction.y() + 1.0);
-
-        // for a darker ambient color, use Color(0.2, 0.3, 0.5); for brighter use Color(0.5, 0.7, 1.0)
-        //return (1.0 - a) * Color(0.0, 0.0, 0.0) + a * Color(0.1, 0.15, 0.2); // dark space
-        return (1.0-a)* Color(1.0, 1.0, 1.0) + a*Color(0.5, 0.7, 1.0);
-    }
-
-    double scattering_pdf = rec.mat_ptr->pdf(r, rec, scattered);
-    double pdf =  1/(2*M_PI);
-
-    Color color_from_scatter =
-            (attenuation * scattering_pdf * ray_color(scattered, world, depth-1)) / pdf;
-
-    return color_from_scatter;
-}*/
 #endif //CUDA_RAY_TRACER_SHADING_H
