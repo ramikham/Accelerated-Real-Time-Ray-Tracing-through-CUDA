@@ -10,7 +10,7 @@
 // A Triangle class that includes the following ray/triangle intersection algorithms:
 //          1. Möller–Trumbore ray-triangle intersection algorithm
 //          2. // TODO: Badouel ray-triangle intersection algorithm
-//          3. // TODO: Snyder & Barr ray-triangle intersection algorithm
+//          3. Snyder & Barr ray-triangle intersection algorithm
 class Triangle : public Primitive {
 public:
     Triangle(const point3D &a, const point3D &b, const point3D &c, std::shared_ptr<Material> triangle_material)
@@ -60,6 +60,88 @@ public:
 */
 
     bool intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const override {
+
+        // Snyder & Barr ray-triangle intersection algorithm
+
+        // Get Ray details
+        // ----
+        Vec3D e = r.get_ray_origin();
+        Vec3D d = r.get_ray_direction();
+
+        // Get Triangle's details
+        Vec3D B_A = b - a;          // (b - a), an edge
+        Vec3D C_A = c - a;           // (c - a), an edge
+
+        // Set variable's for Cramer's Rule
+        double A = a.x() - b.x();
+        double D = a.x() - c.x();
+        double G = d.x();
+
+        double B = a.y() - b.y();
+        double E = a.y() - c.y();
+        double H  = d.y();
+
+        double C = a.z() - b.z();
+        double F = a.z() - c.z();
+        double I = d.z();
+
+        // Compute M
+        double EI = E * I;
+        double HF = H * F;
+
+        double GF = G * F;
+        double DI = D * I;
+
+        double DH = D * H;
+        double EG = E * G;
+
+        double M = A * (EI - HF) + B * (GF - DI) + C * (DH - EG);
+
+        // Compute t
+        double J = a.x() - e.x();
+        double K = a.y() - e.y();
+        double L = a.z() - e.z();
+
+        double AK = A * K;
+        double JB = J * B;
+
+        double JC = J * C;
+        double AL = A * L;
+
+        double BL = B * L;
+        double KC = K * C;
+
+        double t = -(F * (AK - JB) + E * (JC - AL) + D * (BL - KC)) / M;
+
+        // Check for visibility in [t_0,t_1]
+        if (t < t_0 || t > t_1)
+            return false;
+
+        // Compute GAMMA
+        double GAMMA = (I * (AK - JB) + H * (JC - AL) + G * (BL - KC)) / M;
+
+        // Check GAMMA's range
+        if (GAMMA < 0 || GAMMA > 1)
+            return false;
+
+        // Compute BETA
+        double BETA = (J * (EI - HF) + K * (GF - DI) + L * (DH - EG)) / M;
+
+        // Check BETA's range
+        if (BETA < 0 || BETA > 1 - GAMMA)
+            return false;
+
+        // An intersection must happen, so update all intersection information
+        intersection_info.t = t;
+        intersection_info.p = r.at(t);
+        Vec3D n = cross_product(B_A, C_A);
+
+        intersection_info.set_face_normal(r, unit_vector(n));
+        intersection_info.mat_ptr = triangle_material;
+
+        return true;
+        /*
+         * Möller–Trumbore ray-triangle intersection algorithm
         constexpr float epsilon = std::numeric_limits<float>::epsilon();
 
         Vec3D edge_1 = b - a;
@@ -98,12 +180,10 @@ public:
             return true;
         } else
             return false;
+            */
     }
 
     bool has_bounding_box(double time_0, double time_1, AABB &surrounding_AABB) const override {
-        // Increase the size by a very small epsilon
-        constexpr double epsilon = std::numeric_limits<double>::epsilon();
-
         // Find the minimum and maximum coordinates along each axis
         double min_x = fmin(fmin(a.x(), b.x()), c.x()) - epsilon;
         double max_x = fmax(fmax(a.x(), b.x()), c.x()) + epsilon;

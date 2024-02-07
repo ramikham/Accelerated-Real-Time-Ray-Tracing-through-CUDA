@@ -53,9 +53,10 @@ public:
 };
 
 /// Reference: An Introduction to Ray Tracing - Section 2.1: Intersection of the Sphere
-bool Sphere::intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const {
+bool Sphere::intersection(const Ray &r, double t_min, double t_max, Intersection_Information &intersection_info) const {
     // Tests if the ray r intersects the sphere between the interval [t_0,t_1]
 
+    /*
     // Get the A, B, C of the quadratic equation
     Vec3D OC = r.get_ray_origin() - center;
     auto A = r.get_ray_direction().length_squared();
@@ -64,6 +65,7 @@ bool Sphere::intersection(const Ray &r, double t_0, double t_1, Intersection_Inf
 
     // Calculate the quadratic equation discriminant.
     auto discriminant = half_B * half_B - A * C;
+   // auto discriminant = fma(half_B, half_B, -A * C);
 
     // If the discriminant is negative, the ray misses the sphere.
     if (discriminant < 0) return false;
@@ -94,6 +96,85 @@ bool Sphere::intersection(const Ray &r, double t_0, double t_1, Intersection_Inf
     intersection_info.mat_ptr = sphere_material;
 
     return true;
+    */
+
+
+    // TODO: FIND SMALL MISTAKE - it is with visibility and nearest intersection
+  //  Ray r(Vec3D(1,-2,-1), Vec3D(1,2,4));
+
+
+    bool flag_outside_sphere = false;
+    double R2 = radius*radius;
+    Vec3D OC  = center - r.get_ray_origin();
+    double L_2_OC = dot_product(OC, OC);
+    flag_outside_sphere = false;
+    if (L_2_OC >= R2) {
+        // RAY ORIGINATED OURSIDE THE SPJERE
+        flag_outside_sphere = true;
+    }
+
+    double t_ca = dot_product(OC, unit_vector(r.get_ray_direction()));
+
+    if (t_ca < 0) {
+        if (flag_outside_sphere)
+            return false;
+    }
+    double t_2_hc = R2 - L_2_OC + (t_ca * t_ca);
+
+    if (t_2_hc < 0) {
+        return false;
+    }
+
+  //  std::cout << "1. " <<  (t_ca - sqrt(t_2_hc)) / r.get_ray_direction().length() << std::endl;
+ //   std::cout << "2. " << (t_ca + sqrt(t_2_hc)) / r.get_ray_direction().length() << std::endl;
+
+    double intersection_t;
+    if (flag_outside_sphere)
+        intersection_t =  (t_ca - sqrt(t_2_hc)) / r.get_ray_direction().length();
+    else
+        intersection_t = (t_ca + sqrt(t_2_hc)) / r.get_ray_direction().length();
+
+    if (intersection_t <= t_min || t_max <= intersection_t) {
+        return false;
+    }
+    intersection_info.t = intersection_t;
+    intersection_info.p = r.at(intersection_t);
+    Vec3D outward_normal = (intersection_info.p - center) / radius;
+    intersection_info.set_face_normal(r, outward_normal);
+    intersection_info.mat_ptr = sphere_material;
+    return true;
+
+
+    /* stackexchange
+
+    double D2 = dot_product(OC, OC) - t_ca * t_ca;      // D sqaured
+    if (D2 < R2)
+        return false;
+
+    double t_hc = sqrt(R2 - D2);
+    double t0 = t_ca - t_hc;
+    double t1 = t_ca + t_hc;
+
+    if (t0 < t_1 && t0 > t_0) {
+        intersection_info.t = t0 / r.get_ray_direction().length();
+        intersection_info.p = r.at(intersection_info.t);
+        Vec3D outward_normal = (intersection_info.p - center) / radius;
+        intersection_info.set_face_normal(r, outward_normal);
+        intersection_info.mat_ptr = sphere_material;
+        return true;
+    }
+
+    if (t1 < t_1 && t1 > t_0) {
+        intersection_info.t = t1 / r.get_ray_direction().length();
+        intersection_info.p = r.at(intersection_info.t);
+        Vec3D outward_normal = (intersection_info.p - center) / radius;
+        intersection_info.set_face_normal(r, outward_normal);
+        intersection_info.mat_ptr = sphere_material;
+        return true;
+    }
+
+    return false;
+     */
 }
 
 /// Reference: xxx
@@ -107,5 +188,6 @@ bool Sphere::has_bounding_box(double time_0, double time_1, AABB &surrounding_AA
 
     return true;
 }
+
 
 #endif //CUDA_RAY_TRACER_SPHERE_H
