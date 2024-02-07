@@ -36,10 +36,10 @@ public:
     point3D at(double t) const {
         // Solves the ray's equation at time = t
 
-        return ray_origin + t * ray_direction;
+        return ray_origin + t * ray_direction - ray_direction * 0.0001;
     };
 
-private:
+public:
     // Data Members
     // -----------------------------------------------------------------------
     point3D ray_origin;             // the ray's origin

@@ -29,7 +29,7 @@ private:
         auto r1 = random_double();
         auto r2 = random_double();
 
-        auto phi = 2 * pi * r1;
+        auto phi = 2 * M_PI * r1;
         auto theta = acos(1-r2);
 
         // Convert spherical coordinates to Cartesian coordinates

@@ -15,8 +15,7 @@ public:
         z_comp = minPoint.z();
     }
 
-    bool
-    intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const override {
+    bool intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const override {
 
         double t = (z_comp - r.get_ray_origin().z()) / r.get_ray_direction().z();
 

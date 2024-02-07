@@ -798,15 +798,14 @@ Scene_Information many_balls_scene() {
     // Always add light to the scene's "world"
     scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(-10, 80, -10), point3D(0, 80, 0), light));
 
-    scene_info.world.add_primitive_to_list(std::make_shared<Sphere>(point3D( 0.0, -100.5, -1.0), 100.0, diffuse_material_ground));
   //  scene_info.world.add_primitive_to_list(std::make_shared<Sphere>(point3D( 0.0,    0.0, -1.0),   0.5, diffuse_material_upper));
 
   //  scene_info.world.add_primitive_to_list(std::make_shared<Sphere>(point3D( -2.0,    0.0, -1.0),   0.5, diffuse_material_upper));
 
   //  scene_info.world.add_primitive_to_list(std::make_shared<Sphere>(point3D( 3.0,    0.0, -4.0),   0.5, diffuse_material_upper));
 
-    for (int a = -4; a < 0; a++) {
-        for (int b = -4; b < 0; b++) {
+    for (int a = -11; a < 11; a++) {
+        for (int b = -11; b < 11; b++) {
             point3D center(a + 0.9*random_double(), 0.2, b + 0.9*random_double());
             if ((center - point3D(4, 0.2, 0)).length() > 0.9) {
                 scene_info.world.add_primitive_to_list(
@@ -815,6 +814,7 @@ Scene_Information many_balls_scene() {
         }
     }
 
+    scene_info.world.add_primitive_to_list(std::make_shared<Sphere>(point3D( 0.0, -100.5, -1.0), 100.0, diffuse_material_ground));
     // scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(-10, 80, -10), point3D(0, 80, 0), light));
     // radiance_background: scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(213, 554, 227), point3D(343,554,332), light));
 
@@ -825,8 +825,8 @@ Scene_Information many_balls_scene() {
 
     std::cout << scene_info.world.primitives_list.size() << " were created" << std::endl;
     double start = omp_get_wtime();
-   // scene_info.world = Primitives_Group(std::make_shared<BVH>(scene_info.world, MIN_COORDINATE_SORT));
-    scene_info.world = Primitives_Group(std::make_shared<BVH_Midpoint_Partition>(scene_info.world));
+    scene_info.world = Primitives_Group(std::make_shared<BVH>(scene_info.world, MIN_COORDINATE_SORT));
+   // scene_info.world = Primitives_Group(std::make_shared<BVH_Midpoint_Partition>(scene_info.world));
     double end = omp_get_wtime();
     std::cout << "BUILDING BVH TOOK " << end - start << std::endl;
     return scene_info;
