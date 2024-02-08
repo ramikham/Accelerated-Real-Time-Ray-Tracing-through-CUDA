@@ -10,12 +10,13 @@
 
 class Material;         // pre-definition of class "Material"
 
-// The ray/primitive intersection routine needs to return intersection
-// information at the point of intersection. We use a structure for that,
-// and we pass it around via the intersection() function.
 /// Reference: Fundamentals of Computer Graphics: Section 4.4.3 - Ray Intersection in Software
 // ----------------------------------------------------------------------
 struct Intersection_Information {
+    // The ray/primitive intersection routine needs to return intersection
+    // information at the point of intersection. We use a structure for that,
+    // and we pass it around via the intersection() function.
+
     point3D p;                              // intersection point
     Vec3D normal;                           // surface normal at intersection
     double t;                               // intersection t
