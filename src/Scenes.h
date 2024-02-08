@@ -1057,8 +1057,9 @@ Scene_Information bunny_test() {
         scene_info.world.add_primitive_to_list(std::make_shared<Triangle>(triangle));
     }
 
-    scene_info.world = Primitives_Group(std::make_shared<BVH>(scene_info.world, MIN_COORDINATE_SORT));
+  //  scene_info.world = Primitives_Group(std::make_shared<BVH>(scene_info.world, MIN_COORDINATE_SORT));
 
+    scene_info.world = Primitives_Group(std::make_shared<BVH_Midpoint_Partition>(scene_info.world));
     // Explicit Lights
     // -------------------------------------------------------------------------------
     auto m = std::shared_ptr<Material>();

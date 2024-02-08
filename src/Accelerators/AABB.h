@@ -24,9 +24,15 @@ public:
     /// Reference: Fundamentals of Computer Graphics - Section 12.3.1: Bounding Boxes
     bool intersection(const Ray& r, double t_min, double t_max) const {
         /// Checks if ray r intersect the AABB within the interval [t_min,t_max]
+        /// This is an implementation of the fast ray/box intersection algorithm.
+        /// It is often referred to as "branchless". There are some good details about
+        /// it in Tavian's blog: https://tavianator.com/2011/ray_box.html and Peter
+        /// Shirley's blog: https://psgraphics.blogspot.com/2016/02/ray-box-intersection-and-fmin.html
+
+        // We need the inverse of the ray's direction
+        auto inv_dir = Vec3D(1.0 / r.get_ray_direction().x(), 1.0 / r.get_ray_direction().y(), 1.0 / r.get_ray_direction().z());
 
         // First, check the intersection along the x-axis
-        auto inv_dir = Vec3D(1.0 / r.get_ray_direction().x(), 1.0 / r.get_ray_direction().y(), 1.0 / r.get_ray_direction().z());
         auto t_x_min = (minimum[0] - r.get_ray_origin()[0]) * inv_dir[0];
         auto t_x_max = (maximum[0] - r.get_ray_origin()[0]) * inv_dir[0];
         t_min = fmax(fmin(t_x_min, t_x_max), t_min);
@@ -51,20 +57,6 @@ public:
             return false;
 
         return true;
-
-        /* /// Reference: Ray Tracing: The Next Week
-        for (int a = 0; a < 3; a++) {
-            auto invD = 1.0f / r.get_ray_direction()[a];
-            auto t0 = (get_min()[a] - r.get_ray_origin()[a]) * invD;
-            auto t1 = (get_max()[a] - r.get_ray_origin()[a]) * invD;
-            if (invD < 0.0f)
-                std::swap(t0, t1);
-            t_min = t0 > t_min ? t0 : t_min;
-            t_max = t1 < t_max ? t1 : t_max;
-            if (t_max <= t_min)
-                return false;
-        }
-        return true;*/
     }
 
     AABB pad() {

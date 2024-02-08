@@ -20,7 +20,17 @@ public:
     BVH_Midpoint_Partition (const Primitives_Group &list) :
             BVH_Midpoint_Partition(list,  0.0, 0.0, 0) {}
 
-    BVH_Midpoint_Partition(const Primitives_Group& A, double time0, double time1, int AXIS) {
+    const int MAX_RECURSION_DEPTH = 2000;  // Set an appropriate limit
+
+    BVH_Midpoint_Partition(const Primitives_Group& A, double time0, double time1, int AXIS, int depth = 0) {
+        // Generate an axis at random
+        AXIS = random_int_in_range(0,2);
+        if (depth > MAX_RECURSION_DEPTH || A.primitives_list.empty()) {
+            // If recursion depth limit is reached or no primitives, construct a leaf node
+            left = right = nullptr;
+            return;
+        }
+
         auto N = A.primitives_list.size();
 
         if (N == 1) {
@@ -31,9 +41,12 @@ public:
         } else {
             auto m = find_midpoint_of_A(A, time0, time1, AXIS);
             auto pair = partition_around_midpoint(A.primitives_list, m, AXIS);
-            left = std::make_shared<BVH_Midpoint_Partition>(pair.first, time0, time1, (AXIS + 1) % 3);
-            right = std::make_shared<BVH_Midpoint_Partition>(pair.second, time0, time1, (AXIS + 1) % 3);
+
+            // Recursive calls with increased depth
+            left = std::make_shared<BVH_Midpoint_Partition>(pair.first, time0, time1, AXIS, depth + 1);
+            right = std::make_shared<BVH_Midpoint_Partition>(pair.second, time0, time1, AXIS, depth + 1);
         }
+
         AABB box_left, box_right;
         if (left && right && left->has_bounding_box(time0, time1, box_left) && right->has_bounding_box(time0, time1, box_right)) {
             BBOX = construct_surrounding_box(box_left, box_right);
