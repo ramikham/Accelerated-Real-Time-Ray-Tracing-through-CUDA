@@ -13,6 +13,17 @@
 #include "Mathematics/Probability/Mixture_PDF.h"
 #include "Materials/Diffuse_Light.h"
 
+/*
+ * This class contains a collection of radiance(...) functions that calculate the radiance at a given point in the scene.
+ * Radiance is the amount of light that arrives at a particular point in a particular direction.
+ *
+ *          radiance(...): Classical way of calculating shading. It interpolates between two colors to give an ambient
+ *                         light.
+ *          radiance_background(...): Adds the ability to change the color of the background.
+ *          radiance_sample_light_directly(...): Enables sampling light sources directly.
+ *          radiance_mixture(...): Enables the sampling of different PDFs (lights, primitives, etc...).
+ */
+
 /// Reference: Fundamentals of Computer Graphics - Section 4.5.2: Shading in Software
 Color radiance(const Ray& r, const Primitive& world, int depth= 10){
     Intersection_Information rec;

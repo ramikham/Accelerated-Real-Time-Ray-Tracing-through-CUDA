@@ -31,10 +31,14 @@ const double epsilon = std::numeric_limits<double>::epsilon();
 // Support Functions
 // -----------------------------------------------------------------------
 inline double degrees_to_radians(double degrees) {
+    // Converts degrees to radians.
+
     return degrees * M_PI / 180.0;
 }
 
 inline double clamp(double x, double min, double max) {
+    // Clamps a double to [min,max].
+
     if (x < min)
         return min;
     if (x > max)
@@ -43,6 +47,8 @@ inline double clamp(double x, double min, double max) {
 }
 
 double uniform_pdf(){
+    // A uniform pdf over the hemisphere of directions.
+
     return 1/(2*M_PI);
 }
 
@@ -53,15 +59,29 @@ inline double gamma_2_correction(double linear_component) {
     return sqrt(linear_component);
 }
 
-/// Returns the direction of the reflected vector corresponding to the
-/// incident ray and the normal vector at a point on the surface.
-/// Reference: [5]
+/// Reference: An Introduction to Ray Tracing
 inline Vec3D specular_reflection_direction(const Vec3D& I, const Vec3D& N) {
-    return I - 2*(dot_product(N,I)*N);
+    // Returns the direction of the reflected vector corresponding to the incident
+    // ray and the normal vector at a point on the surface.
+
+    return I - 2 * (dot_product(N,I)*N);
 }
 
+/// Reference (see Note below): https://github.com/vchizhov/Derivations/blob/master/Probability%20density%20functions%20of%20the%20projected%20offset%20disk%2C%20circle%2C%20ball%2C%20and%20sphere.pdf
 inline Vec3D diffuse_reflection_direction(const Vec3D& N) {
+    // Calculates a diffuse reflection direction by perturbing the normal N by some
+    // random unit vector.
+    // Note: This is not a cosine weighted distribution of generating
+    // random directions. It can be shown that it is proportional to cos^3(θ)sinθ.
+
     return N + random_unit_vector();
+}
+
+inline double angle_between(const Vec3D &u, const Vec3D &v) {
+    // Calculates the angle between the two vectors u and b,
+    // θ = cos^1[(a.b)/(||a| ||b||)].
+
+    return acos(dot_product(u, v)/(u.length() * v.length()));
 }
 
 // Orthonormal basis Construction Functions
@@ -78,6 +98,8 @@ inline Vec3D global_to_ONB_local(const std::vector<Vec3D>& ONB_axes, const Vec3D
 }
 
 std::vector<Vec3D> build_ONB(const Vec3D& w){
+    // Constructs and returns an orthonormal basis from the given vector w.
+
     Vec3D unit_w = unit_vector(w);
     Vec3D a = (fabs(unit_w.x()) > 0.9) ? Vec3D(0,1,0) : Vec3D(1,0,0);
     Vec3D v = unit_vector(cross_product(unit_w, a));
@@ -86,8 +108,4 @@ std::vector<Vec3D> build_ONB(const Vec3D& w){
     return ONB;
 }
 
-// Angle between
-inline double angle_between(const Vec3D &u, const Vec3D &v) {
-    return acos(dot_product(u, v)/(u.length() * v.length()));
-}
 #endif //CUDA_RAY_TRACER_UTILITIES_H
