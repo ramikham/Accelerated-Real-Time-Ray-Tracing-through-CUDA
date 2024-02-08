@@ -60,11 +60,19 @@ public:
 
 public:
     // Data Members
-    bool reflection;
-    bool refraction;
-    Color surface_color;
-    double glossy_reflection_fraction;
-    double index_of_refraction;
+    bool reflection;                            // does a reflection happen?
+    bool refraction;                            // does a refraction happen?
+    Color surface_color;                        // color of the specular material
+    double glossy_reflection_fraction;          // the fraction of glossiness
+    double index_of_refraction;                 // refraction index of the medium
+
+    /* Examples of indices of refraction
+     * air: 1.00
+     * water: 1.33–1.34
+     * window glass: 1.51
+     * optical glass: 1.49–1.92
+     * diamond: 2.42
+     */
 };
 
 #endif //CUDA_RAY_TRACER_SPECULAR_H

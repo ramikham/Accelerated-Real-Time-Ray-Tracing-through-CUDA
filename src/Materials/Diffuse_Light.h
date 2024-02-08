@@ -18,6 +18,8 @@ public:
 
 
     Diffuse_Light(Color light_color, double area, double x_min, double x_max, double y_min, double y_max, double z_min, double z_max) {
+        // I think I can improve this.
+
         this->light_color = light_color;
         this->area = area;
         this->x_min = x_min;
@@ -42,12 +44,16 @@ public:
     // Getters
     // -----------------------------------------------------------------------
     double get_area() const {
+        // Get the area of the light
+
         return area;
     }
 
     // Supporting Functions
     // -----------------------------------------------------------------------
     point3D sample_position_XZ_Rectangle() const {
+        // Importance Sampling: Get random (x,y,z) on an XZ_Rectangle
+
         double x = random_double(x_min, x_max);
         double y = random_double(y_min, y_max);
         double z = random_double(z_min, z_max);
@@ -55,9 +61,12 @@ public:
         return point3D(x, y, z);
     }
 private:
-    Color light_color;
-    double area;
-    double x_min, x_max, y_min, y_max, z_min, z_max;
+    // Supporting Functions
+    // -----------------------------------------------------------------------
+
+    Color light_color;                                  // color of the light
+    double area;                                        // area of light; needed for importance sampling
+    double x_min, x_max, y_min, y_max, z_min, z_max;    // coordinates of the primitive representing the light
 };
 
 #endif //CUDA_RAY_TRACER_DIFFUSE_LIGHT_H

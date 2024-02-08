@@ -9,8 +9,7 @@
 #include "../Primitives/Primitive.h"
 #include "../Mathematics/Probability/PDF.h"
 
-// predef
-struct Intersection_Information;
+struct Intersection_Information;            // predef
 
 enum MATERIAL_TYPE {
     SPECULAR = 111,
