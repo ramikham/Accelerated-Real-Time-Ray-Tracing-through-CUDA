@@ -1,42 +1,40 @@
 //
-// Created by Rami on 10/17/2023.
+// Created by Rami on 2/11/2024.
 //
 
-#ifndef CUDA_RAY_TRACER_BVH_H
-#define CUDA_RAY_TRACER_BVH_H
+#ifndef CUDA_RAY_TRACER_BVH_CENTROID_COORDINATE_H
+#define CUDA_RAY_TRACER_BVH_CENTROID_COORDINATE_H
+
 
 #include "../Utilities.h"
 #include "../Primitives/Primitive.h"
 #include "../Primitives/Primitives_Group.h"
 
-// An enum to specify the split strategy when constructing the BVH
-// -----------------------------------------------------------------------
-
-/// References: Fundamentals of Computer Graphics - Section 12.3.2: Hierarchical Bounding Boxes
-class BVH : public Primitive {
+/// Reference: Fundamentals of Computer Graphics - Section 12.3.2: Hierarchical Bounding Boxes
+class BVH_Centroid_Coordinate : public Primitive {
 public:
     // Constructors
     // -----------------------------------------------------------------------
-    BVH();
+    BVH_Centroid_Coordinate();
 
     /// Reference: Fundamentals of Computer Graphics - Section 12.3.2: Hierarchical Bounding Boxes
-    BVH(const Primitives_Group &list) :
-            BVH(list.primitives_list, 0, list.primitives_list.size(), 0.0, 0.0, 0) {}
+    BVH_Centroid_Coordinate(const Primitives_Group &list) :
+            BVH_Centroid_Coordinate(list.primitives_list, 0, list.primitives_list.size(), 0.0, 0.0, 0) {}
 
     /// Reference: Fundamentals of Computer Graphics - Section 12.3.2: Hierarchical Bounding Boxes
-    BVH(const std::vector<std::shared_ptr<Primitive>> &src_objects,
-        size_t start, size_t end, double time0, double time1, int axis_ctr) {
-        // Strategy: Sort by Min Coordinate.
+    BVH_Centroid_Coordinate(const std::vector<std::shared_ptr<Primitive>> &src_objects,
+                       size_t start, size_t end, double time0, double time1, int axis_ctr) {
+        // Strategy: Sort by Centroid Coordinate.
         // Axis Choice: Rotational.
 
-        auto objects = src_objects;         // create a modifiable array of the source scene objects
+        auto objects = src_objects;     // create a modifiable array of the source scene objects
 
-        int axis = axis_ctr % 3;                     // keep rotating between the axes
+        int axis = axis_ctr % 3;                 // keep rotating between the axes
 
         // Get the respective comparator function
-        auto comparator = (axis == 0) ? box_x_compare
-                                      : (axis == 1) ? box_y_compare
-                                                    : box_z_compare;
+        auto comparator = (axis == 0) ? box_x_compare_centroid_coord
+                                      : (axis == 1) ? box_y_compare_centroid_coord
+                                                    : box_z_compare_centroid_coord;
 
         size_t N = end - start;         // length of the list
 
@@ -63,8 +61,8 @@ public:
             std::nth_element(objects.begin() + start, objects.begin() + m, objects.begin() + end, comparator);
 
             // Recursively construct the left and right subtrees
-            left = std::make_shared<BVH>(objects, start, m, time0, time1, axis_ctr+1);
-            right = std::make_shared<BVH>(objects, m, end, time0, time1, axis_ctr+1);
+            left = std::make_shared<BVH_Centroid_Coordinate>(objects, start, m, time0, time1, axis_ctr + 1);
+            right = std::make_shared<BVH_Centroid_Coordinate>(objects, m, end, time0, time1, axis_ctr + 1);
         }
 
         AABB box_left, box_right;
@@ -95,31 +93,29 @@ public:
 
         /* A slower intersection method [2] */
         /*
-        if (BBOX.intersection(r, t_0, t_1)) {
-            Intersection_Information l_rec, r_rec;
+     if (BBOX.intersection(r, t_0, t_1)) {
+         Intersection_Information l_rec, r_rec;
 
-            bool left_hit = left->intersection(r, t_0, t_1, l_rec);
-            bool right_hit = right->intersection(r, t_0, t_1, r_rec);
+         bool left_hit = left->intersection(r, t_0, t_1, l_rec);
+         bool right_hit = right->intersection(r, t_0, t_1, r_rec);
 
-            if (left_hit && right_hit) {
-                if (l_rec.t < r_rec.t)
-                    intersection_info = l_rec;
-                else
-                    intersection_info = r_rec;
-                return true;
-            } else if (left_hit) {
-                intersection_info = l_rec;
-                return true;
-            } else if (right_hit) {
-                intersection_info = r_rec;
-                return true;
-            } else
-                return false;
-        } else
-            return false;
-        */
+         if (left_hit && right_hit) {
+             if (l_rec.t < r_rec.t)
+                 intersection_info = l_rec;
+             else
+                 intersection_info = r_rec;
+             return true;
+         } else if (left_hit) {
+             intersection_info = l_rec;
+             return true;
+         } else if (right_hit) {
+             intersection_info = r_rec;
+             return true;
+         } else
+             return false;
+     } else
+         return false;*/
     };
-
     bool has_bounding_box(double time_0, double time_1, AABB &surrounding_AABB) const override {
         surrounding_AABB = BBOX;
         return true;
@@ -130,6 +126,8 @@ public:
     // -----------------------------------------------------------------------
     std::shared_ptr<Primitive> left;        // left-child node
     std::shared_ptr<Primitive> right;       // right-child node
-    AABB BBOX;                              // bounding box of the BVH node
+    AABB BBOX;         // bounding box
 };
-#endif //CUDA_RAY_TRACER_BVH_H
+
+
+#endif //CUDA_RAY_TRACER_BVH_CENTROID_COORDINATE_H
