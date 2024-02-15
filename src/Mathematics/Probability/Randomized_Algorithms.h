@@ -111,7 +111,7 @@ inline Vec3D direction_on_a_hemisphere() {
     // Convert spherical coordinates to Cartesian coordinates
     auto x = sqrt(1-(r2*r2)) * cos(phi);
     auto y = sqrt(1-(r2*r2)) * sin(phi);
-    auto z = 1 - r1;
+    auto z = 1 - r2;
 
 
     return {x,y,z};
