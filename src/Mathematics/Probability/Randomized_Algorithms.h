@@ -90,13 +90,31 @@ inline Vec3D random_cosine_direction() {
 
 // My method
 inline Vec3D cosine_weighted_direction() {
-    double a = random_double();
-    double b = random_double();
+    double r1 = random_double();
+    double r2 = random_double();
 
-    double phi = TWO_PI * a;
-    double sqrt_b = sqrt(b);
+    double phi = TWO_PI * r1;
+    double sqrt_r2 = sqrt(r2);
     double cos_phi = cos(phi);
 
-    return {cos_phi * sqrt_b, sin(phi) * sqrt_b, sqrt(1.0 - b)};
+    return {cos_phi * sqrt_r2, sin(phi) * sqrt_r2, sqrt(1.0 - r2)};
 }
+
+inline Vec3D direction_on_a_hemisphere() {
+    // Generates a uniformly distributed direction on the unit hemisphere
+
+    auto r1 = random_double();
+    auto phi = 2 * M_PI * r1;
+
+    auto r2 = random_double();
+
+    // Convert spherical coordinates to Cartesian coordinates
+    auto x = sqrt(1-(r2*r2)) * cos(phi);
+    auto y = sqrt(1-(r2*r2)) * sin(phi);
+    auto z = 1 - r1;
+
+
+    return {x,y,z};
+}
+
 #endif //CUDA_RAY_TRACER_RANDOMIZED_ALGORITHMS_H

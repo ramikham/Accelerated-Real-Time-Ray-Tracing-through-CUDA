@@ -16,14 +16,6 @@ public:
     /// Reference: 14.7.1: BRDF
     bool illumination(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
                       Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
-        /* OLD - BUT WORKING WITH ONLY radiance_background() or radiance()
-        Vec3D reflection_direction = random_on_hemisphere(intersection_info.normal);
-        scattered_ray = Ray(intersection_info.p, reflection_direction);
-        pdf = uniform_pdf();
-        shading_color = surface_color;
-        return true;
-        */
-
         // Generate a scattered ray with a direction from the corresponding PDF
         surface_pdf_ptr = std::make_shared<Uniform_Hemispherical_PDF>(intersection_info.normal);
         Vec3D scatter_direction = surface_pdf_ptr->generate_a_random_direction_based_on_PDF(intersection_info.normal);
@@ -36,6 +28,14 @@ public:
         shading_color = surface_color;
 
         return true;
+
+        /* OLD - BUT WORKING WITH ONLY radiance_background() or radiance()
+        Vec3D reflection_direction = random_on_hemisphere(intersection_info.normal);
+        scattered_ray = Ray(intersection_info.p, reflection_direction);
+        pdf = uniform_pdf();
+        shading_color = surface_color;
+        return true;
+        */
     }
 
     Vec3D BRDF(const Ray &incident_ray, const Intersection_Information &intersection_information,
