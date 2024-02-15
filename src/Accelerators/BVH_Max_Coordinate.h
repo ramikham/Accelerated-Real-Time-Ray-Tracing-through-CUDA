@@ -54,10 +54,10 @@ public:
             auto m = start + N/2;
 
             // Sort objects using the respective comparator...
-            // std::sort(objects.begin() + start, objects.begin() + end, comparator);
+            std::sort(objects.begin() + start, objects.begin() + end, comparator);
 
             // ... or use partial sort (usually faster and does the job)
-            std::nth_element(objects.begin() + start, objects.begin() + m, objects.begin() + end, comparator);
+           // std::nth_element(objects.begin() + start, objects.begin() + m, objects.begin() + end, comparator);
 
             // Recursively construct the left and right subtrees
             left = std::make_shared<BVH_Max_Coordinate>(objects, start, m, time0, time1, axis_ctr + 1);
