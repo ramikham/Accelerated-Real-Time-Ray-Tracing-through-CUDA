@@ -13,7 +13,7 @@ struct Intersection_Information;            // predef
 
 enum MATERIAL_TYPE {
     SPECULAR = 111,
-    PHONG = 42
+    PHONG = 1600
 };
 
 /// References:     - Fundamentals of Computer Graphics - Section 4.5.1: Light Sources

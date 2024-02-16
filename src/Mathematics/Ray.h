@@ -13,6 +13,7 @@ public:
     // Constructors
     // -----------------------------------------------------------------------
     Ray() {}
+
     Ray(const point3D& ray_origin, const Vec3D& ray_direction, double time=0.0)
     : ray_origin(ray_origin), ray_direction(ray_direction), time(time) {}
 
@@ -23,16 +24,19 @@ public:
 
         return ray_origin;
     };
+
     Vec3D get_ray_direction() const {
         // Returns the direction vector of the ray
 
         return ray_direction;
     };
+
     double get_time() const {
         // Returns the time of the ray
 
         return time;
     };
+
     point3D at(double t) const {
         // Solves the ray's equation at time = t
 

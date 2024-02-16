@@ -20,6 +20,7 @@
 // Include Headers
 // -----------------------------------------------------------------------
 #include "Mathematics/Vec3D.h"
+#include "Mathematics/Vec2D.h"
 #include "Mathematics/Ray.h"
 #include "Mathematics/Probability/Randomized_Algorithms.h"
 
@@ -107,5 +108,6 @@ std::vector<Vec3D> build_ONB(const Vec3D& w){
     std::vector<Vec3D> ONB = {u, v, unit_w};
     return ONB;
 }
+
 
 #endif //CUDA_RAY_TRACER_UTILITIES_H

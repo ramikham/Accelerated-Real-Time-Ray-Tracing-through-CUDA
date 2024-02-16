@@ -100,7 +100,7 @@ inline Vec3D cosine_weighted_direction() {
     return {cos_phi * sqrt_r2, sin(phi) * sqrt_r2, sqrt(1.0 - r2)};
 }
 
-inline Vec3D direction_on_a_hemisphere() {
+inline Vec3D direction_on_hemisphere() {
     // Generates a uniformly distributed direction on the unit hemisphere
 
     auto r1 = random_double();

@@ -33,7 +33,7 @@ public:
                 surrounding_AABB.get_max() + displacement
                 );
 
-        return false;
+        return true;
     }
 
 public:

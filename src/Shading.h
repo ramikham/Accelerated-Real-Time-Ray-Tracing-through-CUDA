@@ -58,7 +58,7 @@ Color radiance(const Ray& r, const Primitive& world, int depth= 10){
 // Color(0.70, 0.80, 1.00) is sky blue
 // (0,0,0) is dark
 // (0.04, 0.04, 0.08) sky dark
-Color radiance_background(const Ray& r, const Primitive& world, int depth= 10, Color background=Color(0.7,0.8,1.0)){
+Color radiance_background(const Ray& r, const Primitive& world, int depth= 10, Color background=Color(0,0,0)){
     Intersection_Information rec;
     if (depth <= 0)
         return Color(0,0,0);
@@ -206,6 +206,9 @@ Color radiance_mixture(const Ray& r, const Primitive& world, const Primitive& li
 
     scattered_ray = Ray(rec.p, mixture_pdf.generate_a_random_direction_based_on_PDF(), r.get_time());
     double new_pdf = mixture_pdf.PDF_value(scattered_ray.get_ray_direction());
+
+    if (new_pdf == 0.0)
+        return color_from_emission;
 
     return color_from_emission + rec.mat_ptr->BRDF(r, rec, scattered_ray, surface_color) *
                                  radiance_mixture(scattered_ray, world, lights, depth-1, background) / new_pdf;

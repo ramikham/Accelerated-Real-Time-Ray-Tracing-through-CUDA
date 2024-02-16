@@ -9,7 +9,6 @@
 
 /// I found the following paper to very useful when implementing importance sampling for the Phong material:
 /// Reference:  Importance Sampling of the Phong Reflectance Model: https://www.cs.princeton.edu/courses/archive/fall16/cos526/papers/importance.pdf
-
 inline Vec3D weighted_direction(double specular_exponent) {
     // Generate two uniform random variables
     double u1 = random_double();
