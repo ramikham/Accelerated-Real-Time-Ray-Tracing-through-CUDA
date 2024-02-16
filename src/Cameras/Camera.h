@@ -13,7 +13,7 @@ public:
     // Constructors
     // -----------------------------------------------------------------------
     Camera() {}
-    // Third constructor - positionable and orientable camera.
+
     Camera(
             point3D lookfrom,           // the position where we place the camera (the camera's origin - now settable by the user)
             point3D lookat,             // the point we look at
@@ -42,7 +42,6 @@ public:
         // returns a ray sent from the camera;s origin towards (u,v).
         return Ray(camera_origin, lower_left_corner + u*viewport_horizontal_vector + v*viewport_vertical_vector - camera_origin);
     }
-
 
 public:
     // Data Members

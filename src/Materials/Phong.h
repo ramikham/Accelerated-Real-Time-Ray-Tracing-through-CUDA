@@ -8,8 +8,6 @@
 #include "Material.h"
 #include "../Mathematics/Probability/Specular_PDF.h"
 
-/// Reference: xxx
-// -------------------------------------------------------------------------------
 class Phong : public Material {
 public:
     // Constructor

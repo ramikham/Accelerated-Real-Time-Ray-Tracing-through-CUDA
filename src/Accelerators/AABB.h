@@ -30,32 +30,16 @@ public:
         /// Shirley's blog: https://psgraphics.blogspot.com/2016/02/ray-box-intersection-and-fmin.html
 
         // We need the inverse of the ray's direction
-        auto inv_dir = Vec3D(1.0 / r.get_ray_direction().x(), 1.0 / r.get_ray_direction().y(), 1.0 / r.get_ray_direction().z());
-
-        // First, check the intersection along the x-axis
-        auto t_x_min = (minimum[0] - r.get_ray_origin()[0]) * inv_dir[0];
-        auto t_x_max = (maximum[0] - r.get_ray_origin()[0]) * inv_dir[0];
-        t_min = fmax(fmin(t_x_min, t_x_max), t_min);
-        t_max = fmin(fmax(t_x_min, t_x_max), t_max);
-        if (t_max <= t_min)
-            return false;
-
-        // Then, check the intersection along the y-axis
-        auto t_y_min = (minimum[1] - r.get_ray_origin()[1]) * inv_dir[1];
-        auto t_y_max = (maximum[1] - r.get_ray_origin()[1]) * inv_dir[1];
-        t_min = fmax(fmin(t_y_min, t_y_max), t_min);
-        t_max = fmin(fmax(t_y_min, t_y_max), t_max);
-        if (t_max <= t_min)
-            return false;
-
-        // Finally, check the intersection along the z-axis
-        auto t_z_min = (minimum[2] - r.get_ray_origin()[2]) * inv_dir[2];
-        auto t_z_max = (maximum[2] - r.get_ray_origin()[2]) * inv_dir[2];
-        t_min = fmax(fmin(t_z_min, t_z_max), t_min);
-        t_max = fmin(fmax(t_z_min, t_z_max), t_max);
-        if (t_max <= t_min)
-            return false;
-
+        for (int a = 0; a < 3; a++) {
+            auto t0 = fmin((minimum[a] - r.get_ray_origin()[a]) / r.get_ray_direction()[a],
+                           (maximum[a] - r.get_ray_origin()[a]) / r.get_ray_direction()[a]);
+            auto t1 = fmax((minimum[a] - r.get_ray_origin()[a]) / r.get_ray_direction()[a],
+                           (maximum[a] - r.get_ray_origin()[a]) / r.get_ray_direction()[a]);
+            t_min = fmax(t0, t_min);
+            t_max = fmin(t1, t_max);
+            if (t_max <= t_min)
+                return false;
+        }
         return true;
     }
 

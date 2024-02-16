@@ -13,37 +13,45 @@ public:
     // Constructors
     // -----------------------------------------------------------------------
     Vec2D() : V{0, 0} {}         // Default constructor
+
     Vec2D(double v_x, double v_y) : V{v_x, v_y} {}
 
     // Getters
     // -----------------------------------------------------------------------
     double x() const { return V[0]; }
+
     double y() const { return V[1]; }
 
     // Overloaded operators
     // -----------------------------------------------------------------------
     Vec2D operator-() const { return Vec2D(-V[0], -V[1]); }
+
     Vec2D& operator+=(const Vec2D& v) {
         V[0] += v[0];
         V[1] += v[1];
 
         return *this;
     }
+
     Vec2D& operator*=(const double c) {
         V[0] *= c;
         V[1] *= c;
 
         return *this;
     }
+
     Vec2D operator/=(const double c) {
         return *this *= 1/c;        // reciprocal multiplication
     }
+
     double operator[](int i) const { return V[i]; }
+
     double& operator[](int i) { return V[i]; }
 
     // Vector operations
     // -----------------------------------------------------------------------
     double length_squared() const { return V[0] * V[0] + V[1] * V[1]; }
+
     double length() const { return std::sqrt(length_squared()); }
 public:
     // Data Members

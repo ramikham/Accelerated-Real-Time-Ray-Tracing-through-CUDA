@@ -11,7 +11,6 @@
 #include "../Shading.h"
 #include "../Scenes.h"
 
-
 // Function that renders with the radiance(...) function
 // -----------------------------------------------------------------------
 void parallel_loop_radiance_renderer(Scene_Information& scene_info) {

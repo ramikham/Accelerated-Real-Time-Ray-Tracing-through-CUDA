@@ -12,17 +12,21 @@ public:
     // Constructors
     // -----------------------------------------------------------------------
     Vec3D() : V{0, 0, 0} {}     // Default constructor
+
     Vec3D(double v_x, double v_y, double v_z) : V{v_x, v_y, v_z} {}
 
     // Getters
     // -----------------------------------------------------------------------
     double x() const { return V[0]; }
+
     double y() const { return V[1]; }
+
     double z() const { return V[2]; }
 
     // Overloaded operators
     // -----------------------------------------------------------------------
     Vec3D operator-() const { return Vec3D(-V[0], -V[1], -V[2]); }
+
     Vec3D& operator+=(const Vec3D& v) {
         V[0] += v[0];
         V[1] += v[1];
@@ -30,6 +34,7 @@ public:
 
         return* this;
     }
+
     Vec3D& operator*=(const double c) {
         V[0] *= c;
         V[1] *= c;
@@ -37,15 +42,19 @@ public:
 
         return* this;
     }
+
     Vec3D operator/=(const double c) {
         return* this *= 1/c;        // reciprocal multiplication
     }
+
     double operator[](int i) const { return V[i]; }
+
     double& operator[](int i) { return V[i]; }
 
     // Vector operations
     // -----------------------------------------------------------------------
     double length_squared() const { return V[0] * V[0] + V[1] * V[1] + V[2] * V[2]; }
+
     double length() const { return std::sqrt(length_squared()); }
 public:
     // Data Members

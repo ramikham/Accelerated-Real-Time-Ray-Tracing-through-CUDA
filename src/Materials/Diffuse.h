@@ -22,7 +22,7 @@ public:
         Vec3D scatter_direction = surface_pdf_ptr->generate_a_random_direction_based_on_PDF();
         scattered_ray = Ray(intersection_info.p, unit_vector(scatter_direction), incident_ray.get_time());
 
-        // Get the PDF value for the generated scattered ray direction
+        // Get the PDF value for the generated scattered ray direction (the sampling PDF)
         pdf = surface_pdf_ptr->PDF_value(scattered_ray.get_ray_direction());
 
         // Set the shading color to the surface color
@@ -43,6 +43,9 @@ public:
 
     /// Reference: Fundamentals of Computer Graphics: Section 14.10 - Monte Carlo Ray Tracing
     double pdf(const Ray &incident_ray, const Intersection_Information &intersection_info, const Ray &scattered_ray) const override {
+        // DEPRECATED: Only needed if you will use the OLD formulation of diffuse (commented above).
+        // The new formulation used the PDF associated with the generated scattered ray direction.
+
         auto cos_theta = dot_product(intersection_info.normal, unit_vector(scattered_ray.get_ray_direction()));
         return cos_theta < 0 ? 0 : cos_theta/M_PI;
     }

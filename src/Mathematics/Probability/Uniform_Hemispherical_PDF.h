@@ -18,12 +18,13 @@ public:
     }
 
     Vec3D generate_a_random_direction_based_on_PDF() const override {
-        return global_to_ONB_local(uvw, direction_on_a_hemisphere());
+        return global_to_ONB_local(uvw, direction_on_hemisphere());
     }
-
+    /*
     Vec3D generate_a_random_direction_based_on_PDF(const Vec3D &normal) const override {
         return random_on_hemisphere(normal);
     }
+     */
 private:
     std::vector<Vec3D> uvw;
     Vec3D intersection_normal;

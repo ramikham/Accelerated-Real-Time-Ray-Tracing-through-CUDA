@@ -43,7 +43,7 @@ public:
     virtual bool intersection(const Ray& r, double t_0, double t_1, Intersection_Information& intersection_info) const = 0;
     virtual bool has_bounding_box(double time_0, double time_1, AABB& surrounding_AABB) const = 0;
     virtual double PDF_value(const point3D& o, const Vec3D& v) const { return 0.0; }
-    virtual Vec3D random(const Vec3D& o) const { Vec3D(1,0,0); }
+    virtual Vec3D random(const Vec3D& o) const { return Vec3D(1,0,0); }
 };
 
 // Supporting Functions for constructing the different BVH classes
