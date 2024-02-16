@@ -9,6 +9,8 @@
 #include "../Primitives/Primitive.h"
 #include "../Primitives/Primitives_Group.h"
 
+// TODO: FIX THE CLASS - IT IS NOT WORKING
+
 /// Reference: Fundamentals of Computer Graphics - Section 12.3.2: Hierarchical Bounding Boxes
 class BVH_Midpoint_Partition : public Primitive {
 public:
@@ -18,39 +20,32 @@ public:
 
     /// Reference: Fundamentals of Computer Graphics - Section 12.3.2: Hierarchical Bounding Boxes
     BVH_Midpoint_Partition (const Primitives_Group &list) :
-            BVH_Midpoint_Partition(list,  0.0, 0.0, 0) {}
+            BVH_Midpoint_Partition(list,  0.0, 0.0, 0, 0) {}
 
-    const int MAX_RECURSION_DEPTH = 2000;  // Set an appropriate limit
-
-    BVH_Midpoint_Partition(const Primitives_Group& A, double time0, double time1, int AXIS, int depth = 0) {
-        // Generate an axis at random
-        AXIS = random_int_in_range(0,2);
-        if (depth > MAX_RECURSION_DEPTH || A.primitives_list.empty()) {
-            // If recursion depth limit is reached or no primitives, construct a leaf node
-            left = right = nullptr;
-            return;
-        }
+    BVH_Midpoint_Partition(const Primitives_Group& A, double time0, double time1, int AXIS, int axis_ctr) {
+        int axis = axis_ctr % 3;                  // keep rotating between the axes
 
         auto N = A.primitives_list.size();
 
         if (N == 1) {
-            left = right = A.primitives_list[0];
+            left = A.primitives_list[0];
+            right = nullptr;
         } else if (N == 2){
             left = A.primitives_list[0];
             right = A.primitives_list[1];
         } else {
-            auto m = find_midpoint_of_A(A, time0, time1, AXIS);
-            auto pair = partition_around_midpoint(A.primitives_list, m, AXIS);
+            auto m = find_midpoint_of_A(A, time0, time1, axis);
+            auto pair = partition_around_midpoint(A.primitives_list, m, axis);
 
-            // Recursive calls with increased depth
-            left = std::make_shared<BVH_Midpoint_Partition>(pair.first, time0, time1, AXIS, depth + 1);
-            right = std::make_shared<BVH_Midpoint_Partition>(pair.second, time0, time1, AXIS, depth + 1);
+            left = std::make_shared<BVH_Midpoint_Partition>(pair.first, time0, time1, axis, axis_ctr + 1);
+            right = std::make_shared<BVH_Midpoint_Partition>(pair.second, time0, time1, axis, axis_ctr + 1);
         }
 
         AABB box_left, box_right;
         if (left && right && left->has_bounding_box(time0, time1, box_left) && right->has_bounding_box(time0, time1, box_right)) {
             BBOX = construct_surrounding_box(box_left, box_right);
         }
+
     }
 
     // Overloaded Functions
