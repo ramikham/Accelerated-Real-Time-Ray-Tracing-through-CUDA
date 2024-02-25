@@ -20,8 +20,8 @@ public:
     /// References:         - Fundamentals of Computer Graphics - Section 5.2.2: Specular Reflection
     ///                     - Fundamentals of Computer Graphics - Section 5.2.3: Calculating Shading
     ///                     - Importance Sampling of the Phong Reflectance Model: https://www.cs.princeton.edu/courses/archive/fall16/cos526/papers/importance.pdf
-    bool illumination(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
-                      Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
+    bool evaluate(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
+                  Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
 
             double u = random_double();                 // generate a random variable u ∈ [0,1]
 
@@ -50,7 +50,7 @@ public:
             return true;
 
             /* OLD - but works. Use it if you don't wish to do importance sampling for Phong materials. */
-            /*
+/*
             surface_pdf_ptr = nullptr;              // no BRDF
             material_type = PHONG;                  // Material Type
 
@@ -68,7 +68,7 @@ public:
             shading_color = surface_color * (diffuse_component + specular_component * specular_intensity) / M_PI;
 
             return true;
-            */
+*/
         }
 
     /// Reference:  - Crash Course in BRDF Implementation: https://boksajak.github.io/files/CrashCourseBRDF.pdf

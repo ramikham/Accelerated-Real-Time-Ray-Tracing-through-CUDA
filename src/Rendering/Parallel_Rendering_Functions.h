@@ -97,6 +97,14 @@ void parallel_loop_radiance_renderer(Scene_Information& scene_info) {
             double g_comp = pixel_color.y();
             double b_comp = pixel_color.z();
 
+            // Get rid of acne: white or black dots
+            if (std::isnan(r_comp))
+                r_comp = 0.0;
+            if (std::isnan(g_comp))
+                g_comp = 0.0;
+            if (std::isnan(b_comp))
+                b_comp = 0.0;
+
             r_comp = gamma_2_correction(r_comp);
             g_comp = gamma_2_correction(g_comp);
             b_comp = gamma_2_correction(b_comp);
@@ -188,6 +196,14 @@ void parallel_loop_radiance_background_renderer(Scene_Information& scene_info) {
             double r_comp = pixel_color.x();
             double g_comp = pixel_color.y();
             double b_comp = pixel_color.z();
+
+            // Get rid of acne: white or black dots
+            if (std::isnan(r_comp))
+                r_comp = 0.0;
+            if (std::isnan(g_comp))
+                g_comp = 0.0;
+            if (std::isnan(b_comp))
+                b_comp = 0.0;
 
             r_comp = gamma_2_correction(r_comp);
             g_comp = gamma_2_correction(g_comp);
@@ -291,6 +307,14 @@ void parallel_cols_workload_radiance_background(Scene_Information& scene_info) {
             double g_comp = pixel_color.y();
             double b_comp = pixel_color.z();
 
+            // Get rid of acne: white or black dots
+            if (std::isnan(r_comp))
+                r_comp = 0.0;
+            if (std::isnan(g_comp))
+                g_comp = 0.0;
+            if (std::isnan(b_comp))
+                b_comp = 0.0;
+
             r_comp = gamma_2_correction(r_comp);
             g_comp = gamma_2_correction(g_comp);
             b_comp = gamma_2_correction(b_comp);
@@ -388,6 +412,14 @@ void parallel_tasks_radiance_background_renderer(Scene_Information& scene_info) 
             double g_comp = pixel_color.y();
             double b_comp = pixel_color.z();
 
+            // Get rid of acne: white or black dots
+            if (std::isnan(r_comp))
+                r_comp = 0.0;
+            if (std::isnan(g_comp))
+                g_comp = 0.0;
+            if (std::isnan(b_comp))
+                b_comp = 0.0;
+
             r_comp = gamma_2_correction(r_comp);
             g_comp = gamma_2_correction(g_comp);
             b_comp = gamma_2_correction(b_comp);
@@ -480,6 +512,22 @@ void parallel_loop_radiance_mixture_renderer(Scene_Information& scene_info) {
             double r_comp = pixel_color.x();
             double g_comp = pixel_color.y();
             double b_comp = pixel_color.z();
+
+            // Get rid of acne: white or black dots
+            if (std::isnan(r_comp))
+                r_comp = 0.0;
+            if (std::isnan(g_comp))
+                g_comp = 0.0;
+            if (std::isnan(b_comp))
+                b_comp = 0.0;
+
+            // Get rid of acne: white or black dots
+            if (std::isnan(r_comp))
+                r_comp = 0.0;
+            if (std::isnan(g_comp))
+                g_comp = 0.0;
+            if (std::isnan(b_comp))
+                b_comp = 0.0;
 
             r_comp = gamma_2_correction(r_comp);
             g_comp = gamma_2_correction(g_comp);
@@ -583,6 +631,14 @@ void parallel_cols_workload_radiance_mixture_renderer(Scene_Information& scene_i
             double g_comp = pixel_color.y();
             double b_comp = pixel_color.z();
 
+            // Get rid of acne: white or black dots
+            if (std::isnan(r_comp))
+                r_comp = 0.0;
+            if (std::isnan(g_comp))
+                g_comp = 0.0;
+            if (std::isnan(b_comp))
+                b_comp = 0.0;
+
             r_comp = gamma_2_correction(r_comp);
             g_comp = gamma_2_correction(g_comp);
             b_comp = gamma_2_correction(b_comp);
@@ -677,6 +733,14 @@ void parallel_tasks_radiance_mixture_renderer(Scene_Information& scene_info) {
             double r_comp = pixel_color.x();
             double g_comp = pixel_color.y();
             double b_comp = pixel_color.z();
+
+            // Get rid of acne: white or black dots
+            if (std::isnan(r_comp))
+                r_comp = 0.0;
+            if (std::isnan(g_comp))
+                g_comp = 0.0;
+            if (std::isnan(b_comp))
+                b_comp = 0.0;
 
             r_comp = gamma_2_correction(r_comp);
             g_comp = gamma_2_correction(g_comp);

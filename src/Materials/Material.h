@@ -21,8 +21,10 @@ enum MATERIAL_TYPE {
 class Material {
 public:
     virtual ~Material()=default;
-    virtual bool illumination(
-            const Ray& incident_ray, const Intersection_Information& intersection_info, Color& shading_color, Ray& scattered_ray, MATERIAL_TYPE& , double& pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const = 0;
+
+    // Evaluates the shading model
+    virtual bool evaluate(const Ray& incident_ray, const Intersection_Information& intersection_info, Color& shading_color, Ray& scattered_ray, MATERIAL_TYPE& , double& pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const = 0;
+
     virtual double pdf(const Ray& incident_ray, const Intersection_Information& intersection_info, const Ray& scattered_ray) const {
         return 0;
     }

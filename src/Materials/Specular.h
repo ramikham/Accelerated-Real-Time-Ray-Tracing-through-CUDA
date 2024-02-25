@@ -31,8 +31,8 @@ public:
     ///                         - Fundamentals of Computer Graphics: Section 14.2: Smooth Metals
     ///                         - Fundamentals of Computer Graphics: Section 14.3.1: Reflectivity of a Dielectric
     ///                         - Fundamentals of Computer Graphics: Section 14.3.2: Refraction
-    bool illumination(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
-                      Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
+    bool evaluate(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
+                  Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
         if (reflection) {
             surface_pdf_ptr = nullptr;
             material_type = SPECULAR;

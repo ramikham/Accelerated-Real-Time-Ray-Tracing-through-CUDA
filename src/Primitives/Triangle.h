@@ -6,7 +6,7 @@
 #define CUDA_RAY_TRACER_TRIANGLE_H
 
 #include "Primitive.h"
-
+static int num_calls_triangle_intersection = 0;
 // A Triangle class that includes the following ray/triangle intersection algorithms:
 //          1. Möller–Trumbore ray-triangle intersection algorithm
 //          2. // TODO: Badouel ray-triangle intersection algorithm
@@ -21,6 +21,15 @@ public:
     // Overloaded Function
     // -------------------------------------------------------------------
     bool intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const override {
+        // NOTE: When measuring runtime, don't call this function; instead, paste the intersection code here.
+
+         return Snyder_Barr_ray_triangle_intersection(r, t_0, t_1, intersection_info);
+
+       // return Moller_Trumbore_ray_triangle_intersection(r, t_0, t_1, intersection_info);
+    }
+
+    /// Reference: Ray Tracing Complex Models Containing Surface Tessellations
+    bool Snyder_Barr_ray_triangle_intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const {
         // Snyder & Barr ray-triangle intersection algorithm
 
         // Get Ray details
@@ -100,8 +109,10 @@ public:
         intersection_info.mat_ptr = triangle_material;
 
         return true;
+    }
 
-        /*
+    /// Reference: Fast, Minimum Storage Ray/Triangle Intersection
+    bool Moller_Trumbore_ray_triangle_intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const {
         // Möller–Trumbore ray-triangle intersection algorithm
         Vec3D edge_1 = b - a;
         Vec3D edge_2 = c - a;
@@ -127,6 +138,10 @@ public:
 
         double t = inv_D * dot_product(edge_2, s_cross_e1);
 
+        // NOTE: newly added -> Check for visibility in [t_0,t_1]
+        if (t < t_0 || t > t_1)
+            return false;
+
         if (t > epsilon) {
             // Ray intersects
             intersection_info.t = t;
@@ -138,28 +153,11 @@ public:
 
             return true;
         } else
-            return false;*/
-
+            return false;
     }
 
     bool has_bounding_box(double time_0, double time_1, AABB &surrounding_AABB) const override {
         // Does the triangle have a bounding box?
-
-        /*
-        double min_x = fmin(fmin(a.x(), b.x()), c.x()) - epsilon;
-        double max_x = fmax(fmax(a.x(), b.x()), c.x()) + epsilon;
-        double min_y = fmin(fmin(a.y(), b.y()), c.y()) - epsilon;
-        double max_y = fmax(fmax(a.y(), b.y()), c.y()) + epsilon;
-        double min_z = fmin(fmin(a.z(), b.z()), c.z()) - epsilon;
-        double max_z = fmax(fmax(a.z(), b.z()), c.z()) + epsilon;*/
-
-        /*
-        double min_x = fmin(a.x(), fmin(b.x(), c.x())) - epsilon;
-        double max_x = fmax(a.x(), fmax(b.x(), c.x())) + epsilon;
-        double min_y = fmin(a.y(), fmin(b.y(), c.y())) - epsilon;
-        double max_y = fmax(a.y(), fmax(b.y(), c.y())) + epsilon;
-        double min_z = fmin(a.z(), fmin(b.z(), c.z())) - epsilon;
-        double max_z = fmax(a.z(), fmax(b.z(), c.z())) + epsilon;*/
 
         Vec3D EPS(epsilon, epsilon, epsilon);
         surrounding_AABB =  AABB(
@@ -206,7 +204,7 @@ public:
         return w + a - o;
     }
 
-private:
+public:
     // Data Members
     // -----------------------------------------------------------------------
     point3D a,b,c;                                          // vertices of the triangle

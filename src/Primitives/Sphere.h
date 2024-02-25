@@ -15,12 +15,17 @@ public:
 
     // Overloaded Functions
     // -----------------------------------------------------------------------
-
-    /// Reference: An Introduction to Ray Tracing - Section 2.1: Intersection of the Sphere
     bool intersection(const Ray &r, double t_min, double t_max, Intersection_Information &intersection_info) const override  {
         // Tests if the ray r intersects the sphere between the interval [t_min,t_max]
+        // NOTE: When measuring runtime, don't call this function; instead, paste the intersection code here.
 
-        /*
+        return ray_sphere_intersection_geometric_solution(r, t_min, t_max, intersection_info);
+
+        // return ray_sphere_intersection_algebraic_solution(r, t_min, t_max, intersection_info);
+    }
+
+    /// Reference: An Introduction to Ray Tracing - Section 2.1: Intersection of the Sphere
+    bool ray_sphere_intersection_algebraic_solution(const Ray &r, double t_min, double t_max, Intersection_Information &intersection_info) const {
         // Get the A, B, C of the quadratic equation
         Vec3D OC = r.get_ray_origin() - center;
         auto A = r.get_ray_direction().length_squared();
@@ -29,7 +34,6 @@ public:
 
         // Calculate the quadratic equation discriminant.
         auto discriminant = half_B * half_B - A * C;
-       // auto discriminant = fma(half_B, half_B, -A * C);
 
         // If the discriminant is negative, the ray misses the sphere.
         if (discriminant < 0) return false;
@@ -41,13 +45,13 @@ public:
         // roots. The smaller, positive real root is the one that is closest
         // to the intersection distance on the ray.
         double intersection_t = (-half_B - sqrt_discriminant) / A;       // first root
-        if (intersection_t <= t_0 || t_1 <= intersection_t) {
+        if (intersection_t <= t_min || t_max <= intersection_t) {
             // first root not in range [t_0,t_1], so calculate
             // the second root.
             intersection_t = (-half_B + sqrt_discriminant) / A;
 
             // Check if second root is also not in the range [t_0,t_1].
-            if (intersection_t <= t_0 || t_1 <= intersection_t)
+            if (intersection_t <= t_min || t_max <= intersection_t)
                 return false;
         }
 
@@ -60,20 +64,17 @@ public:
         intersection_info.mat_ptr = sphere_material;
 
         return true;
-        */
+    }
 
-
-        // TODO: FIND SMALL MISTAKE - it is with visibility and nearest intersection
-        //  Ray r(Vec3D(1,-2,-1), Vec3D(1,2,4));
-
-
+    /// Reference: An Introduction to Ray Tracing - Section 2.1: Intersection of the Sphere
+    bool ray_sphere_intersection_geometric_solution(const Ray &r, double t_min, double t_max, Intersection_Information &intersection_info) const {
         bool flag_outside_sphere = false;
         double R2 = radius*radius;
         Vec3D OC  = center - r.get_ray_origin();
         double L_2_OC = dot_product(OC, OC);
         flag_outside_sphere = false;
         if (L_2_OC >= R2) {
-            // RAY ORIGINATED OURSIDE THE SPJERE
+            // Ray originated outside the sphere
             flag_outside_sphere = true;
         }
 
@@ -90,9 +91,10 @@ public:
         }
 
         //  std::cout << "1. " <<  (t_ca - sqrt(t_2_hc)) / r.get_ray_direction().length() << std::endl;
-        //   std::cout << "2. " << (t_ca + sqrt(t_2_hc)) / r.get_ray_direction().length() << std::endl;
+        //  std::cout << "2. " << (t_ca + sqrt(t_2_hc)) / r.get_ray_direction().length() << std::endl;
 
         double intersection_t;
+
         if (flag_outside_sphere)
             intersection_t =  (t_ca - sqrt(t_2_hc)) / r.get_ray_direction().length();
         else
@@ -101,44 +103,15 @@ public:
         if (intersection_t <= t_min || t_max <= intersection_t) {
             return false;
         }
+
+        // Intersection exists
         intersection_info.t = intersection_t;
         intersection_info.p = r.at(intersection_t);
         Vec3D outward_normal = (intersection_info.p - center) / radius;
         intersection_info.set_face_normal(r, outward_normal);
         intersection_info.mat_ptr = sphere_material;
+
         return true;
-
-
-        /*
-
-        double D2 = dot_product(OC, OC) - t_ca * t_ca;      // D sqaured
-        if (D2 < R2)
-            return false;
-
-        double t_hc = sqrt(R2 - D2);
-        double t0 = t_ca - t_hc;
-        double t1 = t_ca + t_hc;
-
-        if (t0 < t_1 && t0 > t_0) {
-            intersection_info.t = t0 / r.get_ray_direction().length();
-            intersection_info.p = r.at(intersection_info.t);
-            Vec3D outward_normal = (intersection_info.p - center) / radius;
-            intersection_info.set_face_normal(r, outward_normal);
-            intersection_info.mat_ptr = sphere_material;
-            return true;
-        }
-
-        if (t1 < t_1 && t1 > t_0) {
-            intersection_info.t = t1 / r.get_ray_direction().length();
-            intersection_info.p = r.at(intersection_info.t);
-            Vec3D outward_normal = (intersection_info.p - center) / radius;
-            intersection_info.set_face_normal(r, outward_normal);
-            intersection_info.mat_ptr = sphere_material;
-            return true;
-        }
-
-        return false;
-         */
     }
 
     /// Reference: https://gamedev.stackexchange.com/questions/159710/getting-the-bounding-box-of-a-sphere

@@ -3,14 +3,15 @@
 #include "Unit Testing/Functions_Tests.h"
 
 int main() {
+
+
     auto start = omp_get_wtime();
 
  //   Scene_Information scene_info = scene_Test();
-    Scene_Information scene_info = my_Cornell_Box_scene(); //bunny_test();
+    Scene_Information scene_info = a_rabbit_and_a_teapot_inside_a_Cornell_box_without_importance_sampling(); //bunny_test();
 
   //  parallel_render_radiance_mixture(scene_info);      //parallel
     //serial_render(scene_info);
-
 
 
     parallel_loop_radiance_mixture_renderer(scene_info);
@@ -23,6 +24,18 @@ int main() {
 
     scene_info.rendering_time = duration;
 
+    std::cout << "BOX INTERSECTION CALLED = " << num_calls_box_intersection << std::endl;
+    std::cout << "TRIANGLE INTERSECTION CALLED = " << num_calls_triangle_intersection << std::endl;
+    std::cout << "RANDOM_DOUBLE() CALLED = " << num_calls_rand_double << std::endl;
+
+
+  //  BENCHMARK::compare_uniform_random_double_generators();
+  //  BENCHMARK::compare_ray_triangle_intersection_algorithms();
+
+    //  std::cout << 800/8+1;
+
+    //test_AABB_intersection();
 
     return 0;
 }
+

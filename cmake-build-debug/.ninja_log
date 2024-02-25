@@ -1,15 +1,13 @@
 # ninja log v5
-1	266	7297145302485748	build.ninja	6b08690dbb17ab1a
-2035	2867	7296939672677602	CUDA_Ray_Tracer.exe	7f75df793b2006b4
-2	2034	7296939664326434	CMakeFiles/CUDA_Ray_Tracer.dir/src/main.cpp.obj	22b88b420ea156df
+1	134	7305554071849768	build.ninja	6b08690dbb17ab1a
+3	4846	7305072722864969	CMakeFiles/CUDA_Ray_Tracer.dir/src/main.cpp.obj	2bddfffb7e850ace
+4846	5224	7305072726748563	CUDA_Ray_Tracer.exe	c65fb6ce5b0a28a6
 3	520	7277234377575971	CMakeFiles/CUDA_Ray_Tracer.dir/src/Mathematics/Ray.cpp.obj	a7cab23f6a97ec2
-3	2621	7297930967138022	CMakeFiles/CUDA_Ray_Tracer.dir/src/main.cpp.obj	22b88b420ea156df
-2621	3932	7297930980273515	CUDA_Ray_Tracer.exe	7f75df793b2006b4
-3	2810	7297931158273404	CMakeFiles/CUDA_Ray_Tracer.dir/src/main.cpp.obj	22b88b420ea156df
-2810	3831	7297931168614194	CUDA_Ray_Tracer.exe	7f75df793b2006b4
-4	3133	7297934618925207	CMakeFiles/CUDA_Ray_Tracer.dir/src/main.cpp.obj	22b88b420ea156df
-3134	4138	7297934629008062	CUDA_Ray_Tracer.exe	7f75df793b2006b4
-2	1984	7297935424429969	CMakeFiles/CUDA_Ray_Tracer.dir/src/main.cpp.obj	22b88b420ea156df
-1985	2851	7297935433132023	CUDA_Ray_Tracer.exe	7f75df793b2006b4
-3	2139	7297937613876124	CMakeFiles/CUDA_Ray_Tracer.dir/src/main.cpp.obj	22b88b420ea156df
-2139	3009	7297937622608430	CUDA_Ray_Tracer.exe	7f75df793b2006b4
+3	3152	7305569742855385	CMakeFiles/CUDA_Ray_Tracer.dir/src/main.cpp.obj	2bddfffb7e850ace
+3152	3498	7305569746387618	CUDA_Ray_Tracer.exe	c65fb6ce5b0a28a6
+3	3427	7305570759757559	CMakeFiles/CUDA_Ray_Tracer.dir/src/main.cpp.obj	2bddfffb7e850ace
+3428	3720	7305570762734449	CUDA_Ray_Tracer.exe	c65fb6ce5b0a28a6
+3	3170	7305571556070026	CMakeFiles/CUDA_Ray_Tracer.dir/src/main.cpp.obj	2bddfffb7e850ace
+3170	3457	7305571559005760	CUDA_Ray_Tracer.exe	c65fb6ce5b0a28a6
+3	3458	7305573558863906	CMakeFiles/CUDA_Ray_Tracer.dir/src/main.cpp.obj	2bddfffb7e850ace
+3458	3750	7305573561873942	CUDA_Ray_Tracer.exe	c65fb6ce5b0a28a6

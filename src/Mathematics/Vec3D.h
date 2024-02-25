@@ -121,5 +121,8 @@ inline Vec3D max(const Vec3D& a, const Vec3D& b) {
     return { fmax(a.x(), b.x()), fmax(a.y(), b.y()), fmax(a.z(), b.z()) };
 }
 
+inline Vec3D rcp(const Vec3D& v) {
+    return { 1.0f / v.x(), 1.0f / v.y(), 1.0f / v.z() };
+}
 
 #endif //CUDA_RAY_TRACER_VEC3D_H

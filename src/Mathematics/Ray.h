@@ -15,7 +15,13 @@ public:
     Ray() {}
 
     Ray(const point3D& ray_origin, const Vec3D& ray_direction, double time=0.0)
-    : ray_origin(ray_origin), ray_direction(ray_direction), time(time) {}
+    : ray_origin(ray_origin), ray_direction(ray_direction), time(time) {
+        inv_direction = Vec3D(1/ray_direction.x(), 1/ray_direction.y(), 1/ray_direction.z());
+        sign[0] = (inv_direction.x() < 0);
+        sign[1] = (inv_direction.y() < 0);
+        sign[2] = (inv_direction.z() < 0);
+
+    }
 
     // Getters
     // -----------------------------------------------------------------------
@@ -43,12 +49,20 @@ public:
         return ray_origin + t * ray_direction - ray_direction * 0.0001;
     };
 
+    Vec3D get_inverse_direction() const {
+        // Returns the inverse of the direction vector of the ray
+
+        return {1.0 / ray_direction.x(), 1.0 / ray_direction.y(), 1.0 / ray_direction.z()};
+    };
+
 public:
     // Data Members
     // -----------------------------------------------------------------------
     point3D ray_origin;             // the ray's origin
     Vec3D ray_direction;            // the ray's direction
     double time;                    // the ray's time
+    Vec3D inv_direction;
+    int sign[3];
 };
 
 

@@ -7,16 +7,17 @@
 
 #include "../../Utilities.h"
 #include <random>
-
+static int num_calls_rand_double = 0;
 // Constants
 // -----------------------------------------------------------------------
 const double TWO_PI = 2 * M_PI;
 
 // Randomized Algorithms
 // -----------------------------------------------------------------------
+
 inline double random_double() {
     // Returns a random double between [0.0,1.0).
-
+   // num_calls_rand_double++;
     return rand() / (RAND_MAX + 1.0);
 }
 
@@ -52,7 +53,6 @@ static Vec3D random_vector_in_range() {
             };
 }
 
-/// Reference: [4]
 inline Vec3D random_unit_vector() {
     // Returns a random vector on the unit sphere of directions.
 

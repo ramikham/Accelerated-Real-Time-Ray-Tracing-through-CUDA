@@ -14,8 +14,8 @@ public:
 
     /// References:     - Fundamentals of Computer Graphics - Section 5.2.1: Lambertian Reflection
     ///                 - Fundamentals of Computer Graphics - Section 5.2.3: Calculating Shading
-    bool illumination(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
-                      Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
+    bool evaluate(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
+                  Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
 
         // Generate a scattered ray with a direction from the corresponding PDF
         surface_pdf_ptr = std::make_shared<Cosine_Weighted_PDF>(intersection_info.normal);          // A cosine-weighted distribution is physically correct
