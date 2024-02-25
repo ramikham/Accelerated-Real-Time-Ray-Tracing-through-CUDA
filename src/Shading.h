@@ -46,7 +46,7 @@ Color radiance(const Ray& r, const Primitive& world, int depth= 10){
     double pdf;
 
     // std::cout << "Normal from shade(): " << rec.normal << std::endl;
-    if (!rec.mat_ptr->illumination(r, rec, surface_color, scattered_ray, material_type, pdf, surface_pdf_ptr))
+    if (!rec.mat_ptr->evaluate(r, rec, surface_color, scattered_ray, material_type, pdf, surface_pdf_ptr))
         return Color(1.0,1.0,1.0);
 
     return rec.mat_ptr->BRDF(r, rec, scattered_ray, surface_color) *
@@ -75,7 +75,7 @@ Color radiance_background(const Ray& r, const Primitive& world, int depth= 10, C
 
     Color color_from_emission = rec.mat_ptr->emitted(rec.p, rec);
 
-    if (!rec.mat_ptr->illumination(r, rec, surface_color, scattered_ray, material_type, pdf, surface_pdf_ptr))
+    if (!rec.mat_ptr->evaluate(r, rec, surface_color, scattered_ray, material_type, pdf, surface_pdf_ptr))
         return color_from_emission;
 
     if (surface_pdf_ptr == nullptr && (material_type == SPECULAR || material_type == PHONG))
@@ -105,7 +105,7 @@ Color radiance_sample_light_directly(const Ray& r, const Primitive& world, int d
     // SAMPLE LIGHT DIRECTLY
     Color color_from_emission = rec.mat_ptr->emitted(rec.p, rec);
 
-    if (!rec.mat_ptr->illumination(r, rec, surface_color, scattered_ray, material_type, pdf, surface_pdf_ptr))
+    if (!rec.mat_ptr->evaluate(r, rec, surface_color, scattered_ray, material_type, pdf, surface_pdf_ptr))
         return color_from_emission;
 
     point3D on_light = point3D(random_double(213, 343), 554, random_double(227, 332));
@@ -146,7 +146,7 @@ Color radiance_sample_light_directly_2(const Ray& r, const Primitive& world, con
     // SAMPLE LIGHT DIRECTLY
     Color color_from_emission = rec.mat_ptr->emitted(rec.p, rec);
 
-    if (!rec.mat_ptr->illumination(r, rec, surface_color, scattered_ray, material_type, pdf, surface_pdf_ptr))
+    if (!rec.mat_ptr->evaluate(r, rec, surface_color, scattered_ray, material_type, pdf, surface_pdf_ptr))
         return color_from_emission;
 
     Color total_radiance = color_from_emission;
@@ -195,7 +195,7 @@ Color radiance_mixture(const Ray& r, const Primitive& world, const Primitive& li
 
     Color color_from_emission = rec.mat_ptr->emitted(rec.p, rec);
 
-    if (!rec.mat_ptr->illumination(r, rec, surface_color, scattered_ray, material_type, pdf, surface_pdf_ptr))
+    if (!rec.mat_ptr->evaluate(r, rec, surface_color, scattered_ray, material_type, pdf, surface_pdf_ptr))
         return color_from_emission;
 
     if (surface_pdf_ptr == nullptr && (material_type == SPECULAR || material_type == PHONG))

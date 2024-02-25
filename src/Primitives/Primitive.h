@@ -54,7 +54,7 @@ public:
 inline bool compare_AABBs(const std::shared_ptr<Primitive> a, const std::shared_ptr<Primitive> b, int axis) {
     // Compares two primitives based on the minimum coordinates of their bounding boxes along a specified axis.
 
-    assert(axis >= 0 && axis <= 2);
+  //  assert(axis >= 0 && axis <= 2);
 
     AABB box_a;
     AABB box_b;

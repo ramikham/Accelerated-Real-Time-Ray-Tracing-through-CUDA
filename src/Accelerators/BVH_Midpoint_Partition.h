@@ -53,6 +53,8 @@ public:
     /// Reference: Fundamentals of Computer Graphics - Section 12.3.2: Hierarchical Bounding Boxes
     bool intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const override {
         // Test whether the box of the BVH node is intersected by the ray r
+
+        // TODO: CHANGE
         if (BBOX.intersection(r, t_0, t_1)) {
             Intersection_Information l_rec, r_rec;
 

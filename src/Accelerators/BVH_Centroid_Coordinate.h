@@ -77,7 +77,7 @@ public:
 
     // Overloaded Functions
     // -----------------------------------------------------------------------
-    /// Reference: [1] Ray Tracing: The Next Week
+    /// Reference: [1] https://graphics.stanford.edu/~boulos/papers/efficient_notes.pdf
     /// Reference: [2] Fundamentals of Computer Graphics - Section 12.3.2: Hierarchical Bounding Boxes
     bool intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const override {
         // Tests whether the box of the BVH node is intersected by the ray r.

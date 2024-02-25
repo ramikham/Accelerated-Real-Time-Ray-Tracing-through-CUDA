@@ -30,8 +30,8 @@ public:
         this->z_max = z_max;
     }
 
-    bool illumination(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
-                      Ray &scattered_ray, MATERIAL_TYPE &type, double &pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
+    bool evaluate(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
+                  Ray &scattered_ray, MATERIAL_TYPE &type, double &pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
         return false;
     }
 

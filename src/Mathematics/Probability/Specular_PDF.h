@@ -16,10 +16,11 @@ inline Vec3D weighted_direction(double specular_exponent) {
 
     // Inverse transformation from CDF
     double phi = 2 * M_PI * u1;
+    double theta = acos(pow(u1, 1/(specular_exponent+1)));
 
-    double z = pow(u2, 2/(specular_exponent+1));
-    double y = sin(phi) * sqrt(1 - pow(u2, 2/(specular_exponent+1)));
-    double x = cos(phi) * sqrt(1 - pow(u2, 2/(specular_exponent+1)));
+    double z = cos(theta);
+    double y = sin(phi) * sin(theta);
+    double x = cos(phi) * sin(theta);
 
     return {x, y, z};
 }
