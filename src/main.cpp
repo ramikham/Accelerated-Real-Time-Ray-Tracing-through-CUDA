@@ -7,14 +7,9 @@ int main() {
 
     auto start = omp_get_wtime();
 
- //   Scene_Information scene_info = scene_Test();
-    Scene_Information scene_info = a_rabbit_and_a_teapot_inside_a_Cornell_box_without_importance_sampling(); //bunny_test();
+    Scene_Information scene_info = a_rabbit_and_a_teapot_inside_a_Cornell_box_1(); //bunny_test();
 
-  //  parallel_render_radiance_mixture(scene_info);      //parallel
-    //serial_render(scene_info);
-
-
-    parallel_loop_radiance_mixture_renderer(scene_info);
+   parallel_loop_radiance_mixture_renderer(scene_info);
 
     auto stop = omp_get_wtime();
 

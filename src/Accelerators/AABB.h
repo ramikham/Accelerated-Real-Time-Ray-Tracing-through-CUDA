@@ -34,25 +34,6 @@ public:
         return Williams_ray_AABB_intersection(r, t_min, t_max);
     }
 
-    AABB pad() {
-        // Return an AABB that has no side narrower than some delta, padding if necessary.
-        double delta = 0.0001;
-
-        point3D new_min(
-                (maximum.x() - minimum.x() >= delta) ? minimum.x() : (minimum.x() - delta / 2),
-                (maximum.y() - minimum.y() >= delta) ? minimum.y() : (minimum.y() - delta / 2),
-                (maximum.z() - minimum.z() >= delta) ? minimum.z() : (minimum.z() - delta / 2)
-        );
-
-        point3D new_max(
-                (maximum.x() - minimum.x() >= delta) ? maximum.x() : (maximum.x() + delta / 2),
-                (maximum.y() - minimum.y() >= delta) ? maximum.y() : (maximum.y() + delta / 2),
-                (maximum.z() - minimum.z() >= delta) ? maximum.z() : (maximum.z() + delta / 2)
-        );
-
-        return AABB(new_min, new_max);
-    }
-
     inline double volume() const {
         // Calculates the volume of the AABB
         return (maximum.x() - minimum.x()) * (maximum.y() - minimum.y()) * (maximum.z() - minimum.z());
@@ -165,9 +146,9 @@ private:
 
     // Data Members
     // -----------------------------------------------------------------------
-    point3D minimum;            // point at the minimum extent (corner) of the box
-    point3D maximum;            // point at the maximum extent (corner) of the box
-    Vec3D bounds[2];
+    point3D minimum;            // point at the minimum corner of the box
+    point3D maximum;            // point at the maximum corner of the box
+    Vec3D bounds[2];            // the two corner of the box
 };
 
 // Supporting Functions

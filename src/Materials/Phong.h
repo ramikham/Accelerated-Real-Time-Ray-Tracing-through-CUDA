@@ -23,6 +23,7 @@ public:
     bool evaluate(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
                   Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
 
+
             double u = random_double();                 // generate a random variable u ∈ [0,1]
 
             double k_d = 0.5;           // diffuse component

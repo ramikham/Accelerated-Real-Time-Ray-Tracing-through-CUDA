@@ -13,7 +13,6 @@
 #include "Accelerators/BVH.h"
 #include "Accelerators/BVH_Max_Coordinate.h"
 #include "Accelerators/BVH_Centroid_Coordinate.h"
-#include "Accelerators/BVH_Midpoint_Partition.h"
 #include "Accelerators/Parallel_Bounding_Volume_Hierarchy.h"
 #include "Mathematics/Transformations/Translate.h"
 #include "Materials/Phong.h"
@@ -27,10 +26,9 @@
 #include "Primitives/XZ_Rectangle.h"
 #include "Primitives/Box.h"
 #include "Materials/Uniform_Hemispherical_Diffuse.h"
-#include "Accelerators/BVH_Midpoint_Partition.h"
 #include "Primitives/Triangle.h"
 #include "Accelerators/BVH_Fast.h"
-#include "Accelerators/BVH_New.h"
+
 
 struct Scene_Information {
     // Image settings
@@ -66,7 +64,7 @@ struct Scene_Information {
     int number_of_threads_used;
 };
 
-Scene_Information a_rabbit_and_a_teapot_inside_a_Cornell_box_with_importance_sampling() {
+Scene_Information a_rabbit_and_a_teapot_inside_a_Cornell_box_1() {
     /*  Note: This scene was used to render figure XXX. To see the effects of importance sampling,
             render the scene with radiance_mixture() and choose the importance sampling evaluate()
             version of the materials used in the scene.
@@ -93,7 +91,7 @@ Scene_Information a_rabbit_and_a_teapot_inside_a_Cornell_box_with_importance_sam
     scene_info.lookat = Vec3D(278, 278, 0);
     scene_info.vup = Vec3D(0, 1, 0);
     scene_info.vfov = 40;
-    scene_info.output_image_name = "A Teapot and a Rabbit Inside a Cornell Box - NO ISP - 500 SPP";          //NO ISAMP
+    scene_info.output_image_name = "A Teapot and a Rabbit Inside a Cornell Box - ISP - 500 SPP";          //NO ISAMP
 
     scene_info.camera = Camera(scene_info.lookfrom, scene_info.lookat, scene_info.vup, scene_info.vfov, scene_info.aspect_ratio);
 
