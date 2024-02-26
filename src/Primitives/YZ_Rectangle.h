@@ -8,6 +8,7 @@
 #include "Primitive.h"
 
 /// Reference: Ray Tracing: The Next Week
+/// Note: Some changes were made. I changed the way the rectangles are represented and the importance sampling process.
 class YZ_Rectangle : public Primitive {
 public:
     // Constructor
@@ -21,7 +22,7 @@ public:
         x_comp = minPoint.x();
     }
 
-    // Overloaded Function
+    // Overloaded Functions
     // -------------------------------------------------------------------
     bool intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const override {
         // Does the ray intersect the YZ_Rectangle?

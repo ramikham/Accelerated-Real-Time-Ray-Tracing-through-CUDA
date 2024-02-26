@@ -22,7 +22,7 @@ public:
         area = (max_point.x() - min_point.x()) * (max_point.z() - min_point.z());
     }
 
-    // Overloaded Function
+    // Overloaded Functions
     // -------------------------------------------------------------------
     bool intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const override {
         // Does the ray intersect the XZ_Rectangle?

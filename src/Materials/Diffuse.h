@@ -31,14 +31,13 @@ public:
         return true;
 
         /* REGULAR - OLD working */
-
-        /*
-        material_type = DIFFUSE;
+       /*
         Vec3D reflection_direction = diffuse_reflection_direction(intersection_info.normal);
         scattered_ray = Ray(intersection_info.p, reflection_direction);
         shading_color = surface_color;
         pdf = this->pdf(incident_ray, intersection_info, scattered_ray);
-        return true;*/
+        return true;
+        */
     }
 
     /// Reference: Fundamentals of Computer Graphics: Section 14.10 - Monte Carlo Ray Tracing
