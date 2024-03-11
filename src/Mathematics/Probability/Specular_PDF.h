@@ -21,6 +21,7 @@ inline Vec3D weighted_direction(double specular_exponent) {
     double z = cos(theta);
     double y = sin(phi) * sin(theta);
     double x = cos(phi) * sin(theta);
+  //  sin_called++; sin_called++; sin_called++;
 
     return {x, y, z};
 }

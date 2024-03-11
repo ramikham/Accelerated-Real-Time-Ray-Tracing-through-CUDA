@@ -500,9 +500,8 @@ namespace BENCHMARK {
     }
 
     void compare_ray_triangle_intersection_algorithms() {
-        const int num_iterations = 30000000;
+        const int num_iterations = 100000000;
 
-        // Measure the runtime of random_double_1
         double start_time_1 = omp_get_wtime();
         for (int i = 0; i < num_iterations; ++i) {
             Ray r(random_vector_in_range(), random_vector_in_range());
@@ -514,7 +513,6 @@ namespace BENCHMARK {
         double end_time_1 = omp_get_wtime();
         std::cout << "Snyder & Barr Ray/Triangle Intersection Algorithm runtime: " << end_time_1 - start_time_1 << " seconds\n";
 
-        // Measure the runtime of random_double_2
         double start_time_2 = omp_get_wtime();
         for (int i = 0; i < num_iterations; ++i) {
             Ray r(random_vector_in_range(), random_vector_in_range());
@@ -525,6 +523,294 @@ namespace BENCHMARK {
         }
         double end_time_2 = omp_get_wtime();
         std::cout << "Moller-Trumbore Ray/Triangle Intersection Algorithm runtime: " << end_time_2 - start_time_2 << " seconds\n";
+    }
+
+    bool algebraic_ray_sphere_intersection(Vec3D center, double radius, const Ray &r, double t_0, double t_1) {
+        // Get the A, B, C of the quadratic equation
+        Vec3D OC = r.get_ray_origin() - center;
+        auto A = r.get_ray_direction().length_squared();
+        auto half_B = dot_product(OC, r.get_ray_direction());           // half_B is a shortcut
+        auto C = OC.length_squared() - radius * radius;
+
+        // Calculate the quadratic equation discriminant.
+        auto discriminant = half_B * half_B - A * C;
+        // auto discriminant = fma(half_B, half_B, -A * C);
+
+        // If the discriminant is negative, the ray misses the sphere.
+        if (discriminant < 0) return false;
+
+        // Calculate the square root of the discriminant.
+        double sqrt_discriminant = sqrt(discriminant);
+
+        // Since t > 0 is part of the ray definition, we examine the two
+        // roots. The smaller, positive real root is the one that is closest
+        // to the intersection distance on the ray.
+        double intersection_t = (-half_B - sqrt_discriminant) / A;       // first root
+        if (intersection_t <= t_0 || t_1 <= intersection_t) {
+            // first root not in range [t_0,t_1], so calculate
+            // the second root.
+            intersection_t = (-half_B + sqrt_discriminant) / A;
+
+            // Check if second root is also not in the range [t_0,t_1].
+            if (intersection_t <= t_0 || t_1 <= intersection_t)
+                return false;
+        }
+
+        return true;
+    }
+
+    bool geometric_ray_sphere_intersection(Vec3D center, double radius, const Ray &r, double t_min, double t_max) {
+        bool flag_outside_sphere = false;
+        double R2 = radius * radius;
+        Vec3D OC = center - r.get_ray_origin();
+        double L_2_OC = dot_product(OC, OC);
+        if (L_2_OC >= R2) {
+            // RAY ORIGINATED OUTSIDE THE SPHERE
+            flag_outside_sphere = true;
+        }
+
+        double t_ca = dot_product(OC, unit_vector(r.get_ray_direction()));
+
+        if (t_ca < 0) {
+            if (flag_outside_sphere)
+                return false;
+        }
+
+        double t_2_hc = R2 - L_2_OC + (t_ca * t_ca);
+
+        if (t_2_hc < 0) {
+            return false;
+        }
+
+        double intersection_t;
+        if (flag_outside_sphere) {
+            double sqrt_t_2_hc = sqrt(t_2_hc);
+            double dir_length = r.get_ray_direction().length();
+            intersection_t = (t_ca - sqrt_t_2_hc) / dir_length;
+        }
+        else {
+            double sqrt_t_2_hc = sqrt(t_2_hc);
+            double dir_length = r.get_ray_direction().length();
+            intersection_t = (t_ca + sqrt_t_2_hc) / dir_length;
+        }
+
+        if (intersection_t <= t_min || t_max <= intersection_t) {
+            return false;
+        }
+
+        return true;
+    }
+
+    void compare_ray_sphere_intersection_algorithms() {
+        const int num_iterations = 1000000;
+
+        // Measure the runtime of random_double_1
+        double start_time_1 = omp_get_wtime();
+        for (int i = 0; i < num_iterations; ++i) {
+            Ray r_in(random_vector_in_range(), random_vector_in_range());
+            point3D c = random_vector_in_range();
+            double radius = random_double(1, 100);
+            double t_0 = random_double();
+            algebraic_ray_sphere_intersection(c, radius, r_in, t_0, t_0 + 1.0);
+        }
+        double end_time_1 = omp_get_wtime();
+        std::cout << "Algebraic Ray/Sphere Intersection Algorithm runtime: " << end_time_1 - start_time_1 << " seconds\n";
+
+        // Measure the runtime of random_double_2
+        double start_time_2 = omp_get_wtime();
+        for (int i = 0; i < num_iterations; ++i) {
+            Ray r_in(random_vector_in_range(), random_vector_in_range());
+            point3D c = random_vector_in_range();
+            double radius = random_double(1, 100);
+            double t_0 = random_double();
+            geometric_ray_sphere_intersection(c, radius, r_in, t_0, t_0 + 1.0);
+        }
+        double end_time_2 = omp_get_wtime();
+        std::cout << "Geometric Ray/Sphere Intersection Algorithm runtime: " << end_time_2 - start_time_2 << " seconds\n";
+    }
+
+    bool slab_method(point3D& minimum, point3D& maximum, const Ray& r, double t_min, double t_max) {
+        Vec3D r_orig = r.get_ray_origin();
+        Vec3D r_direction = r.get_ray_direction();
+
+        for (int a = 0; a < 3; a++) {
+            auto t0 = fmin((minimum[a] - r_orig[a]) / r_direction[a],
+                           (maximum[a] - r_orig[a]) / r_direction[a]);
+            auto t1 = fmax((minimum[a] - r_orig[a]) / r_direction[a],
+                           (maximum[a] - r_orig[a]) / r_direction[a]);
+            t_min = fmax(t0, t_min);
+            t_max = fmin(t1, t_max);
+            if (t_max <= t_min)
+                return false;
+        }
+        return true;
+    }
+
+    bool Tavian_ray_AABB_intersection(point3D& minimum, point3D& maximum, const Ray& r, double t_min, double t_max) {
+        Vec3D ray_origin = r.get_ray_origin();
+
+        for (int a = 0; a < 3; a++) {
+            auto t0 = fmin((minimum[a] - ray_origin[a]) * r.inv_direction[a],
+                           (maximum[a] - ray_origin[a]) * r.inv_direction[a]);
+            auto t1 = fmax((minimum[a] - ray_origin[a]) * r.inv_direction[a],
+                           (maximum[a] - ray_origin[a]) * r.inv_direction[a]);
+            t_min = fmax(t0, t_min);
+            t_max = fmin(t1, t_max);
+            if (t_max <= t_min)
+                return false;
+        }
+        return true;
+    }
+
+    bool Tavian_ray_AABB_intersection_unrolled(point3D& minimum, point3D& maximum, const Ray& r, double t_min, double t_max) {
+        Vec3D ray_origin = r.get_ray_origin();
+
+        auto t0 = fmin((minimum[0] - ray_origin[0]) * r.inv_direction[0],
+                       (maximum[0] - ray_origin[0]) * r.inv_direction[0]);
+        auto t1 = fmax((minimum[0] - ray_origin[0]) * r.inv_direction[0],
+                       (maximum[0] - ray_origin[0]) * r.inv_direction[0]);
+        t_min = fmax(t0, t_min);
+        t_max = fmin(t1, t_max);
+        if (t_max <= t_min)
+            return false;
+
+        t0 = fmin((minimum[1] - ray_origin[1]) * r.inv_direction[1],
+                  (maximum[1] - ray_origin[1]) * r.inv_direction[1]);
+        t1 = fmax((minimum[1] - ray_origin[1]) * r.inv_direction[1],
+                  (maximum[1] - ray_origin[1]) * r.inv_direction[1]);
+        t_min = fmax(t0, t_min);
+        t_max = fmin(t1, t_max);
+        if (t_max <= t_min)
+            return false;
+
+
+        t0 = fmin((minimum[2] - ray_origin[2]) * r.inv_direction[2],
+                  (maximum[2] - ray_origin[2]) * r.inv_direction[2]);
+        t1 = fmax((minimum[2] - ray_origin[2]) * r.inv_direction[2],
+                  (maximum[2] - ray_origin[2]) * r.inv_direction[2]);
+        t_min = fmax(t0, t_min);
+        t_max = fmin(t1, t_max);
+        if (t_max <= t_min)
+            return false;
+
+
+        return true;
+    }
+
+    bool Williams_ray_AABB_intersection(point3D bounds[2], const Ray& r, double t_min, double t_max) {
+        double tmin, tmax, tymin, tymax, tzmin, tzmax;
+
+        tmin = (bounds[r.sign[0]].x() - r.get_ray_origin().x()) * r.inv_direction.x();
+        tmax = (bounds[1 - r.sign[0]].x() - r.get_ray_origin().x()) * r.inv_direction.x();
+        tymin = (bounds[r.sign[1]].y() - r.get_ray_origin().y()) * r.inv_direction.y();
+        tymax = (bounds[1 - r.sign[1]].y() - r.get_ray_origin().y()) * r.inv_direction.y();
+
+        if ((tmin > tymax) || (tymin > tmax))
+            return false;
+
+        if (tymin > tmin)
+            tmin = tymin;
+
+        if (tymax < tmax)
+            tmax = tymax;
+
+        tzmin = (bounds[r.sign[2]].z() - r.get_ray_origin().z()) * r.inv_direction.z();
+        tzmax = (bounds[1 - r.sign[2]].z() - r.get_ray_origin().z()) * r.inv_direction.z();
+
+        if ((tmin > tzmax) || (tzmin > tmax))
+            return false;
+
+        if (tzmin > tmin)
+            tmin = tzmin;
+
+        if (tzmax < tmax)
+            tmax = tzmax;
+
+        return ((tmin < t_max) && (tmax > t_min));
+    }
+
+    void compare_ray_AABB_intersection_algorithms() {
+
+        int num_iterations = 1000000;
+
+
+        double start_slab = omp_get_wtime();
+        for (int i = 0; i < num_iterations; i++) {
+            double min_extent_x = random_double();
+            point3D min_pt = Vec3D(min_extent_x, 0, 0);
+            double max_add = random_int_in_range(1, 1000);
+            point3D max_pt = Vec3D(0, min_extent_x+max_add, min_extent_x+max_add);
+            Ray r(random_vector_in_range(), random_vector_in_range());
+
+            // Method
+            slab_method(min_pt, max_pt, r, 0.0, 1.0);
+        }
+        double end_slab = omp_get_wtime();
+        std::cout << "Slab method took = " << end_slab - start_slab << std::endl;
+
+
+        double start_Tavian = omp_get_wtime();
+        for (int i = 0; i < num_iterations; i++) {
+            double min_extent_x = random_double();
+            point3D min_pt = Vec3D(min_extent_x, 0, 0);
+            double max_add = random_int_in_range(1, 1000);
+            point3D max_pt = Vec3D(0, min_extent_x+max_add, min_extent_x+max_add);
+            Ray r(random_vector_in_range(), random_vector_in_range());
+
+            // Method
+            Tavian_ray_AABB_intersection(min_pt, max_pt, r, 0.0, 1.0);
+        }
+        double end_Tavian = omp_get_wtime();
+        std::cout << "Tavian method took = " << end_slab - start_slab << std::endl;
+
+        double start_unrolled_Tavian = omp_get_wtime();
+        for (int i = 0; i < num_iterations; i++) {
+            double min_extent_x = random_double();
+            point3D min_pt = Vec3D(min_extent_x, 0, 0);
+            double max_add = random_int_in_range(1, 1000);
+            point3D max_pt = Vec3D(0, min_extent_x+max_add, min_extent_x+max_add);
+            Ray r(random_vector_in_range(), random_vector_in_range());
+
+            // Method
+            Tavian_ray_AABB_intersection_unrolled(min_pt, max_pt, r, 0.0, 1.0);
+        }
+        double end_unrolled_Tavian = omp_get_wtime();
+        std::cout << "Unrolled Tavian method took = " << end_unrolled_Tavian - start_unrolled_Tavian << std::endl;
+
+        double start_Williams = omp_get_wtime();
+        for (int i = 0; i < num_iterations; i++){
+            double min_extent_x = random_double();
+            point3D min_pt = Vec3D(min_extent_x, 0, 0);
+            double max_add = random_int_in_range(1, 1000);
+            point3D max_pt = Vec3D(0, min_extent_x+max_add, min_extent_x+max_add);
+            point3D bounds[] = {min_pt, max_pt};
+            Ray r(random_vector_in_range(), random_vector_in_range());
+
+            // Method
+            Williams_ray_AABB_intersection(bounds, r, 0.0, 1.0);
+        }
+
+        double end_Williams = omp_get_wtime();
+        std::cout << "Williams' method took = " << end_Williams - start_Williams << std::endl;
+
+        num_iterations = 10000000;
+
+
+
+
+        num_iterations = 50000000;
+
+
+        num_iterations = 100000000;
+
+
+        num_iterations = 500000000;
+
+
+
+        num_iterations = 1000000000;
+
+
     }
 }
 

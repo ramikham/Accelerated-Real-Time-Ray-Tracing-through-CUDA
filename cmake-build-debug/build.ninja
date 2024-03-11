@@ -51,7 +51,7 @@ build cmake_object_order_depends_target_CUDA_Ray_Tracer: phony || CMakeFiles/CUD
 
 build CMakeFiles/CUDA_Ray_Tracer.dir/src/main.cpp.obj: CXX_COMPILER__CUDA_Ray_Tracer_Debug C$:/Users/Rami/CLionProjects/CUDA_Ray_Tracer/src/main.cpp || cmake_object_order_depends_target_CUDA_Ray_Tracer
   DEP_FILE = CMakeFiles\CUDA_Ray_Tracer.dir\src\main.cpp.obj.d
-  FLAGS = -fopenmp -g -Og -fdiagnostics-color=always -std=gnu++11
+  FLAGS = -fopenmp -fno-finite-math-only -g -Og -fdiagnostics-color=always -std=gnu++11
   OBJECT_DIR = CMakeFiles\CUDA_Ray_Tracer.dir
   OBJECT_FILE_DIR = CMakeFiles\CUDA_Ray_Tracer.dir\src
 
@@ -64,7 +64,7 @@ build CMakeFiles/CUDA_Ray_Tracer.dir/src/main.cpp.obj: CXX_COMPILER__CUDA_Ray_Tr
 # Link the executable CUDA_Ray_Tracer.exe
 
 build CUDA_Ray_Tracer.exe: CXX_EXECUTABLE_LINKER__CUDA_Ray_Tracer_Debug CMakeFiles/CUDA_Ray_Tracer.dir/src/main.cpp.obj
-  FLAGS = -fopenmp -g -Og
+  FLAGS = -fopenmp -fno-finite-math-only -g -Og
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\CUDA_Ray_Tracer.dir
   POST_BUILD = cd .

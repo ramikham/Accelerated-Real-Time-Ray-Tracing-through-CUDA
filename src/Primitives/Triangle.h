@@ -23,9 +23,10 @@ public:
     bool intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const override {
         // NOTE: When measuring runtime, don't call this function; instead, paste the intersection code here.
 
-         return Snyder_Barr_ray_triangle_intersection(r, t_0, t_1, intersection_info);
+        // num_calls_triangle_intersection++;
+        // return Snyder_Barr_ray_triangle_intersection(r, t_0, t_1, intersection_info);
 
-       // return Moller_Trumbore_ray_triangle_intersection(r, t_0, t_1, intersection_info);
+        return Moller_Trumbore_ray_triangle_intersection(r, t_0, t_1, intersection_info);
     }
 
     /// Reference: Ray Tracing Complex Models Containing Surface Tessellations
@@ -364,8 +365,10 @@ void load_model(const std::string& file_name,std::vector<point3D>& vertices,
             double tempX = x;
             double tempZ = z;
 
+            // Z-angle rotation
             x = std::cos(theta) * tempX - std::sin(theta) * tempZ;
             z = std::sin(theta) * tempX + std::cos(theta) * tempZ;
+
 
             x += displacement.x();
             y += displacement.y();
@@ -394,6 +397,95 @@ void load_model(const std::string& file_name,std::vector<point3D>& vertices,
     }
     obj_file.close();
 }
+
+void load_model(const std::string& file_name,std::vector<point3D>& vertices,
+                std::vector<Triangle>& triangles, const std::shared_ptr<Material>& material,
+                Vec3D& displacement, double& scale_factor, double& X_angle_of_rotation, double& Y_angle_of_rotation, double& Z_angle_of_rotation){
+    Y_angle_of_rotation = degrees_to_radians(Y_angle_of_rotation);
+    Z_angle_of_rotation = degrees_to_radians(Z_angle_of_rotation);
+    std::ifstream obj_file(file_name);
+
+    if (!obj_file.is_open()) {
+        std::cerr << "ERROR: UNABLE TO OPEN OBJ FILE " << file_name << std::endl;
+        return;
+    }
+
+    std::string line;
+    while (std::getline(obj_file, line)) {
+        std::istringstream iss(line);
+        std::string token;
+        iss >> token;
+
+        if (token == "v") {
+            // Vertex
+            double x, y, z;
+            iss >> x >> y >> z;
+
+            // Apply scaling
+            // -------------------------------------------------------------------------------
+            x *= scale_factor;
+            y *= scale_factor;
+            z *= scale_factor;
+
+            // Apply Rotation
+            // -------------------------------------------------------------------------------
+
+            // Z-axis rotation
+            double theta_Z = Z_angle_of_rotation;
+            double tempX = x;
+            double tempY = y;
+
+            x = std::cos(theta_Z) * tempX - std::sin(theta_Z) * tempY;
+            y = std::sin(theta_Z) * tempX + std::cos(theta_Z) * tempY;
+
+            // Y-axis rotation
+            double theta_Y = Y_angle_of_rotation;  // - 59.5
+            tempX = x;
+            double tempZ = z;
+
+            x = std::cos(theta_Y) * tempX + std::sin(theta_Y) * tempZ;
+            z = -std::sin(theta_Y) * tempX + std::cos(theta_Y) * tempZ;
+
+            // X-axis rotation
+            double theta_X = X_angle_of_rotation;
+            tempY = y;
+            tempZ = z;
+
+            y = std::cos(theta_X) * tempY - std::sin(theta_X) * tempZ;
+            z = std::sin(theta_X) * tempX + std::cos(theta_X) * tempZ;
+
+
+
+            // Apply Translation
+            // -------------------------------------------------------------------------------
+            x += displacement.x();
+            y += displacement.y();
+            z += displacement.z();
+
+            vertices.emplace_back(x, y, z);
+            //    std::cout << x << " " << y << " " << z << " " << std::endl;
+        } else if (token == "f") {
+            // Face
+            int v1, v2, v3;
+            iss >> v1 >> v2 >> v3;      // DANGER! Ensure obj file follows this for faces
+
+            // Indices in OBJ files start from 1. In C++ they start from 0.
+            v1--; v2--; v3--;
+
+            // Pad vertices by epsilon
+            point3D padded_v1 = vertices[v1] + Vec3D(epsilon, epsilon, epsilon);
+            point3D padded_v2 = vertices[v2] + Vec3D(epsilon, epsilon, epsilon);
+            point3D padded_v3 = vertices[v3] + Vec3D(epsilon, epsilon, epsilon);
+
+            //   std::cout << padded_v1 << " " << vertices[v2] << " " << vertices[v3] << " " << std::endl;
+
+            // Create the triangle using the vertices
+            triangles.emplace_back(padded_v1, padded_v2, padded_v3, material);
+        }
+    }
+    obj_file.close();
+}
+
 
 
 #endif //CUDA_RAY_TRACER_TRIANGLE_H

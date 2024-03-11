@@ -15,12 +15,16 @@ public:
     AABB(const point3D& MIN, const point3D& MAX) : minimum(MIN), maximum(MAX) {
         bounds[0] = MIN;
         bounds[1] = MAX;
+
+        // Calculate centroid
+        centroid = 0.5 * (minimum + maximum);
     }
 
     // Getters
     // -----------------------------------------------------------------------
     point3D get_min() const { return minimum; }
     point3D get_max() const { return maximum; };
+    point3D get_centroid() const { return centroid; }
 
     // Functions
     // -----------------------------------------------------------------------
@@ -29,9 +33,13 @@ public:
         // Checks if ray r intersect the AABB within the interval [t_min,t_max]
         // NOTE: When measuring runtime, don't call this function; instead, paste the intersection code here.
 
-        // num_calls_box_intersection++;            // how many times is this function called?
+       //  num_calls_box_intersection++;            // how many times is this function called?
 
-        return Williams_ray_AABB_intersection(r, t_min, t_max);
+       return Williams_ray_AABB_intersection(r, t_min, t_max);
+       // return Tavian_ray_AABB_intersection(r, t_min, t_max);
+       // return slab_method(r, t_min, t_max);
+       // return our_ray_AABB_intersection(r, t_min, t_max);
+       // return Kensler_ray_AABB_intersection_method(r, t_min, t_max);
     }
 
     inline double volume() const {
@@ -47,8 +55,24 @@ public:
         return 2.0 * (a * b + b * c + c * a);
     }
 private:
+    bool slab_method(const Ray& r, double t_min, double t_max) const {
+        Vec3D r_orig = r.get_ray_origin();
+        Vec3D r_direction = r.get_ray_direction();
+
+        for (int a = 0; a < 3; a++) {
+            auto t0 = fmin((minimum[a] - r_orig[a]) / r_direction[a],
+                           (maximum[a] - r_orig[a]) / r_direction[a]);
+            auto t1 = fmax((minimum[a] - r_orig[a]) / r_direction[a],
+                           (maximum[a] - r_orig[a]) / r_direction[a]);
+            t_min = fmax(t0, t_min);
+            t_max = fmin(t1, t_max);
+            if (t_max <= t_min)
+                return false;
+        }
+        return true;
+    }
+
     /// Reference: Fast, Branchless Ray/Bounding Box Intersections
-    /// Note: I changed it a little bit by caching. I noticed that this makes it faster.
     bool Tavian_ray_AABB_intersection(const Ray& r, double t_min, double t_max) const {
         /// This is an implementation of the fast ray/box intersection algorithm.
         /// It is often referred to as "branchless". There are some good details about
@@ -61,54 +85,53 @@ private:
         // We need the inverse of the ray's direction. Also, I don't want to divide by the
         // inverse, I will instead multiply be the reciprocal.
         for (int a = 0; a < 3; a++) {
-            auto t0 = fmin((minimum[a] - ray_origin[a]) * r.inv_direction[a],
+            auto t0 = std::min((minimum[a] - ray_origin[a]) * r.inv_direction[a],
                            (maximum[a] - ray_origin[a]) * r.inv_direction[a]);
-            auto t1 = fmax((minimum[a] - ray_origin[a]) * r.inv_direction[a],
+            auto t1 = std::max((minimum[a] - ray_origin[a]) * r.inv_direction[a],
                            (maximum[a] - ray_origin[a]) * r.inv_direction[a]);
-            t_min = fmax(t0, t_min);
-            t_max = fmin(t1, t_max);
+            t_min = std::max(t0, t_min);
+            t_max = std::min(t1, t_max);
+            if (t_max <= t_min)
+                return false;
+        }
+        return t_min < t_max;
+    }
+
+    bool our_ray_AABB_intersection(const Ray& r, double t_min, double t_max) const {
+        Vec3D ray_origin = r.get_ray_origin();
+
+        for (int i = 0; i < 3; ++i) {
+            double inv_direction_i = r.inv_direction[i];
+            double t0 = (minimum[i] - ray_origin[i]) * inv_direction_i;
+            double t1 = (maximum[i] - ray_origin[i]) * inv_direction_i;
+
+            if (t0 > t1)
+                std::swap(t0, t1);
+
+            t_min = std::max(t0, t_min);
+            t_max = std::min(t1, t_max);
+
             if (t_max <= t_min)
                 return false;
         }
         return true;
     }
 
-    /// Note: This is an unrolled version. In most cases, it runs faster than the for-loop version above.
-    bool Tavian_ray_AABB_intersection_unrolled(const Ray& r, double t_min, double t_max) const {
-        /// VERSION: Tavian - but unrolled
+    /// Reference: https://psgraphics.blogspot.com/2016/02/ray-box-intersection-and-fmin.html
+    bool Kensler_ray_AABB_intersection_method(const Ray& r, double t_min, double t_max) const {
+        Vec3D r_orig = r.get_ray_origin();
 
-        Vec3D ray_direction = r.get_ray_direction();
-        Vec3D ray_origin = r.get_ray_origin();
-
-        auto inv_direction_x = 1.0 / ray_direction.x();
-        auto inv_direction_y = 1.0 / ray_direction.y();
-        auto inv_direction_z = 1.0 / ray_direction.z();
-
-        auto t_min_x = (minimum.x() - ray_origin.x()) * inv_direction_x;
-        auto t_max_x = (maximum.x() - ray_origin.x()) * inv_direction_x;
-
-        t_min = fmax(t_min_x, t_min);
-        t_max = fmin(t_max_x, t_max);
-
-        if (t_max <= t_min)
-            return false;
-
-        auto t_min_y = (minimum.y() - ray_origin.y()) * inv_direction_y;
-        auto t_max_y = (maximum.y() - ray_origin.y()) * inv_direction_y;
-
-        t_min = fmax(t_min_y, t_min);
-        t_max = fmin(t_max_y, t_max);
-
-        if (t_max <= t_min)
-            return false;
-
-        auto t_min_z = (minimum.z() - ray_origin.z()) * inv_direction_z;
-        auto t_max_z = (maximum.z() - ray_origin.z()) * inv_direction_z;
-
-        t_min = fmax(t_min_z, t_min);
-        t_max = fmin(t_max_z, t_max);
-
-        return t_max > t_min;
+        for (int a = 0; a < 3; a++) {
+            auto t0 = (minimum[a] - r_orig[a]) * r.inv_direction[a];
+            auto t1 = (maximum[a] -  r_orig[a]) * r.inv_direction[a];
+            if (r.inv_direction[a] < 0.0f)
+                std::swap(t0, t1);
+            t_min = t0 > t_min ? t0 : t_min;
+            t_max = t1 < t_max ? t1 : t_max;
+            if (t_max <= t_min)
+                return false;
+        }
+        return true;
     }
 
     /// Reference: An Efficient and Robust Ray–Box Intersection Algorithm - https://people.csail.mit.edu/amy/papers/box-jgt.pdf
@@ -143,12 +166,12 @@ private:
 
         return ((tmin < t_max) && (tmax > t_min));
     }
-
     // Data Members
     // -----------------------------------------------------------------------
     point3D minimum;            // point at the minimum corner of the box
     point3D maximum;            // point at the maximum corner of the box
     Vec3D bounds[2];            // the two corner of the box
+    point3D centroid;
 };
 
 // Supporting Functions

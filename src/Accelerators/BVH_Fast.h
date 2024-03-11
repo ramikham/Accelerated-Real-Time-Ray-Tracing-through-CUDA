@@ -12,15 +12,17 @@
 class BVH_Fast : public Primitive {
 public:
     BVH_Fast(const Primitives_Group &list) :
-            BVH_Fast(list.primitives_list) {}
+            BVH_Fast(list.primitives_list, 0) {}
 
-    BVH_Fast(const std::vector<std::shared_ptr<Primitive>>& src_objects) {
+    BVH_Fast(const std::vector<std::shared_ptr<Primitive>>& src_objects, int axis_ctr) {
         auto objects = src_objects;
 
-        int axis = random_int_in_range(0,2);
-        auto comparator = (axis == 0) ? box_x_compare
-                                      : (axis == 1) ? box_y_compare
-                                                    : box_z_compare;
+        // int axis = random_int_in_range(0,2);       // choose the axis at random, or ...
+        int axis = axis_ctr % 3;                          // keep rotating between the axes
+
+        auto comparator = (axis == 0) ? box_x_compare_centroid_coord
+                                      : (axis == 1) ? box_y_compare_centroid_coord
+                                                    : box_z_compare_centroid_coord;
 
         size_t size = objects.size();
 
@@ -38,20 +40,20 @@ public:
             auto m = size / 2;
 
             // can use sort:
-            // std::sort(objects.begin() + start, objects.begin() + end, comparator);
+            // std::sort(objects.begin(), objects.end(), comparator);
+
+            // ... or can use partial_sort:
+            // std::partial_sort(objects.begin(), objects.begin() + m, objects.end(), comparator);
 
             // ... or can use nth_element:
             std::nth_element(objects.begin(), objects.begin() + m, objects.end(), comparator);
 
-            // ... or can use partial_sort:
-            // std::partial_sort(objects.begin(), objects.begin() + m, objects.end(), comparator)
-
-            auto left_objects = std::vector<std::shared_ptr<Primitive>>(objects.begin(), objects.begin()+m);
-            auto right_objects = std::vector<std::shared_ptr<Primitive>>(objects.begin()+m, objects.end());
+            auto first_half = std::vector<std::shared_ptr<Primitive>>(objects.begin(), objects.begin() + m);
+            auto second_half = std::vector<std::shared_ptr<Primitive>>(objects.begin() + m, objects.end());
 
             // Invoke recursion
-            left = std::make_shared<BVH_Fast>(left_objects);
-            right = std::make_shared<BVH_Fast>(right_objects);
+            left = std::make_shared<BVH_Fast>(first_half, axis_ctr + 1);
+            right = std::make_shared<BVH_Fast>(second_half, axis_ctr + 1);
         }
         AABB box_left, box_right;
 
