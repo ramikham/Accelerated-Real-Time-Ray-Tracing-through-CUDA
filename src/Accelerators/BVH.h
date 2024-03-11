@@ -28,7 +28,8 @@ public:
 
         auto objects = src_objects;         // create a modifiable array of the source scene objects
 
-        int axis = choose_split_axis(objects, start, end, time0, time1);                    // keep rotating between the axes
+        int axis = random_int_in_range(0,2);                    // choose an axis at random, or ...
+        // int axis = axis_ctr % 3;                                   // keep rotating between the axes
 
         // Get the respective comparator function
         auto comparator = (axis == 0) ? box_x_compare
@@ -54,10 +55,13 @@ public:
             auto m = start + N/2;
 
             // Sort objects using the respective comparator...
-            // std::sort(objects.begin() + start, objects.begin() + end, comparator);
+            std::sort(objects.begin() + start, objects.begin() + end, comparator);
 
             // ... or use partial sort (usually faster and does the job)
-            std::nth_element(objects.begin() + start, objects.begin() + m, objects.begin() + end, comparator);
+            // std::partial_sort(objects.begin() + start, objects.begin() + m, objects.begin() + end, comparator);
+
+            // ... or use nth element (fastest!)
+            // std::nth_element(objects.begin() + start, objects.begin() + m, objects.begin() + end, comparator);
 
             // Recursively construct the left and right subtrees
             left = std::make_shared<BVH>(objects, start, m, time0, time1, axis_ctr+1);
@@ -123,42 +127,6 @@ public:
     };
 
 public:
-    int choose_split_axis(const std::vector<std::shared_ptr<Primitive>>& objects,
-                          size_t start, size_t end, double time0, double time1) const {
-        double min_sum = std::numeric_limits<double>::infinity();
-        int best_axis = 0;
-
-        for (int axis = 0; axis < 3; ++axis) {
-            auto comparator = (axis == 0) ? box_x_compare
-                                          : (axis == 1) ? box_y_compare
-                                                        : box_z_compare;
-
-            size_t N = end - start;
-            auto objects_copy = objects;  // Copy the objects to sort without modifying the original order
-
-            // Sort objects using the respective comparator
-           // std::sort(objects_copy.begin() + start, objects_copy.begin() + end, comparator);
-
-            // Initialize bounding boxes for left and right subtrees
-            AABB box_left, box_right;
-
-            // Calculate the sum of volumes for each split point
-            for (size_t mid = start + 1; mid < end; ++mid) {
-                if (!objects_copy[mid - 1]->has_bounding_box(time0, time1, box_left) ||
-                    !objects_copy[mid]->has_bounding_box(time0, time1, box_right)) {
-                    continue;
-                }
-
-                double current_sum = box_left.volume() * (mid - start) + box_right.volume() * (end - mid);
-                if (current_sum < min_sum) {
-                    min_sum = current_sum;
-                    best_axis = axis;
-                }
-            }
-        }
-
-        return best_axis;
-    }
     // Data Members
     // -----------------------------------------------------------------------
     std::shared_ptr<Primitive> left;        // left-child node

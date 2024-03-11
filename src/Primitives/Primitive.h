@@ -54,8 +54,6 @@ public:
 inline bool compare_AABBs(const std::shared_ptr<Primitive> a, const std::shared_ptr<Primitive> b, int axis) {
     // Compares two primitives based on the minimum coordinates of their bounding boxes along a specified axis.
 
-  //  assert(axis >= 0 && axis <= 2);
-
     AABB box_a;
     AABB box_b;
 
@@ -90,8 +88,6 @@ bool box_z_compare(const std::shared_ptr<Primitive> a, const std::shared_ptr<Pri
 // -----------------------------------------------------------------------
 inline bool compare_AABBs_max_coord(const std::shared_ptr<Primitive> a, const std::shared_ptr<Primitive> b, int axis) {
     // Compares two primitives based on the maximum coordinates of their bounding boxes along a specified axis.
-
-    assert(axis >= 0 && axis <= 2);
 
     AABB box_a;
     AABB box_b;
@@ -128,8 +124,6 @@ bool box_z_compare_max_coord(const std::shared_ptr<Primitive> a, const std::shar
 inline bool compare_AABBs_centroid_coord(const std::shared_ptr<Primitive> a, const std::shared_ptr<Primitive> b, int axis) {
     // Compares two primitives based on the centroid coordinates of their bounding boxes along a specified axis.
 
-    assert(axis >= 0 && axis <= 2);
-
     AABB box_a;            // AABB of object a
     AABB box_b;            // AABB of object b
 
@@ -138,12 +132,14 @@ inline bool compare_AABBs_centroid_coord(const std::shared_ptr<Primitive> a, con
         exit(0);
     }
 
+    /*
     // Calculate centroids
     point3D centroid_a = 0.5 * (box_a.get_min() + box_a.get_max());
     point3D centroid_b = 0.5 * (box_b.get_min() + box_b.get_max());
+     */
 
     // Compare centroids
-    return centroid_a.V[axis] < centroid_b.V[axis];
+    return box_a.get_centroid().V[axis] < box_b.get_centroid().V[axis];
 }
 
 bool box_x_compare_centroid_coord(const std::shared_ptr<Primitive> a, const std::shared_ptr<Primitive> b){

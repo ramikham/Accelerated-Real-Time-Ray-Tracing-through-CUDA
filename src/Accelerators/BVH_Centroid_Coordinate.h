@@ -29,7 +29,8 @@ public:
 
         auto objects = src_objects;     // create a modifiable array of the source scene objects
 
-        int axis = axis_ctr % 3;                 // keep rotating between the axes
+        // int axis = random_int_in_range(0,2);       // choose the axis at random, or ...
+         int axis = axis_ctr % 3;                          // keep rotating between the axes
 
         // Get the respective comparator function
         auto comparator = (axis == 0) ? box_x_compare_centroid_coord
@@ -58,7 +59,10 @@ public:
             // std::sort(objects.begin() + start, objects.begin() + end, comparator);
 
             // ... or use partial sort (usually faster and does the job)
-            std::nth_element(objects.begin() + start, objects.begin() + m, objects.begin() + end, comparator);
+            // std::partial_sort(objects.begin() + start, objects.begin() + m, objects.begin() + end, comparator);
+
+            // ... or use nth_element (fastest!)
+             std::nth_element(objects.begin() + start, objects.begin() + m, objects.begin() + end, comparator);
 
             // Recursively construct the left and right subtrees
             left = std::make_shared<BVH_Centroid_Coordinate>(objects, start, m, time0, time1, axis_ctr + 1);

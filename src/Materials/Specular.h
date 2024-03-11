@@ -13,7 +13,7 @@ public:
     Specular(const Color& surface_color, double glossy_reflection_fraction, double index_of_refraction) : surface_color(
             surface_color), glossy_reflection_fraction(glossy_reflection_fraction), index_of_refraction(
             index_of_refraction) {
-        if (glossy_reflection_fraction > 1) {
+        if (glossy_reflection_fraction > 0) {
             glossy_reflection_fraction = 1;
             reflection = true;
             refraction = false;

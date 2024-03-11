@@ -19,9 +19,9 @@ public:
         // Tests if the ray r intersects the sphere between the interval [t_min,t_max]
         // NOTE: When measuring runtime, don't call this function; instead, paste the intersection code here.
 
-        return ray_sphere_intersection_geometric_solution(r, t_min, t_max, intersection_info);
+        // return ray_sphere_intersection_geometric_solution(r, t_min, t_max, intersection_info);
 
-        // return ray_sphere_intersection_algebraic_solution(r, t_min, t_max, intersection_info);
+        return ray_sphere_intersection_algebraic_solution(r, t_min, t_max, intersection_info);
     }
 
     /// Reference: An Introduction to Ray Tracing - Section 2.1: Intersection of the Sphere

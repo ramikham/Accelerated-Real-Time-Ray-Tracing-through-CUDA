@@ -16,7 +16,6 @@ public:
     ///                 - Fundamentals of Computer Graphics - Section 5.2.3: Calculating Shading
     bool evaluate(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
                   Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
-
         // Generate a scattered ray with a direction from the corresponding PDF
         surface_pdf_ptr = std::make_shared<Cosine_Weighted_PDF>(intersection_info.normal);          // A cosine-weighted distribution is physically correct
         Vec3D scatter_direction = surface_pdf_ptr->generate_a_random_direction_based_on_PDF();
@@ -31,7 +30,7 @@ public:
         return true;
 
         /* REGULAR - OLD working */
-       /*
+        /*
         Vec3D reflection_direction = diffuse_reflection_direction(intersection_info.normal);
         scattered_ray = Ray(intersection_info.p, reflection_direction);
         shading_color = surface_color;

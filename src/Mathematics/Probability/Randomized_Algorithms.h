@@ -17,7 +17,7 @@ const double TWO_PI = 2 * M_PI;
 
 inline double random_double() {
     // Returns a random double between [0.0,1.0).
-   // num_calls_rand_double++;
+    // num_calls_rand_double++;
     return rand() / (RAND_MAX + 1.0);
 }
 
@@ -88,6 +88,7 @@ inline Vec3D random_cosine_direction() {
     return Vec3D(x, y, z);
 }
 
+static int sin_called = 0;
 // My method
 inline Vec3D cosine_weighted_direction() {
     double r1 = random_double();
@@ -96,6 +97,7 @@ inline Vec3D cosine_weighted_direction() {
     double phi = TWO_PI * r1;
     double sqrt_r2 = sqrt(r2);
     double cos_phi = cos(phi);
+   // sin_called++;
 
     return {cos_phi * sqrt_r2, sin(phi) * sqrt_r2, sqrt(1.0 - r2)};
 }
