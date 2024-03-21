@@ -83,8 +83,8 @@ Scene_Information one_weekend_scene() {
 
     // Rendering settings
     // -------------------------------------------------------------------------------
-    scene_info.max_depth = 5;
-    scene_info.samples_per_pixel = 100;
+    scene_info.max_depth = 10;
+    scene_info.samples_per_pixel = 2000;
 
     // Camera settings
     // -------------------------------------------------------------------------------
@@ -92,7 +92,7 @@ Scene_Information one_weekend_scene() {
     scene_info.lookat = Vec3D(0,0,0);
     scene_info.vup = Vec3D(0, 1, 0);
     scene_info.vfov = 20;       // use 80 for debugging
-    scene_info.output_image_name = "tst";
+    scene_info.output_image_name = "One Weekend Scene";
 
     scene_info.camera = Camera(scene_info.lookfrom, scene_info.lookat, scene_info.vup, scene_info.vfov, scene_info.aspect_ratio);
     // Materials
@@ -163,7 +163,7 @@ Scene_Information enter_the_dragon() {
     // Rendering settings
     // -------------------------------------------------------------------------------
     scene_info.max_depth = 20;
-    scene_info.samples_per_pixel = 500;
+    scene_info.samples_per_pixel = 1;
 
     // Camera settings
     // -------------------------------------------------------------------------------
@@ -171,7 +171,7 @@ Scene_Information enter_the_dragon() {
     scene_info.lookat = Vec3D(278, 278, 0);
     scene_info.vup = Vec3D(0, 1, 0);
     scene_info.vfov = 40;       // use 80 for debugging
-    scene_info.output_image_name = "Enter the Dragon - No OPT.";          //NO ISAMP
+    scene_info.output_image_name = "Enter the Dragon - 1 SPP";          //NO ISAMP
 
     scene_info.camera = Camera(scene_info.lookfrom, scene_info.lookat, scene_info.vup, scene_info.vfov, scene_info.aspect_ratio);
     // Materials
@@ -210,22 +210,6 @@ Scene_Information enter_the_dragon() {
     scene_info.world.add_primitive_to_list(std::make_shared<XY_Rectangle>(point3D(0, 0, 555), point3D(555, 555, 555), teapot_royal_blue_phong));
     scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(213, 554, 227), point3D(343,554,332), light));
     scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(0, 0, 0), point3D(555,0,555), sky_blue_phong));
-    scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(0, 555, 0), point3D(555,555,555), white));
-
-    // scene_info.world.add_primitive_to_list(std::make_shared<Sphere>(point3D(190,90,190), 90, pink_metal));
-
-    // Small spheres surrounding the main sphere
-    //Add the boxes
-    // std::shared_ptr<Primitive> box1 = std::make_shared<Box>(point3D(0,0,0), point3D(165,390,165), total_mirror);
-    // std::shared_ptr<Primitive> box2 = std::make_shared<Box>(point3D(0,0,0), point3D(165,165,165), pink);
-
-    // Translation/Rotation
-    // -------------------------------------------------------------------------------
-    // box1 = std::make_shared<Rotate_Y>(box1, -10);
-    // box1 = std::make_shared<Translate>(box1, Vec3D(265,0,295));
-    // scene_info.world.add_primitive_to_list(box1);
-    // scene_info.world = Primitives_Group(std::make_shared<BVH_Fast>(scene_info.world));
-
 
     // Add Meshes to the scene
     // -------------------------------------------------------------------------------
@@ -235,8 +219,6 @@ Scene_Information enter_the_dragon() {
 
     // Bunny's material
     std::shared_ptr<Material> glass = std::make_shared<Specular>(Color(1.0,1.0,1.0), 0.7, 1.0);
-
-    //  std::shared_ptr<Diffuse> bunny_material = std::make_shared<Diffuse>(Color(0.9, 0.6, 0.4));
 
     std::vector<point3D> bunny_vertices;
     std::vector<Triangle> bunny_faces;
@@ -649,7 +631,7 @@ Scene_Information a_rabbit_and_a_teapot_inside_a_Cornell_box_1() {
     // Rendering settings
     // -------------------------------------------------------------------------------
     scene_info.max_depth = 10;
-    scene_info.samples_per_pixel = 10;
+    scene_info.samples_per_pixel = 30;
 
     // Camera settings
     // -------------------------------------------------------------------------------
@@ -657,7 +639,7 @@ Scene_Information a_rabbit_and_a_teapot_inside_a_Cornell_box_1() {
     scene_info.lookat = Vec3D(278, 278, 0);
     scene_info.vup = Vec3D(0, 1, 0);
     scene_info.vfov = 40;
-    scene_info.output_image_name = "TST";          //NO ISAMP
+    scene_info.output_image_name = "Rabbit - ISP Used - 30 SPP";          //NO ISAMP
 
     scene_info.camera = Camera(scene_info.lookfrom, scene_info.lookat, scene_info.vup, scene_info.vfov, scene_info.aspect_ratio);
 
