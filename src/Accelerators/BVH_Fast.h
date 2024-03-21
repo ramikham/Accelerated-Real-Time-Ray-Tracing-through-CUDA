@@ -48,6 +48,7 @@ public:
             // ... or can use nth_element:
             std::nth_element(objects.begin(), objects.begin() + m, objects.end(), comparator);
 
+            // Don't send the full lists, just send partial copies of them
             auto first_half = std::vector<std::shared_ptr<Primitive>>(objects.begin(), objects.begin() + m);
             auto second_half = std::vector<std::shared_ptr<Primitive>>(objects.begin() + m, objects.end());
 

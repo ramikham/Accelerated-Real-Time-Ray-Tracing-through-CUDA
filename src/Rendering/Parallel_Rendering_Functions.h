@@ -384,14 +384,14 @@ void parallel_tasks_radiance_background_renderer(Scene_Information& scene_info) 
     {
         // Define the number of regions .I found that this number is empirical,
         // usually a small number yields poor performance. Keep it a div. by image dims.
-        int num_regions = 2000;
+        int num_regions = 6000;
 
         // Calculate the number of iterations per region
         int iter_per_region = num_of_pixels / num_regions;
 
         // Spawn tasks for each region
         for (int region = 0; region < num_regions; ++region) {
-#pragma omp task final (region < 20)
+#pragma omp task
             {
                 unsigned int seed = omp_get_thread_num();
                 int start_iter = region * iter_per_region;

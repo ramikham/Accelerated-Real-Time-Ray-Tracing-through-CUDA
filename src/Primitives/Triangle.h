@@ -427,7 +427,7 @@ void load_model(const std::string& file_name,std::vector<point3D>& vertices,
             y *= scale_factor;
             z *= scale_factor;
 
-            // Apply Rotation
+            // Apply rotation
             // -------------------------------------------------------------------------------
 
             // Z-axis rotation
