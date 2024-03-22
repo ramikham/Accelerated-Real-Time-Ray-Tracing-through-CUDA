@@ -6,7 +6,7 @@
 #define CUDA_RAY_TRACER_AABB_H
 
 #include "../Utilities.h"
-static int num_calls_box_intersection = 0;
+
 class AABB {
 public:
     // Constructors
@@ -47,13 +47,6 @@ public:
         return (maximum.x() - minimum.x()) * (maximum.y() - minimum.y()) * (maximum.z() - minimum.z());
     }
 
-    inline double surface_area() const {
-        double a = maximum.x() - minimum.x();
-        double b = maximum.y() - minimum.y();
-        double c = maximum.z() - minimum.z();
-
-        return 2.0 * (a * b + b * c + c * a);
-    }
 private:
     bool slab_method(const Ray& r, double t_min, double t_max) const {
         Vec3D r_orig = r.get_ray_origin();
