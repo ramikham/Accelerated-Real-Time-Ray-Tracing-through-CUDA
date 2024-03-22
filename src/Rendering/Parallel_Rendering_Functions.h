@@ -712,7 +712,7 @@ void parallel_tasks_radiance_mixture_renderer(Scene_Information& scene_info) {
     // Get the number of available threads
     int num_of_pixels = image_width * image_height;
 
-#pragma omp parallel num_threads(2)        // 128   2000 is best
+#pragma omp parallel num_threads(16)        // 128   2000 is best
 #pragma omp single
     {
         // Define the number of regions .I found that this number is empirical,
