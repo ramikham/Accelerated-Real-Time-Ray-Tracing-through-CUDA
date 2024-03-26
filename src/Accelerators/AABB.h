@@ -159,6 +159,7 @@ private:
 
         return ((tmin < t_max) && (tmax > t_min));
     }
+
     // Data Members
     // -----------------------------------------------------------------------
     point3D minimum;            // point at the minimum corner of the box
