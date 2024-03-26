@@ -23,9 +23,7 @@ public:
     bool intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const override {
         // NOTE: When measuring runtime, don't call this function; instead, paste the intersection code here.
 
-        // num_calls_triangle_intersection++;
         // return Snyder_Barr_ray_triangle_intersection(r, t_0, t_1, intersection_info);
-
         return Moller_Trumbore_ray_triangle_intersection(r, t_0, t_1, intersection_info);
     }
 

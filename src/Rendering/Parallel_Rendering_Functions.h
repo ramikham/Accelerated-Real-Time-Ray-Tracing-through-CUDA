@@ -146,6 +146,7 @@ void parallel_loop_radiance_background_renderer(Scene_Information& scene_info) {
     point3D lookat = scene_info.lookat;
     Vec3D vup = scene_info.vup;
     double vfov  = scene_info.vfov;
+
     Camera cam = scene_info.camera;
 
     const std::string& file_name = scene_info.output_image_name + ".ppm";

@@ -13,7 +13,7 @@
 #include "Accelerators/BVH.h"
 #include "Accelerators/BVH_Max_Coordinate.h"
 #include "Accelerators/BVH_Centroid_Coordinate.h"
-#include "Accelerators/Parallel_Bounding_Volume_Hierarchy.h"
+#include "Accelerators/BVH_Parallel.h"
 #include "Mathematics/Transformations/Translate.h"
 #include "Materials/Phong.h"
 #include "Materials/Diffuse_Light.h"
@@ -52,6 +52,7 @@ struct Scene_Information {
     double vfov;
 
     Camera camera;
+    Orthographic_Camera orthographic_camera;
 
     // .ppm image file name
     // -------------------------------------------------------------------------------
@@ -95,6 +96,7 @@ Scene_Information one_weekend_scene() {
     scene_info.output_image_name = "One Weekend Scene";
 
     scene_info.camera = Camera(scene_info.lookfrom, scene_info.lookat, scene_info.vup, scene_info.vfov, scene_info.aspect_ratio);
+
     // Materials
     // -------------------------------------------------------------------------------
     std::shared_ptr<Diffuse> ground_material = std::make_shared<Diffuse>(Color(0.5, 0.5, 0.5));
@@ -567,7 +569,7 @@ Scene_Information a_rabbit_and_a_teapot_inside_a_Cornell_box_1() {
     // Rendering settings
     // -------------------------------------------------------------------------------
     scene_info.max_depth = 10;
-    scene_info.samples_per_pixel = 30;
+    scene_info.samples_per_pixel = 10;
 
     // Camera settings
     // -------------------------------------------------------------------------------
@@ -575,7 +577,7 @@ Scene_Information a_rabbit_and_a_teapot_inside_a_Cornell_box_1() {
     scene_info.lookat = Vec3D(278, 278, 0);
     scene_info.vup = Vec3D(0, 1, 0);
     scene_info.vfov = 40;
-    scene_info.output_image_name = "Rabbit - ISP Used - 30 SPP";          //NO ISAMP
+    scene_info.output_image_name = "Rabbit and Teapot in a Room";          //NO ISAMP
 
     scene_info.camera = Camera(scene_info.lookfrom, scene_info.lookat, scene_info.vup, scene_info.vfov, scene_info.aspect_ratio);
 
@@ -675,7 +677,7 @@ Scene_Information a_rabbit_and_a_teapot_inside_a_Cornell_box_1() {
     auto start = omp_get_wtime();           // measure time
     // Construct BVH
     // -------------------------------------------------------------------------------
-     scene_info.world = Primitives_Group(std::make_shared<BVH_Fast>(scene_info.world));
+    scene_info.world = Primitives_Group(std::make_shared<BVH_Fast>(scene_info.world));
     // scene_info.world = Primitives_Group(std::make_shared<BVH>(scene_info.world));
     // scene_info.world = Primitives_Group(std::make_shared<BVH_Max_Coordinate>(scene_info.world));
     // scene_info.world = Primitives_Group(std::make_shared<BVH_Centroid_Coordinate>(scene_info.world));
@@ -845,7 +847,7 @@ Scene_Information full_Cornell_box() {
     // Rendering settings
     // -------------------------------------------------------------------------------
     scene_info.max_depth = 10;
-    scene_info.samples_per_pixel = 1000;
+    scene_info.samples_per_pixel = 10;
 
     // Camera settings
     // -------------------------------------------------------------------------------
@@ -970,7 +972,8 @@ Scene_Information full_Cornell_box() {
     auto start = omp_get_wtime();           // measure time
     // Construct BVH
     // -------------------------------------------------------------------------------
-    scene_info.world = Primitives_Group(std::make_shared<BVH_Fast>(scene_info.world));
+    // scene_info.world = Primitives_Group(std::make_shared<BVH_Fast>(scene_info.world));
+    scene_info.world = Primitives_Group(std::make_shared<BVH_Parallel>(scene_info.world));
 
     auto end = omp_get_wtime();
     std::cout << "BVH Building took: " <<  end - start << std::endl;
