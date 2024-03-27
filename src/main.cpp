@@ -6,7 +6,7 @@ int main() {
 
         auto start = omp_get_wtime();
 
-        Scene_Information scene_info = full_Cornell_box(); //bunny_test();
+        Scene_Information scene_info = texture_Cornell_box(); //bunny_test();
 
         // parallel_loop_radiance_background_renderer(scene_info);
         // parallel_tasks_radiance_background_renderer(scene_info);

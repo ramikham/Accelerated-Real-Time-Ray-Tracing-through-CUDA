@@ -22,6 +22,8 @@ struct Intersection_Information {
     double t;                               // intersection t
     bool front_face;                        // did the ray intersect the front face of the primitive?
     std::shared_ptr<Material> mat_ptr;      // pointer to the material of the primitive
+    double u;                               // texture coordinate
+    double v;                               // texture coordinate
 
     // Function to make the normal always point out against the ray.
     inline void set_face_normal(const Ray& r, const Vec3D& outward_normal) {

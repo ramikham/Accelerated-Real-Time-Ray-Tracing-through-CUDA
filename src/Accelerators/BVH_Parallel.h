@@ -38,10 +38,6 @@ public:
         } else {
             auto m = size / 2;
 
-            // can use sort:
-            // std::sort(objects.begin(), objects.end(), comparator);
-
-            // ... or can use nth_element:
             std::nth_element(objects.begin(), objects.begin() + m, objects.end(), comparator);
 
             // Don't send the full lists, just send partial copies of them

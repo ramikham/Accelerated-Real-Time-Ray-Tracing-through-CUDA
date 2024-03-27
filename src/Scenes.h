@@ -28,6 +28,9 @@
 #include "Materials/Uniform_Hemispherical_Diffuse.h"
 #include "Primitives/Triangle.h"
 #include "Accelerators/BVH_Fast.h"
+#include "Textures/Texture.h"
+#include "Cameras/Camera.h"
+#include "Materials/Diffuse_With_Texture.h"
 
 
 struct Scene_Information {
@@ -896,16 +899,16 @@ Scene_Information full_Cornell_box() {
     /* Erato */
     /******************/
 
-    // Bunny's material
+    // Erato's material
     std::shared_ptr<Diffuse> erato_material = std::make_shared<Diffuse>(Color(0.77, 0.58, 0.29));
 
     std::vector<point3D> erato_vertices;
     std::vector<Triangle> erato_faces;
 
-    // Bunny's displacement vector
+    // Erato's displacement vector
     Vec3D erato_D = Vec3D(300, 0, 300);
 
-    // Bunny's scale factor
+    // Erato's scale factor
     double erato_scale_factor = 40.0;
 
     double xa = 0; double ya = 180; double xc = 0;          //SETUP GOOD NOW CHANGE VFOV
@@ -973,6 +976,93 @@ Scene_Information full_Cornell_box() {
     // Construct BVH
     // -------------------------------------------------------------------------------
     // scene_info.world = Primitives_Group(std::make_shared<BVH_Fast>(scene_info.world));
+     scene_info.world = Primitives_Group(std::make_shared<BVH_Parallel>(scene_info.world));
+
+    auto end = omp_get_wtime();
+    std::cout << "BVH Building took: " <<  end - start << std::endl;
+    scene_info.BVH_build_time = end - start;
+
+    // Lights
+    // -------------------------------------------------------------------------------
+    auto m = std::shared_ptr<Material>();
+    scene_info.lights.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(213, 554, 227), point3D(343,554,332), m));
+
+    return scene_info;
+}
+
+Scene_Information texture_Cornell_box() {
+    /*  Note: This scene was used to render figure XXX. To see the effects of importance sampling,
+            render the scene with radiance_mixture() and choose the importance sampling evaluate()
+            version of the materials used in the scene.
+    */
+
+    Scene_Information scene_info;
+
+    // Image settings
+    // -------------------------------------------------------------------------------
+    scene_info.aspect_ratio = 1.0;
+    scene_info.image_width = 800;
+    scene_info.image_height = static_cast<int>(scene_info.image_width / scene_info.aspect_ratio);
+
+    // Rendering settings
+    // -------------------------------------------------------------------------------
+    scene_info.max_depth = 10;
+    scene_info.samples_per_pixel = 100;
+
+    // Camera settings
+    // -------------------------------------------------------------------------------
+    scene_info.lookfrom = Vec3D(278, 278, -800);
+    scene_info.lookat = Vec3D(278, 278, 0);
+    scene_info.vup = Vec3D(0, 1, 0);
+    scene_info.vfov = 40;
+    scene_info.output_image_name = "Texture Scene";          //NO ISAMP
+
+    scene_info.camera = Camera(scene_info.lookfrom, scene_info.lookat, scene_info.vup, scene_info.vfov, scene_info.aspect_ratio);
+
+    // Materials
+    // -------------------------------------------------------------------------------
+    std::shared_ptr<Diffuse> red = std::make_shared<Diffuse>(Color(0.65, 0.05, 0.05));
+    std::shared_ptr<Diffuse> white = std::make_shared<Diffuse>(Color(0.73, 0.73, 0.73));
+    std::shared_ptr<Diffuse> green = std::make_shared<Diffuse>(Color(0.12, 0.45, 0.15));
+    std::shared_ptr<Diffuse> blue = std::make_shared<Diffuse>(Color(0.7,0.7, 1.0));
+    std::shared_ptr<Diffuse> orange = std::make_shared<Diffuse>(Color(1,0.5,0));
+    std::shared_ptr<Diffuse> green_shade = std::make_shared<Diffuse>(Color(0.86,0.91,0.85));
+
+    // Light
+    std::shared_ptr<Diffuse_Light> light = std::make_shared<Diffuse_Light>(Color(30,30,30));
+
+    // Textures
+    // -------------------------------------------------------------------------------
+    Color orange_color = Color(1,0.5,0);
+    std::shared_ptr<Constant_Color> green_color_texture = std::make_shared<Constant_Color>(orange_color);
+
+    Color dark_cyan_color = Color(0.0, 0.55, 0.55);
+    std::shared_ptr<Constant_Color> different_green_color_texture = std::make_shared<Constant_Color>(dark_cyan_color);
+
+    std::shared_ptr<Stripe_Texture> stripes = std::make_shared<Stripe_Texture>(green_color_texture, different_green_color_texture);
+    std::shared_ptr<Diffuse_With_Texture> diffuse_texture = std::make_shared<Diffuse_With_Texture>(stripes);
+
+    // Primitives
+    // -------------------------------------------------------------------------------
+    // Add walls and light in the ceiling
+    scene_info.world.add_primitive_to_list(std::make_shared<YZ_Rectangle>(point3D(555, 0, 0), point3D(555, 555, 555), green));
+    scene_info.world.add_primitive_to_list(std::make_shared<YZ_Rectangle>(point3D(0,0,0), point3D(0, 555, 555), red));
+    scene_info.world.add_primitive_to_list(std::make_shared<XY_Rectangle>(point3D(0, 0, 555), point3D(555, 555, 555), white));
+    scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(213, 554, 227), point3D(343,554,332), light));
+    scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(0, 0, 0), point3D(555,0,555), white));
+    scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(0, 555, 0), point3D(555,555,555), white));
+
+    // Add sphere
+    scene_info.world.add_primitive_to_list(std::make_shared<Sphere>(point3D(190,90,190), 90, diffuse_texture));
+
+    // Add Meshes to the scene
+    // -------------------------------------------------------------------------------
+    // I don't think i will add meshes to this scene ....
+
+    auto start = omp_get_wtime();           // measure time
+    // Construct BVH
+    // -------------------------------------------------------------------------------
+    // scene_info.world = Primitives_Group(std::make_shared<BVH_Fast>(scene_info.world));
     scene_info.world = Primitives_Group(std::make_shared<BVH_Parallel>(scene_info.world));
 
     auto end = omp_get_wtime();
@@ -986,4 +1076,5 @@ Scene_Information full_Cornell_box() {
 
     return scene_info;
 }
+
 #endif //CUDA_RAY_TRACER_SCENES_H
