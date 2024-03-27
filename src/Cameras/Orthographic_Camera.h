@@ -10,6 +10,8 @@
 /// Reference: Fundamentals of Computer Graphics - Section 4.3.1: Orthographic Views
 class Orthographic_Camera {
 public:
+    Orthographic_Camera() {}
+
     Orthographic_Camera( point3D lookfrom,           // the position where we place the camera (the camera's origin - now settable by the user)
                          point3D lookat,             // the point we look at
                          Vec3D vup,                  // a vector representing the "up" direction of the camera
@@ -23,10 +25,10 @@ public:
         image_height = 2.0 * h;
         image_width = aspect_ratio * image_height;
 
-        l = -r;
-        b = -t;
-        r = image_width;
-        t = image_height;
+        l = -image_width / 2;
+        r = image_width / 2;
+        b = -image_height / 2;
+        t = image_height / 2;
 
         // Compute the camera's orthonormal basis, its coordiante system
         camera_backward = unit_vector(lookfrom - lookat);

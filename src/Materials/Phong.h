@@ -88,6 +88,7 @@ public:
         cos_alpha = clamp(cos_alpha, 0.0, 1.0);
 
         //   std::cout << attenuated_color * (specular_intensity * std::pow(cos_alpha, shininess)) << std::endl;
+
         // Phong BRDF
         return attenuated_color * (specular_intensity * std::pow(cos_alpha, shininess));
 
