@@ -5,7 +5,7 @@
 #ifndef CUDA_RAY_TRACER_TEXTURE_H
 #define CUDA_RAY_TRACER_TEXTURE_H
 
-#include "../Utilities.h"
+#include "Perlin_Noise/Perlin.h"
 
 class Texture {
 public:
@@ -70,9 +70,10 @@ public:
     // Constructor
     // -----------------------------------------------------------------------
     Stripe_Texture_Controllable_Width(const std::shared_ptr<Texture>& first_color, const std::shared_ptr<Texture>& second_color,
-                                      double stripes_width) : c0(first_color), c1(second_color), w(stripes_width) {
+                                      double stripes_width, bool interpolate=false) :
+                                      c0(first_color), c1(second_color), w(stripes_width), interpolate(interpolate) {
         // Width should be between (0,1]
-        assert(w > 0 && w <= 1);
+        assert(w > 0);            // was assert(w > 0 && w <= 1);
     }
 
     // Overloaded Function
@@ -81,6 +82,16 @@ public:
         // Given two colors c0,c1, we can make a stripe color out of them using
         // an oscillating function to switch between the two colors. We can also
         // control the stripes width.
+        if (interpolate)
+            return rgb_stripe_interpolated(u, v, p);
+        else
+            return rgb_stripe(u, v, p);
+    }
+
+private:
+    // Supporting Functions
+    // -----------------------------------------------------------------------
+    Color rgb_stripe(double u, double v, const point3D& p) const {
         if (sin(M_PI * p.x() / w) > 0) {
             return c0->value_at(u, v, p);
         }
@@ -89,11 +100,34 @@ public:
         }
     }
 
-private:
+    Color rgb_stripe_interpolated(double u, double v, const point3D& p) const {
+        double t = (1 + sin(M_PI * p.x() / w)) / 2;
+        return (1 - t) * c0->value_at(u, v, p) + t * c1->value_at(u, v, p);
+    }
+
     // Data Members
     // -----------------------------------------------------------------------
     std::shared_ptr<Texture> c0;        // first color
     std::shared_ptr<Texture> c1;        // second color
     double w;                           // width
+    bool interpolate;                   // should interpolation be used?
+};
+
+class Noise_Texture : public Texture {
+public:
+    // Constructor
+    // -----------------------------------------------------------------------
+    Noise_Texture() {}
+
+    // Overloaded Function
+    // -----------------------------------------------------------------------
+    Color value_at(double u, double v, const point3D &p) const override {
+        auto s = 4.0 * p;
+        return Color(1,1,1) * noise.turb(s);
+    }
+private:
+    // Data Members
+    // -----------------------------------------------------------------------
+    Perlin noise;
 };
 #endif //CUDA_RAY_TRACER_TEXTURE_H

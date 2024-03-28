@@ -29,6 +29,14 @@ public:
         return true;
     }
 
+    double pdf(const Ray &incident_ray, const Intersection_Information &intersection_info, const Ray &scattered_ray) const override {
+        // DEPRECATED: Only needed if you will use the OLD formulation of diffuse (commented above).
+        // The new formulation used the PDF associated with the generated scattered ray direction.
+
+        auto cos_theta = dot_product(intersection_info.normal, unit_vector(scattered_ray.get_ray_direction()));
+        return cos_theta < 0 ? 0 : cos_theta/M_PI;
+    }
+
     Vec3D BRDF(const Ray &incident_ray, const Intersection_Information &intersection_information, const Ray &scattered_ray, Color& attenuated_color) const override {
         auto cos_theta = dot_product(intersection_information.normal, unit_vector(scattered_ray.get_ray_direction()));
         return cos_theta < 0 ? Vec3D(0,0,0) : attenuated_color * cos_theta/M_PI;
