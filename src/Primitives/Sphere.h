@@ -109,6 +109,7 @@ public:
         intersection_info.p = r.at(intersection_t);
         Vec3D outward_normal = (intersection_info.p - center) / radius;
         intersection_info.set_face_normal(r, outward_normal);
+        get_sphere_uv(outward_normal, intersection_info.u, intersection_info.v);
         intersection_info.mat_ptr = sphere_material;
 
         return true;
@@ -165,6 +166,14 @@ public:
         double y = sin(phi)*sqrt(1-z*z);
 
         return Vec3D(x, y, z);
+    }
+
+    static void get_sphere_uv(const point3D& p, double& u, double& v) {
+        double theta = acos(-p.y());
+        double phi = atan2(-p.z(), p.x()) + M_PI;
+
+        u = phi / (2 * M_PI);
+        v = theta / M_PI;
     }
 
     // Data Members
