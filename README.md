@@ -15,7 +15,8 @@ This scene was rendered with 5,000 samples-per-pixel.
 ![Lucy Mirror](Images/Semester%202/Lucy-with-a-Mirror-5000-SPP.jpg)</br></br>
 Another Lucy scene. This time with Utah's Teapot.
 ![Lucy and Teapot](Images/Semester%202/Lucy_and_Utah_Teapot.jpg)</br></br>
-
+This is a scene that uses stripe textures.
+![Texture Scene](Images/Semester%202/Texture-Scene-2.png)</br></br>
 ## References
 The 3D models used in this project were taken from the following websites:
 - https://graphics.stanford.edu/data/3Dscanrep/
