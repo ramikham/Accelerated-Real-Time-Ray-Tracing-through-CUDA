@@ -991,11 +991,6 @@ Scene_Information full_Cornell_box() {
 }
 
 Scene_Information texture_Cornell_box() {
-    /*  Note: This scene was used to render figure XXX. To see the effects of importance sampling,
-            render the scene with radiance_mixture() and choose the importance sampling evaluate()
-            version of the materials used in the scene.
-    */
-
     Scene_Information scene_info;
 
     // Image settings
@@ -1007,7 +1002,7 @@ Scene_Information texture_Cornell_box() {
     // Rendering settings
     // -------------------------------------------------------------------------------
     scene_info.max_depth = 10;
-    scene_info.samples_per_pixel = 100;
+    scene_info.samples_per_pixel = 1;
 
     // Camera settings
     // -------------------------------------------------------------------------------
@@ -1015,7 +1010,7 @@ Scene_Information texture_Cornell_box() {
     scene_info.lookat = Vec3D(278, 278, 0);
     scene_info.vup = Vec3D(0, 1, 0);
     scene_info.vfov = 40;
-    scene_info.output_image_name = "Texture Scene";          //NO ISAMP
+    scene_info.output_image_name = "Texture Scene 3";          //NO ISAMP
 
     scene_info.camera = Camera(scene_info.lookfrom, scene_info.lookat, scene_info.vup, scene_info.vfov, scene_info.aspect_ratio);
 
@@ -1033,14 +1028,16 @@ Scene_Information texture_Cornell_box() {
 
     // Textures
     // -------------------------------------------------------------------------------
-    Color orange_color = Color(1,0.5,0);
-    std::shared_ptr<Constant_Color> green_color_texture = std::make_shared<Constant_Color>(orange_color);
+    Color gold_color = Color(1.0,0.84,0);
+    std::shared_ptr<Constant_Color> gold_color_texture = std::make_shared<Constant_Color>(gold_color);
 
-    Color dark_cyan_color = Color(0.0, 0.55, 0.55);
-    std::shared_ptr<Constant_Color> different_green_color_texture = std::make_shared<Constant_Color>(dark_cyan_color);
+    Color burgandy_color = Color(0.5, 0, 0.13);
+    std::shared_ptr<Constant_Color> different_green_color_texture = std::make_shared<Constant_Color>(burgandy_color);
 
-    std::shared_ptr<Stripe_Texture> stripes = std::make_shared<Stripe_Texture>(green_color_texture, different_green_color_texture);
-    std::shared_ptr<Diffuse_With_Texture> diffuse_texture = std::make_shared<Diffuse_With_Texture>(stripes);
+    // Stripes Texture
+    std::shared_ptr<Stripe_Texture_Controllable_Width> stripes_2 = std::make_shared<Stripe_Texture_Controllable_Width>(gold_color_texture, different_green_color_texture, 20, true);
+    std::shared_ptr<Diffuse_With_Texture> diffuse_texture_2 = std::make_shared<Diffuse_With_Texture>(stripes_2);
+
 
     // Primitives
     // -------------------------------------------------------------------------------
@@ -1052,17 +1049,34 @@ Scene_Information texture_Cornell_box() {
     scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(0, 0, 0), point3D(555,0,555), white));
     scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(0, 555, 0), point3D(555,555,555), white));
 
-    // Add sphere
-    scene_info.world.add_primitive_to_list(std::make_shared<Sphere>(point3D(190,90,190), 90, diffuse_texture));
-
     // Add Meshes to the scene
     // -------------------------------------------------------------------------------
-    // I don't think i will add meshes to this scene ....
+    /* Stanford Dragon */
+    /******************/
+
+    std::vector<point3D> bunny_vertices;
+    std::vector<Triangle> bunny_faces;
+
+    // Dragon's displacement vector
+    Vec3D bunny_D = Vec3D(40, 120, 250);
+
+    // Dragon's scale factor
+    double bunny_scale_factor = 2000;
+
+    // Dragon's Rotation
+    double angle_of_rotation_X = 0; double angle_of_rotation_Y = 180; double angle_of_rotation_Z = 0;
+
+    // Load the Stanford Dragon from the .obj file
+    load_model("C:\\Users\\Rami\\Desktop\\dragon.obj" , bunny_vertices, bunny_faces, diffuse_texture_2, bunny_D, bunny_scale_factor, angle_of_rotation_X, angle_of_rotation_Y, angle_of_rotation_Z); // "C:\\Users\\Rami\\Desktop\\Lucy.obj"
+
+    // Add the dragon to the world
+    for (const auto& triangle : bunny_faces) {
+        scene_info.world.add_primitive_to_list(std::make_shared<Triangle>(triangle));
+    }
 
     auto start = omp_get_wtime();           // measure time
     // Construct BVH
     // -------------------------------------------------------------------------------
-    // scene_info.world = Primitives_Group(std::make_shared<BVH_Fast>(scene_info.world));
     scene_info.world = Primitives_Group(std::make_shared<BVH_Parallel>(scene_info.world));
 
     auto end = omp_get_wtime();

@@ -12,9 +12,8 @@ int main() {
         // parallel_tasks_radiance_background_renderer(scene_info);
         // parallel_cols_workload_radiance_background(scene_info);
 
-
-         parallel_loop_radiance_mixture_renderer(scene_info);
-        // parallel_tasks_radiance_mixture_renderer(scene_info);       // my to-go function
+        // parallel_loop_radiance_mixture_renderer(scene_info);
+        parallel_tasks_radiance_mixture_renderer(scene_info);       // my to-go function
         // parallel_cols_workload_radiance_mixture_renderer(scene_info);
 
         auto stop = omp_get_wtime();
