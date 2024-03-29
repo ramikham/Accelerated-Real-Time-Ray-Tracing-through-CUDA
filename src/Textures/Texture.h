@@ -82,10 +82,14 @@ public:
         // Given two colors c0,c1, we can make a stripe color out of them using
         // an oscillating function to switch between the two colors. We can also
         // control the stripes width.
+
+        // We can rotate the stripes if we wish
+        point3D rotated_p = rotate_point_around_Y(p, M_PI / 4);
+
         if (interpolate)
-            return rgb_stripe_interpolated(u, v, p);
+            return rgb_stripe_interpolated(u, v, rotated_p);
         else
-            return rgb_stripe(u, v, p);
+            return rgb_stripe(u, v, rotated_p);
     }
 
 private:
@@ -101,7 +105,8 @@ private:
     }
 
     Color rgb_stripe_interpolated(double u, double v, const point3D& p) const {
-        double t = (1 + sin(M_PI * p.x() / w)) / 2;
+        // We can interpolate smoothly between the stripe color
+        double t = (1 + sin(M_PI * p.x() / w)) / 2;                 // t is a parameter that varies the color linearly
         return (1 - t) * c0->value_at(u, v, p) + t * c1->value_at(u, v, p);
     }
 

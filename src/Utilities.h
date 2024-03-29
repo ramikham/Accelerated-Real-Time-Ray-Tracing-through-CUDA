@@ -53,6 +53,36 @@ double uniform_pdf(){
     return 1/(2*M_PI);
 }
 
+point3D rotate_point_around_X(const point3D& p, double theta) {
+    // A function that rotates a 3D point 'p' by an angle 'theta' around the X-axis.
+    // Assumes that 'theta' is given in radians.
+
+    double y = cos(theta) * p.y() - sin(theta) * p.z();
+    double z = sin(theta) * p.y() + cos(theta) * p.z();
+
+    return {p.x(), y, z};
+}
+
+point3D rotate_point_around_Y(const point3D& p, double theta) {
+    // A function that rotates a 3D point 'p' by an angle 'theta' around the Y-axis.
+    // Assumes that 'theta' is given in radians.
+
+    double x = cos(theta) * p.x() + sin(theta) * p.z();
+    double z = -sin(theta) * p.x() + cos(theta) * p.z();
+
+    return {x, p.y(), z};
+}
+
+point3D rotate_point_around_Z(const point3D& p, double theta) {
+    // A function that rotates a 3D point 'p' by an angle 'theta' around the Z-axis.
+    // Assumes that 'theta' is given in radians.
+
+    double x = cos(theta) * p.x() - sin(theta) * p.y();
+    double y = sin(theta) * p.x() + cos(theta) * p.y();
+
+    return {x, y, p.z()};
+}
+
 // Gamma Correction
 /// Reference: Fundamentals of Computer Graphics
 // -----------------------------------------------------------------------
