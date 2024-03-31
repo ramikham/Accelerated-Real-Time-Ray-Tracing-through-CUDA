@@ -61,10 +61,15 @@ private:
 
         // I FIXED the BUGG :) The problem was that the incident direction should have been reversed, so i used  Vec3D viewer_direction = -incident_direction;
 
-        // Clamp N dot products to prevent numerical instability
-        double FD90MinusOne = 2.0 * roughness * saturate(dot_product(half_vector, scatter_direction)) * saturate(dot_product(half_vector, scatter_direction)) - 0.5;
-        double FDL = 1.0 + (FD90MinusOne * pow(1.0 - dot_product(normal, viewer_direction), 5.0));
-        double FDV = 1.0 + (FD90MinusOne * pow(1.0 - dot_product(normal, scatter_direction), 5.0));
+        double cos_theta_d = dot_product(half_vector, scatter_direction);
+        double FD90MinusOne = 2.0 * roughness * saturate(cos_theta_d) * saturate(cos_theta_d) - 0.5;            // Clamp to prevent numerical instability
+
+        double cos_theta_L = dot_product(normal, scatter_direction);
+        double FDL = 1.0 + (FD90MinusOne * pow(1.0 - cos_theta_L, 5.0));
+
+        double cos_theta_V = dot_product(normal, viewer_direction);
+        double FDV = 1.0 + (FD90MinusOne * pow(1.0 - cos_theta_V, 5.0));
+
         return FDL * FDV;
     }
 

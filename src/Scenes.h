@@ -31,7 +31,7 @@
 #include "Textures/Texture.h"
 #include "Cameras/Camera.h"
 #include "Materials/Diffuse_With_Texture.h"
-
+#include "Materials/Disney_Diffuse.h"
 
 struct Scene_Information {
     // Image settings
@@ -666,7 +666,7 @@ Scene_Information a_rabbit_and_a_teapot_inside_a_Cornell_box_1() {
     double angle_of_rotation = -59.5;
 
     // Teapot's material
-   //std::shared_ptrstd::shared_ptr<Phong> teapot_royal_blue_phong = std::make_shared<Phong>(Color(0.25, 0.41, 1.0), 0.8, 2.5);
+    //std::shared_ptrstd::shared_ptr<Phong> teapot_royal_blue_phong = std::make_shared<Phong>(Color(0.25, 0.41, 1.0), 0.8, 2.5);
     auto teapot_royal_blue_phong = std::make_shared<Diffuse>(Color(0.25, 0.41, 1.0));
 
     // Load the model from the .obj file
@@ -850,7 +850,7 @@ Scene_Information full_Cornell_box() {
     // Rendering settings
     // -------------------------------------------------------------------------------
     scene_info.max_depth = 10;
-    scene_info.samples_per_pixel = 10;
+    scene_info.samples_per_pixel = 3000;
 
     // Camera settings
     // -------------------------------------------------------------------------------
@@ -858,7 +858,7 @@ Scene_Information full_Cornell_box() {
     scene_info.lookat = Vec3D(278, 278, 0);
     scene_info.vup = Vec3D(0, 1, 0);
     scene_info.vfov = 40;
-    scene_info.output_image_name = "erato";          //NO ISAMP
+    scene_info.output_image_name = "erato - 3000 SPP";          //NO ISAMP
 
     scene_info.camera = Camera(scene_info.lookfrom, scene_info.lookat, scene_info.vup, scene_info.vfov, scene_info.aspect_ratio);
 
@@ -976,7 +976,7 @@ Scene_Information full_Cornell_box() {
     // Construct BVH
     // -------------------------------------------------------------------------------
     // scene_info.world = Primitives_Group(std::make_shared<BVH_Fast>(scene_info.world));
-     scene_info.world = Primitives_Group(std::make_shared<BVH_Parallel>(scene_info.world));
+    scene_info.world = Primitives_Group(std::make_shared<BVH_Parallel>(scene_info.world));
 
     auto end = omp_get_wtime();
     std::cout << "BVH Building took: " <<  end - start << std::endl;
@@ -1001,8 +1001,8 @@ Scene_Information texture_Cornell_box() {
 
     // Rendering settings
     // -------------------------------------------------------------------------------
-    scene_info.max_depth = 10;
-    scene_info.samples_per_pixel = 1;
+    scene_info.max_depth = 30;
+    scene_info.samples_per_pixel = 4000;
 
     // Camera settings
     // -------------------------------------------------------------------------------
@@ -1010,7 +1010,7 @@ Scene_Information texture_Cornell_box() {
     scene_info.lookat = Vec3D(278, 278, 0);
     scene_info.vup = Vec3D(0, 1, 0);
     scene_info.vfov = 40;
-    scene_info.output_image_name = "Texture Scene 3";          //NO ISAMP
+    scene_info.output_image_name = "Stripes Texture Scene";          //NO ISAMP
 
     scene_info.camera = Camera(scene_info.lookfrom, scene_info.lookat, scene_info.vup, scene_info.vfov, scene_info.aspect_ratio);
 
@@ -1019,9 +1019,6 @@ Scene_Information texture_Cornell_box() {
     std::shared_ptr<Diffuse> red = std::make_shared<Diffuse>(Color(0.65, 0.05, 0.05));
     std::shared_ptr<Diffuse> white = std::make_shared<Diffuse>(Color(0.73, 0.73, 0.73));
     std::shared_ptr<Diffuse> green = std::make_shared<Diffuse>(Color(0.12, 0.45, 0.15));
-    std::shared_ptr<Diffuse> blue = std::make_shared<Diffuse>(Color(0.7,0.7, 1.0));
-    std::shared_ptr<Diffuse> orange = std::make_shared<Diffuse>(Color(1,0.5,0));
-    std::shared_ptr<Diffuse> green_shade = std::make_shared<Diffuse>(Color(0.86,0.91,0.85));
 
     // Light
     std::shared_ptr<Diffuse_Light> light = std::make_shared<Diffuse_Light>(Color(30,30,30));
@@ -1037,7 +1034,6 @@ Scene_Information texture_Cornell_box() {
     // Stripes Texture
     std::shared_ptr<Stripe_Texture_Controllable_Width> stripes_2 = std::make_shared<Stripe_Texture_Controllable_Width>(gold_color_texture, different_green_color_texture, 20, true);
     std::shared_ptr<Diffuse_With_Texture> diffuse_texture_2 = std::make_shared<Diffuse_With_Texture>(stripes_2);
-
 
     // Primitives
     // -------------------------------------------------------------------------------
@@ -1091,4 +1087,74 @@ Scene_Information texture_Cornell_box() {
     return scene_info;
 }
 
+Scene_Information different_diffuse_models_scene() {
+    Scene_Information scene_info;
+
+    // Image settings
+    // -------------------------------------------------------------------------------
+    scene_info.aspect_ratio = 1.0;
+    scene_info.image_width = 800;
+    scene_info.image_height = static_cast<int>(scene_info.image_width / scene_info.aspect_ratio);
+
+    // Rendering settings
+    // -------------------------------------------------------------------------------
+    scene_info.max_depth = 30;
+    scene_info.samples_per_pixel = 4000;
+
+    // Camera settings
+    // -------------------------------------------------------------------------------
+    scene_info.lookfrom = Vec3D(278, 278, -800);
+    scene_info.lookat = Vec3D(278, 278, 0);
+    scene_info.vup = Vec3D(0, 1, 0);
+    scene_info.vfov = 40;
+    scene_info.output_image_name = "Three Diffuse Spheres";          //NO ISAMP
+
+    scene_info.camera = Camera(scene_info.lookfrom, scene_info.lookat, scene_info.vup, scene_info.vfov, scene_info.aspect_ratio);
+
+    // Materials
+    // -------------------------------------------------------------------------------
+    // Walls materials
+    std::shared_ptr<Diffuse> red = std::make_shared<Diffuse>(Color(0.65, 0.05, 0.05));
+    std::shared_ptr<Diffuse> white = std::make_shared<Diffuse>(Color(0.73, 0.73, 0.73));
+    std::shared_ptr<Diffuse> green = std::make_shared<Diffuse>(Color(0.12, 0.45, 0.15));
+
+    // Spheres materials
+    std::shared_ptr<Diffuse> sphere_blue_diffuse = std::make_shared<Diffuse>(Color(0.70, 0.80, 1.00));
+    std::shared_ptr<Uniform_Hemispherical_Diffuse> sphere_blue_hemi_diffuse = std::make_shared<Uniform_Hemispherical_Diffuse>(Color(0.70, 0.80, 1.00));
+    std::shared_ptr<Disney_Diffuse> sphere_blue_disney_diffuse = std::make_shared<Disney_Diffuse>(Color(0.70, 0.80, 1.00), 0.7);
+
+    // Light material
+    std::shared_ptr<Diffuse_Light> light = std::make_shared<Diffuse_Light>(Color(30,30,30));
+
+    // Primitives
+    // -------------------------------------------------------------------------------
+    // Add walls and light in the ceiling
+    scene_info.world.add_primitive_to_list(std::make_shared<YZ_Rectangle>(point3D(555, 0, 0), point3D(555, 555, 555), green));
+    scene_info.world.add_primitive_to_list(std::make_shared<YZ_Rectangle>(point3D(0,0,0), point3D(0, 555, 555), red));
+    scene_info.world.add_primitive_to_list(std::make_shared<XY_Rectangle>(point3D(0, 0, 555), point3D(555, 555, 555), white));
+    scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(213, 554, 227), point3D(343,554,332), light));
+    scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(0, 0, 0), point3D(555,0,555), white));
+    scene_info.world.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(0, 555, 0), point3D(555,555,555), white));
+
+    // Add the three spheres
+    scene_info.world.add_primitive_to_list(std::make_shared<Sphere>(point3D(150,60,190), 60, sphere_blue_diffuse));       // right sphere
+    scene_info.world.add_primitive_to_list(std::make_shared<Sphere>(point3D(285,60,190), 60, sphere_blue_hemi_diffuse));       // middle sphere
+    scene_info.world.add_primitive_to_list(std::make_shared<Sphere>(point3D(420,60,190), 60, sphere_blue_disney_diffuse)); // left sphere
+
+    auto start = omp_get_wtime();           // measure time
+    // Construct BVH
+    // -------------------------------------------------------------------------------
+    scene_info.world = Primitives_Group(std::make_shared<BVH_Parallel>(scene_info.world));
+
+    auto end = omp_get_wtime();
+    std::cout << "BVH Building took: " <<  end - start << std::endl;
+    scene_info.BVH_build_time = end - start;
+
+    // Lights
+    // -------------------------------------------------------------------------------
+    auto m = std::shared_ptr<Material>();
+    scene_info.lights.add_primitive_to_list(std::make_shared<XZ_Rectangle>(point3D(213, 554, 227), point3D(343,554,332), m));
+
+    return scene_info;
+}
 #endif //CUDA_RAY_TRACER_SCENES_H
