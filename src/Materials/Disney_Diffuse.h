@@ -8,6 +8,8 @@
 #include "Material.h"
 #include "../Mathematics/Probability/Cosine_Weighted_PDF.h"
 
+/// References:              - Physically Based Shading at Disney
+///                          - Crash Course in BRDF Implementation
 class Disney_Diffuse : public Material {
 public:
     Disney_Diffuse(const Color& surface_color, double roughness) : surface_color(surface_color), roughness(roughness) {}
@@ -53,9 +55,9 @@ private:
         Vec3D viewer_direction = -incident_direction;
         Vec3D half_vector = unit_vector(viewer_direction + scatter_direction);
 
-       // std::cout << "H . scatter = " << dot_product(half_vector, scatter_direction) << std::endl;
-       // std::cout << "N . incident = " << dot_product(normal, incident_direction) << std::endl;
-       // std::cout << "N . scatter = " << dot_product(normal, scatter_direction) << std::endl;
+        // std::cout << "H . scatter = " << dot_product(half_vector, scatter_direction) << std::endl;
+        // std::cout << "N . incident = " << dot_product(normal, incident_direction) << std::endl;
+        // std::cout << "N . scatter = " << dot_product(normal, scatter_direction) << std::endl;
 
         // I FIXED the BUGG :) The problem was that the incident direction should have been reversed, so i used  Vec3D viewer_direction = -incident_direction;
 
