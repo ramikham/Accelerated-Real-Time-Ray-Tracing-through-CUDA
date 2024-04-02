@@ -11,8 +11,12 @@
 
 class Diffuse_With_Texture : public Material {
 public:
+    // Constructor
+    // -----------------------------------------------------------------------
     Diffuse_With_Texture(const std::shared_ptr<Texture>& surface_color) : surface_color(surface_color) {}
 
+    // Overridden Functions
+    // -----------------------------------------------------------------------
     bool evaluate(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
                   Ray &scattered_ray, MATERIAL_TYPE &type, double &pdf, std::shared_ptr<PDF> &surface_pdf_ptr) const override {
         // Generate a scattered ray with a direction from the corresponding PDF
@@ -43,6 +47,8 @@ public:
     }
 
 private:
+    // Data Members
+    // -----------------------------------------------------------------------
     std::shared_ptr<Texture> surface_color;
 };
 

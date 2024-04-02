@@ -11,8 +11,12 @@
 
 class Uniform_Hemispherical_Diffuse : public Material {
 public:
+    // Constructor
+    // -----------------------------------------------------------------------
     Uniform_Hemispherical_Diffuse(const Color& surface_color) : surface_color(surface_color) {}
 
+    // Overridden Functions
+    // -----------------------------------------------------------------------
     /// Reference: 14.7.1: BRDF
     bool evaluate(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
                   Ray &scattered_ray, MATERIAL_TYPE& material_type, double& pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
@@ -29,14 +33,14 @@ public:
         shading_color = surface_color;
 
         return true;
-/*
-        // OLD - BUT WORKING WITH ONLY radiance_background() or radiance()
+        /*
+        // OLD - BUT WORKING WITH ONLY radiance_background() or radiance() (i.e., no importance sampling)
         Vec3D reflection_direction = random_on_hemisphere(intersection_info.normal);
         scattered_ray = Ray(intersection_info.p, reflection_direction);
         pdf = uniform_pdf();
         shading_color = surface_color;
         return true;
-*/
+        */
     }
 
     Vec3D BRDF(const Ray &incident_ray, const Intersection_Information &intersection_information,
@@ -46,6 +50,7 @@ public:
 
 private:
     // Data Members
+    // -----------------------------------------------------------------------
     Color surface_color;          // = surface color = diffuse coefficient = diffuse color
 };
 

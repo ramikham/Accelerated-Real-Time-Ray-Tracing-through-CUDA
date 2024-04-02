@@ -11,6 +11,8 @@
 
 class BVH_Parallel: public Primitive {
 public:
+    // Constructors
+    // -----------------------------------------------------------------------
     BVH_Parallel(const Primitives_Group &list) :
             BVH_Parallel(list.primitives_list, 0) {}
 
@@ -64,6 +66,8 @@ public:
         BBOX = construct_surrounding_box(box_left, box_right);
     }
 
+    // Overridden Functions
+    // -----------------------------------------------------------------------
     bool intersection(const Ray &r, double t_0, double t_1, Intersection_Information &intersection_info) const override {
         /* A faster intersection method [1]. I will stick to this rather than my implementation below. */
         if (!BBOX.intersection(r, t_0, t_1))

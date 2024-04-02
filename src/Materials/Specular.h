@@ -10,6 +10,8 @@
 
 class Specular : public Material {
 public:
+    // Constructor
+    // -----------------------------------------------------------------------
     Specular(const Color& surface_color, double glossy_reflection_fraction, double index_of_refraction) : surface_color(
             surface_color), glossy_reflection_fraction(glossy_reflection_fraction), index_of_refraction(
             index_of_refraction) {
@@ -25,6 +27,8 @@ public:
         }
     }
 
+    // Overridden Functions
+    // -----------------------------------------------------------------------
     ~Specular() override = default;
 
     /// References:             - Fundamentals of Computer Graphics: Section 4.5.4: Mirror Reflection
@@ -60,6 +64,7 @@ public:
 
 public:
     // Data Members
+    // -----------------------------------------------------------------------
     bool reflection;                            // does a reflection happen?
     bool refraction;                            // does a refraction happen?
     Color surface_color;                        // color of the specular material

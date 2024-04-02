@@ -51,7 +51,7 @@ public:
             return true;
 
             /* OLD - but works. Use it if you don't wish to do importance sampling for Phong materials. */
-/*
+            /*
             surface_pdf_ptr = nullptr;              // no BRDF
             material_type = PHONG;                  // Material Type
 
@@ -62,14 +62,14 @@ public:
 
             // Specular reflection
             Vec3D viewer_direction = -incident_ray.get_ray_direction();
-            Vec3D halfway_direction = unit_vector(viewer_direction + scattered_ray.get_ray_direction());
+            Vec3D halfway_direction = unit_vector(viewer_direction + scattered_ray.get_ray_direction());        // check
             float specular_component = std::pow(std::fmax(0, dot_product(intersection_info.normal, halfway_direction)), shininess);
 
             // Combine diffuse and specular reflections
             shading_color = surface_color * (diffuse_component + specular_component * specular_intensity) / M_PI;
 
             return true;
-*/
+            */
         }
 
     /// Reference:  - Crash Course in BRDF Implementation: https://boksajak.github.io/files/CrashCourseBRDF.pdf

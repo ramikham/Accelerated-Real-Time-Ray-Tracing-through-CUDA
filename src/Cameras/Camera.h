@@ -37,6 +37,8 @@ public:
         lower_left_corner = camera_origin - viewport_horizontal_vector/2 - viewport_vertical_vector/2 - camera_backward;
     }
 
+    // Supporting Functions
+    // -----------------------------------------------------------------------
     Ray get_ray(double u, double v) const{
         // (u,v): pixel in the image plane.
         // returns a ray sent from the camera;s origin towards (u,v).

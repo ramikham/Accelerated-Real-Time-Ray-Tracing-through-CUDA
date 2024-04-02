@@ -502,7 +502,7 @@ void parallel_loop_radiance_mixture_renderer(Scene_Information& scene_info) {
     ofs << "P3\n" << image_width << " " << image_height << "\n255\n";
     std::vector<std::vector<Color>> pixel_colors(image_height, std::vector<Color>(image_width, Color(0, 0, 0)));
 
-#pragma omp parallel for collapse(2) schedule(dynamic) default(none) shared(std::cout, samples_per_pixel, image_height, image_width, cam, world, pixel_colors, max_depth, lights) num_threads(14)
+#pragma omp parallel for collapse(2) schedule(dynamic) default(none) shared(std::cout, samples_per_pixel, image_height, image_width, cam, world, pixel_colors, max_depth, lights) num_threads(16)
     for (int j = image_height - 1; j >=0; --j) {
         //    #pragma omp parallel for default(none) shared(samples_per_pixel, image_height, image_width, j, cam, world, lights, pixel_colors, max_depth) num_threads(16)
         for (int i = 0; i < image_width; ++i) {

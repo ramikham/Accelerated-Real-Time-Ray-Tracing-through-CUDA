@@ -9,8 +9,12 @@
 
 class Uniform_Spherical_PDF : public PDF {
 public:
+    // Constructor
+    // -----------------------------------------------------------------------
     Uniform_Spherical_PDF() {}
 
+    // Overridden Functions
+    // -----------------------------------------------------------------------
     double PDF_value(const Vec3D &direction) const override {
         return 1 / (4 * M_PI);
     }

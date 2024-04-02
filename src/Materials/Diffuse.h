@@ -10,8 +10,12 @@
 
 class Diffuse : public Material {
 public:
+    // Constructor
+    // -----------------------------------------------------------------------
     Diffuse(const Color& surface_color) : surface_color(surface_color) {}
 
+    // Overridden Functions
+    // -----------------------------------------------------------------------
     /// References:     - Fundamentals of Computer Graphics - Section 5.2.1: Lambertian Reflection
     ///                 - Fundamentals of Computer Graphics - Section 5.2.3: Calculating Shading
     bool evaluate(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
@@ -37,7 +41,7 @@ public:
         shading_color = surface_color;
         pdf = this->pdf(incident_ray, intersection_info, scattered_ray);
         return true;
-*/
+        */
     }
 
     /// Reference: Fundamentals of Computer Graphics: Section 14.10 - Monte Carlo Ray Tracing
@@ -52,10 +56,12 @@ public:
     /// Reference: Fundamentals of Computer Graphics: Section 14.7.1 - BRDF
     Vec3D BRDF(const Ray &incident_ray, const Intersection_Information &intersection_information, const Ray &scattered_ray, Color& attenuated_color) const override {
         auto cos_theta = dot_product(intersection_information.normal, unit_vector(scattered_ray.get_ray_direction()));
+        //std::cout << attenuated_color * cos_theta/M_PI << std::endl;
         return cos_theta < 0 ? Vec3D(0,0,0) : attenuated_color * cos_theta/M_PI;
     }
 private:
     // Data Members
+    // -----------------------------------------------------------------------
     Color surface_color;          // = surface color = diffuse coefficient = diffuse color
 };
 

@@ -78,7 +78,7 @@ public:
         BBOX = construct_surrounding_box(box_left, box_right);
     };
 
-    // Overloaded Functions
+    // Overridden Functions
     // -----------------------------------------------------------------------
     /// Reference: [1] https://graphics.stanford.edu/~boulos/papers/efficient_notes.pdf
     /// Reference: [2] Fundamentals of Computer Graphics - Section 12.3.2: Hierarchical Bounding Boxes

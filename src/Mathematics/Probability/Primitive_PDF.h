@@ -10,6 +10,8 @@
 
 class Primitive_PDF : public PDF {
 public:
+    // Constructor
+    // -----------------------------------------------------------------------
     Primitive_PDF(const Primitive& primitives, const point3D& origin) : primitives(primitives), origin(origin) {
         if (std::isnan(origin.x()) || std::isnan(origin.y()) || std::isnan(origin.z())) {
             std::cerr << "Primitive_PDF: NaN detected in origin during construction." << std::endl;
@@ -17,6 +19,8 @@ public:
         }
     }
 
+    // Overridden Functions
+    // -----------------------------------------------------------------------
     double PDF_value(const Vec3D& direction) const override {
         return primitives.PDF_value(origin, direction);
     }
@@ -28,6 +32,8 @@ public:
     }
 
 private:
+    // Data Members
+    // -----------------------------------------------------------------------
     const Primitive& primitives;
     point3D origin;
 };
