@@ -37,6 +37,12 @@ inline double degrees_to_radians(double degrees) {
     return degrees * M_PI / 180.0;
 }
 
+inline double radians_to_degrees(double radiance) {
+    // Converts degrees to radians.
+    return radiance * M_PI / 180.0;
+}
+
+
 inline double clamp(double x, double min, double max) {
     // Clamps a double to [min,max].
 
@@ -46,6 +52,13 @@ inline double clamp(double x, double min, double max) {
         return max;
     return x;
 }
+
+double lerp(double a, double b, double t) {
+    return a + t * (b - a);
+}
+
+
+inline double saturate(double x) { return clamp(x, 0.0, 1.0); }
 
 double uniform_pdf(){
     // A uniform pdf over the hemisphere of directions.

@@ -9,10 +9,14 @@
 
 class Cosine_Weighted_PDF : public PDF {
 public:
+    // Constructor
+    // -----------------------------------------------------------------------
     Cosine_Weighted_PDF(const Vec3D& w) {
         uvw = build_ONB(w);
     }
 
+    // Overridden Functions
+    // -----------------------------------------------------------------------
     double PDF_value(const Vec3D& direction) const override {
         auto cosine_theta = dot_product(uvw[2], unit_vector(direction));
         return fmax(0, cosine_theta/M_PI);
@@ -23,7 +27,9 @@ public:
     }
 
 private:
-    std::vector<Vec3D> uvw;
+    // Data members
+    // -----------------------------------------------------------------------
+    std::vector<Vec3D> uvw;             // uvw forms the orthonormal basis
 };
 
 

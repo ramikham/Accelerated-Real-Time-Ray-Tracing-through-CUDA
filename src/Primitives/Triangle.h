@@ -105,6 +105,7 @@ public:
         Vec3D n = cross_product(B_A, C_A);
 
         intersection_info.set_face_normal(r, unit_vector(n));
+
         intersection_info.mat_ptr = triangle_material;
 
         return true;
@@ -146,7 +147,6 @@ public:
             intersection_info.t = t;
             intersection_info.p = r.at(t);
             Vec3D n = cross_product(edge_1, edge_2);
-
             intersection_info.set_face_normal(r, unit_vector(n));
             intersection_info.mat_ptr = triangle_material;
 

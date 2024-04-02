@@ -9,6 +9,8 @@
 
 class Diffuse_Light : public Material {
 public:
+    // Constructors
+    // -----------------------------------------------------------------------
     Diffuse_Light(Color light_color) : light_color(light_color) {}
 
     Diffuse_Light(Color& lightColor, double& area, double& x_min, double& x_max,
@@ -30,6 +32,8 @@ public:
         this->z_max = z_max;
     }
 
+    // Overridden Functions
+    // -----------------------------------------------------------------------
     bool evaluate(const Ray &incident_ray, const Intersection_Information &intersection_info, Color &shading_color,
                   Ray &scattered_ray, MATERIAL_TYPE &type, double &pdf, std::shared_ptr<PDF>& surface_pdf_ptr) const override {
         return false;
@@ -48,7 +52,7 @@ public:
 
         return area;
     }
-
+private:
     // Supporting Functions
     // -----------------------------------------------------------------------
     point3D sample_position_XZ_Rectangle() const {
@@ -60,9 +64,6 @@ public:
 
         return point3D(x, y, z);
     }
-private:
-    // Supporting Functions
-    // -----------------------------------------------------------------------
 
     Color light_color;                                  // color of the light
     double area;                                        // area of light; needed for importance sampling

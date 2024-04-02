@@ -26,7 +26,7 @@ public:
     point3D get_max() const { return maximum; };
     point3D get_centroid() const { return centroid; }
 
-    // Functions
+    // Supporting Functions
     // -----------------------------------------------------------------------
     /// Reference: Fundamentals of Computer Graphics - Section 12.3.1: Bounding Boxes
     bool intersection(const Ray& r, double t_min, double t_max) const {
@@ -48,6 +48,8 @@ public:
     }
 
 private:
+    // Supporting Functions
+    // -----------------------------------------------------------------------
     bool slab_method(const Ray& r, double t_min, double t_max) const {
         Vec3D r_orig = r.get_ray_origin();
         Vec3D r_direction = r.get_ray_direction();

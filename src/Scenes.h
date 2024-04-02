@@ -63,20 +63,14 @@ struct Scene_Information {
 
     // Statistics
     // -------------------------------------------------------------------------------
-    // TODO
     double BVH_build_time;
     double render_time;
     int number_of_ray_intersection_tests;
     int number_of_threads_used;
 };
 
-/// Reference: Ray Tracing in One Weekend - https://raytracing.github.io/books/RayTracingInOneWeekend.html#wherenext?/afinalrender
 Scene_Information one_weekend_scene() {
-    /*  Note: This scene was used to render figure XXX. To see the effects of importance sampling,
-             render the scene with radiance_mixture() and choose the importance sampling evaluate()
-             version of the materials used in the scene.
-     */
-
+    /// Reference: Ray Tracing in One Weekend - https://raytracing.github.io/books/RayTracingInOneWeekend.html#wherenext?/afinalrender
     Scene_Information scene_info;
 
     // Image settings
@@ -152,11 +146,6 @@ Scene_Information one_weekend_scene() {
 }
 
 Scene_Information enter_the_dragon() {
-    /*  Note: This scene was used to render figure XXX. To see the effects of importance sampling,
-             render the scene with radiance_mixture() and choose the importance sampling evaluate()
-             version of the materials used in the scene.
-     */
-
     Scene_Information scene_info;
 
     // Image settings
@@ -244,12 +233,7 @@ Scene_Information enter_the_dragon() {
     return scene_info;
 }
 
-Scene_Information enter_Lucy_with_light() {
-    /*  Note: This scene was used to render figure XXX. To see the effects of importance sampling,
-             render the scene with radiance_mixture() and choose the importance sampling evaluate()
-             version of the materials used in the scene.
-     */
-
+Scene_Information Lucy_with_light() {
     Scene_Information scene_info;
 
     // Image settings
@@ -333,11 +317,6 @@ Scene_Information enter_Lucy_with_light() {
 }
 
 Scene_Information enter_Lucy() {
-    /*  Note: This scene was used to render figure XXX. To see the effects of importance sampling,
-             render the scene with radiance_mixture() and choose the importance sampling evaluate()
-             version of the materials used in the scene.
-     */
-
     Scene_Information scene_info;
 
     // Image settings
@@ -456,12 +435,7 @@ Scene_Information enter_Lucy() {
     return scene_info;
 }
 
-Scene_Information lucy_with_a_mirror() {
-    /*  Note: This scene was used to render figure XXX. To see the effects of importance sampling,
-             render the scene with radiance_mixture() and choose the importance sampling evaluate()
-             version of the materials used in the scene.
-     */
-
+Scene_Information Lucy_with_a_mirror() {
     Scene_Information scene_info;
 
     // Image settings
@@ -555,12 +529,7 @@ Scene_Information lucy_with_a_mirror() {
     return scene_info;
 }
 
-Scene_Information a_rabbit_and_a_teapot_inside_a_Cornell_box_1() {
-    /*  Note: This scene was used to render figure XXX. To see the effects of importance sampling,
-            render the scene with radiance_mixture() and choose the importance sampling evaluate()
-            version of the materials used in the scene.
-    */
-
+Scene_Information a_rabbit_and_a_teapot_inside_a_Cornell_box() {
     Scene_Information scene_info;
 
     // Image settings
@@ -698,11 +667,6 @@ Scene_Information a_rabbit_and_a_teapot_inside_a_Cornell_box_1() {
 }
 
 Scene_Information a_rabbit_and_a_teapot_inside_a_Cornell_box_without_importance_sampling() {
-    /*  Note: This scene was used to render figure XXX. To see the effects of no importance sampling,
-            render the scene with radiance_background() and choose the non-importance sampling evaluate()
-            version of the materials used in the scene.
-    */
-
     auto start = omp_get_wtime();           // measures BVH construction time
 
     Scene_Information scene_info;
@@ -834,11 +798,6 @@ Scene_Information a_rabbit_and_a_teapot_inside_a_Cornell_box_without_importance_
 }
 
 Scene_Information full_Cornell_box() {
-    /*  Note: This scene was used to render figure XXX. To see the effects of importance sampling,
-            render the scene with radiance_mixture() and choose the importance sampling evaluate()
-            version of the materials used in the scene.
-    */
-
     Scene_Information scene_info;
 
     // Image settings
@@ -1157,4 +1116,5 @@ Scene_Information different_diffuse_models_scene() {
 
     return scene_info;
 }
+
 #endif //CUDA_RAY_TRACER_SCENES_H
